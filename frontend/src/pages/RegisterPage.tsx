@@ -9,12 +9,12 @@ import {
 	Alert,
 	Link,
 } from "@mui/material";
-
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 
-const LoginPage = () => {
+const RegisterPage = () => {
+	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
@@ -24,18 +24,18 @@ const LoginPage = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			// In production, use environment variable for API URL
 			const apiUrl =
 				import.meta.env.VITE_API_URL || "http://localhost:3000";
-			const response = await axios.post(`${apiUrl}/auth/login`, {
+			const response = await axios.post(`${apiUrl}/auth/register`, {
+				name,
 				email,
 				password,
 			});
 
 			setAuth(response.data.user, response.data.token);
-			navigate("/admin");
+			navigate("/"); // Redirect to home after register
 		} catch (err: any) {
-			setError(err.response?.data?.error || "Failed to login");
+			setError(err.response?.data?.error || "Failed to register");
 		}
 	};
 
@@ -56,7 +56,7 @@ const LoginPage = () => {
 						align="center"
 						gutterBottom
 					>
-						Login
+						Create Account
 					</Typography>
 					{error && (
 						<Alert severity="error" sx={{ mb: 2 }}>
@@ -68,11 +68,22 @@ const LoginPage = () => {
 							margin="normal"
 							required
 							fullWidth
+							id="name"
+							label="Full Name"
+							name="name"
+							autoComplete="name"
+							autoFocus
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+						/>
+						<TextField
+							margin="normal"
+							required
+							fullWidth
 							id="email"
 							label="Email Address"
 							name="email"
 							autoComplete="email"
-							autoFocus
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 						/>
@@ -84,7 +95,7 @@ const LoginPage = () => {
 							label="Password"
 							type="password"
 							id="password"
-							autoComplete="current-password"
+							autoComplete="new-password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 						/>
@@ -94,15 +105,15 @@ const LoginPage = () => {
 							variant="contained"
 							sx={{ mt: 3, mb: 2 }}
 						>
-							Sign In
+							Sign Up
 						</Button>
 						<Box sx={{ textAlign: "center" }}>
 							<Link
 								component={RouterLink}
-								to="/register"
+								to="/login"
 								variant="body2"
 							>
-								Don't have an account? Sign Up
+								Already have an account? Sign in
 							</Link>
 						</Box>
 					</Box>
@@ -112,4 +123,4 @@ const LoginPage = () => {
 	);
 };
 
-export default LoginPage;
+export default RegisterPage;
