@@ -7,6 +7,10 @@ import ForumPage from "./pages/ForumPage";
 import TechnicalPage from "./pages/TechnicalPage";
 import FollowersPage from "./pages/FollowersPage";
 
+import LoginPage from "./pages/LoginPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 // Placeholder components for other pages
 const DialoguesPage = () => (
 	<Box sx={{ pb: 8 }}>
@@ -121,6 +125,15 @@ function App() {
 				<Routes>
 					<Route path="/" element={<MainLayout />}>
 						<Route index element={<HomePage />} />
+						<Route path="login" element={<LoginPage />} />
+						<Route
+							path="admin"
+							element={
+								<ProtectedRoute>
+									<AdminDashboard />
+								</ProtectedRoute>
+							}
+						/>
 						<Route
 							path="quests/bjorn"
 							element={<BjornQuestsPage />}
