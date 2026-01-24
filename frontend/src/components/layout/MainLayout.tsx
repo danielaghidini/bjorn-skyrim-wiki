@@ -29,6 +29,7 @@ import {
 	Wrench,
 } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
 
 const drawerWidth = 240;
 
@@ -230,6 +231,52 @@ const MainLayout: React.FC = () => {
 									</Button>
 								);
 							})}
+							<Box
+								sx={{
+									borderLeft:
+										"1px solid rgba(255,255,255,0.1)",
+									pl: 1,
+									ml: 1,
+									display: "flex",
+									alignItems: "center",
+								}}
+							>
+								{useAuthStore((state) => state.token) ? (
+									<>
+										<Button
+											component={NavLink}
+											to="/admin"
+											sx={{
+												color: "text.secondary",
+												"&:hover": {
+													color: "primary.main",
+												},
+											}}
+										>
+											Dashboard
+										</Button>
+									</>
+								) : (
+									<Button
+										component={NavLink}
+										to="/login"
+										variant="outlined"
+										size="small"
+										sx={{
+											borderColor:
+												"rgba(79, 195, 247, 0.5)",
+											color: "primary.main",
+											"&:hover": {
+												borderColor: "primary.main",
+												bgcolor:
+													"rgba(79, 195, 247, 0.1)",
+											},
+										}}
+									>
+										Login
+									</Button>
+								)}
+							</Box>
 						</Stack>
 					</Toolbar>
 				</Container>
