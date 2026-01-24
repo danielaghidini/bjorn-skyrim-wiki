@@ -1,0 +1,6 @@
+[phases.build]
+dependsOn = ["setup"]
+cmds = ["npm ci", "npx prisma generate", "npm run build"]
+
+[start]
+cmd = "npm run start"
