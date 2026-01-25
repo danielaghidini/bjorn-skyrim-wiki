@@ -1,0 +1,460 @@
+import React from "react";
+import {
+	Box,
+	AppBar,
+	Toolbar,
+	Typography,
+	Drawer,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+	Container,
+	IconButton,
+	Button,
+	Stack,
+	Menu as MuiMenu,
+	MenuItem,
+} from "@mui/material";
+import { ChevronDown } from "lucide-react";
+import {
+	Home,
+	Scroll,
+	MessageSquare,
+	Image,
+	Menu,
+	MessageCircle,
+	Users,
+	Wrench,
+} from "lucide-react";
+import { NavLink, Outlet } from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
+
+const drawerWidth = 240;
+
+const menuItems = [
+	{ text: "Home", icon: <Home size={18} />, path: "/" },
+	{
+		text: "Quests",
+		icon: <Scroll size={18} />,
+		path: "#", // Just a trigger for the dropdown
+		children: [
+			{ text: "Bjorn Quests", path: "/quests/bjorn" },
+			{ text: "Game Quests", path: "/quests/game" },
+		],
+	},
+	{
+		text: "Followers",
+		icon: <Users size={18} />,
+		path: "/followers",
+	},
+	{
+		text: "Forum",
+		icon: <MessageCircle size={18} />,
+		path: "/forum",
+	},
+	{
+		text: "Dialogues",
+		icon: <MessageSquare size={18} />,
+		path: "/dialogues",
+	},
+	{ text: "Gallery", icon: <Image size={18} />, path: "/media" },
+];
+
+const MainLayout: React.FC = () => {
+	const [mobileOpen, setMobileOpen] = React.useState(false);
+
+	const handleDrawerToggle = () => {
+		setMobileOpen(!mobileOpen);
+	};
+
+	const mobileDrawer = (
+		<Box sx={{ p: 2, height: "100%", bgcolor: "background.default" }}>
+			<Typography
+				variant="h6"
+				noWrap
+				component="div"
+				sx={{
+					color: "#ffffff",
+					fontWeight: "bold",
+					fontFamily: "Bungee",
+					mb: 3,
+					textAlign: "center",
+				}}
+			>
+				Nordic Chronicles
+			</Typography>
+			<List>
+				{menuItems.map((item) => (
+					<React.Fragment key={item.text}>
+						<ListItem disablePadding sx={{ mb: 1 }}>
+							<ListItemButton
+								component={NavLink}
+								to={item.path}
+								onClick={() => setMobileOpen(false)}
+								sx={{
+									"&.active": {
+										backgroundColor:
+											"rgba(79, 195, 247, 0.1)",
+										borderLeft: "3px solid",
+										borderColor: "primary.main",
+										"& .MuiListItemIcon-root, & .MuiListItemText-primary":
+											{
+												color: "primary.main",
+											},
+									},
+								}}
+							>
+								<ListItemIcon sx={{ minWidth: 40 }}>
+									{item.icon}
+								</ListItemIcon>
+								<ListItemText primary={item.text} />
+							</ListItemButton>
+						</ListItem>
+						{item.children &&
+							item.children.map((child) => (
+								<ListItem
+									key={child.text}
+									disablePadding
+									sx={{ mb: 1, pl: 4 }}
+								>
+									<ListItemButton
+										component={NavLink}
+										to={child.path}
+										onClick={() => setMobileOpen(false)}
+										sx={{
+											"&.active": {
+												color: "primary.main",
+											},
+										}}
+									>
+										<ListItemText
+											primary={child.text}
+											primaryTypographyProps={{
+												fontSize: "0.9rem",
+											}}
+										/>
+									</ListItemButton>
+								</ListItem>
+							))}
+					</React.Fragment>
+				))}
+			</List>
+		</Box>
+	);
+
+	return (
+		<Box
+			sx={{
+				display: "flex",
+				flexDirection: "column",
+				minHeight: "100vh",
+			}}
+		>
+			<AppBar
+				position="fixed"
+				sx={{
+					bgcolor: "rgba(10, 13, 17, 0.9)",
+					backdropFilter: "blur(8px)",
+					boxShadow: "none",
+					borderBottom: "1px solid rgba(79, 195, 247, 0.2)",
+					zIndex: (theme) => theme.zIndex.drawer + 1,
+				}}
+			>
+				<Container maxWidth="lg">
+					<Toolbar
+						disableGutters
+						sx={{ justifyContent: "space-between" }}
+					>
+						<Box sx={{ display: "flex", alignItems: "center" }}>
+							<IconButton
+								color="inherit"
+								aria-label="open drawer"
+								edge="start"
+								onClick={handleDrawerToggle}
+								sx={{ mr: 2, display: { sm: "none" } }}
+							>
+								<Menu />
+							</IconButton>
+							<Typography
+								variant="h6"
+								noWrap
+								component={NavLink}
+								to="/"
+								sx={{
+									color: "#ffffff",
+									fontWeight: "bold",
+									textDecoration: "none",
+									fontFamily: "Bungee",
+									letterSpacing: "0.1rem",
+								}}
+							>
+								Bjorn Wiki
+							</Typography>
+						</Box>
+
+						<Stack
+							direction="row"
+							spacing={1}
+							sx={{ display: { xs: "none", sm: "flex" } }}
+						>
+							{menuItems.map((item) => {
+								if (item.children) {
+									return (
+										<QuestDropdown
+											key={item.text}
+											item={item}
+										/>
+									);
+								}
+								return (
+									<Button
+										key={item.text}
+										component={NavLink}
+										to={item.path}
+										startIcon={item.icon}
+										sx={{
+											color: "text.secondary",
+											px: 2,
+											"&.active": {
+												color: "primary.main",
+												backgroundColor:
+													"rgba(79, 195, 247, 0.05)",
+											},
+											"&:hover": {
+												color: "primary.light",
+											},
+										}}
+									>
+										{item.text}
+									</Button>
+								);
+							})}
+							<Box
+								sx={{
+									borderLeft:
+										"1px solid rgba(255,255,255,0.1)",
+									pl: 1,
+									ml: 1,
+									display: "flex",
+									alignItems: "center",
+								}}
+							>
+								{useAuthStore((state) => state.token) ? (
+									<>
+										<Button
+											component={NavLink}
+											to="/admin"
+											sx={{
+												color: "text.secondary",
+												"&:hover": {
+													color: "primary.main",
+												},
+											}}
+										>
+											Dashboard
+										</Button>
+									</>
+								) : (
+									<Button
+										component={NavLink}
+										to="/login"
+										variant="outlined"
+										size="small"
+										sx={{
+											borderColor:
+												"rgba(79, 195, 247, 0.5)",
+											color: "primary.main",
+											"&:hover": {
+												borderColor: "primary.main",
+												bgcolor:
+													"rgba(79, 195, 247, 0.1)",
+											},
+										}}
+									>
+										Login
+									</Button>
+								)}
+							</Box>
+						</Stack>
+					</Toolbar>
+				</Container>
+			</AppBar>
+
+			{/* Mobile Drawer */}
+			<Box component="nav">
+				<Drawer
+					variant="temporary"
+					open={mobileOpen}
+					onClose={handleDrawerToggle}
+					ModalProps={{ keepMounted: true }}
+					sx={{
+						display: { xs: "block", sm: "none" },
+						"& .MuiDrawer-paper": {
+							boxSizing: "border-box",
+							width: drawerWidth,
+						},
+					}}
+				>
+					{mobileDrawer}
+				</Drawer>
+			</Box>
+
+			<Box
+				component="main"
+				sx={{
+					flexGrow: 1,
+					p: 3,
+					mt: "80px",
+				}}
+			>
+				<Container maxWidth="lg">
+					<Outlet />
+				</Container>
+			</Box>
+
+			{/* Footer */}
+			<Box
+				component="footer"
+				sx={{
+					py: 6,
+					mt: "auto",
+					bgcolor: "rgba(10, 13, 17, 0.95)",
+					borderTop: "1px solid rgba(79, 195, 247, 0.1)",
+					textAlign: "center",
+				}}
+			>
+				<Container maxWidth="lg">
+					<Stack
+						direction={{ xs: "column", sm: "row" }}
+						spacing={4}
+						justifyContent="space-between"
+						alignItems="center"
+					>
+						<Typography
+							variant="body2"
+							sx={{
+								color: "text.secondary",
+								fontFamily: "Bungee",
+								letterSpacing: 1,
+							}}
+						>
+							Bjorn Wiki
+						</Typography>
+
+						<Stack direction="row" spacing={3}>
+							<Button
+								component={NavLink}
+								to="/technical"
+								sx={{
+									color: "text.secondary",
+									fontSize: "0.8rem",
+									"&:hover": { color: "primary.main" },
+								}}
+								startIcon={<Wrench size={14} />}
+							>
+								Technical Info
+							</Button>
+							<Button
+								component="a"
+								href="https://ko-fi.com/bjorndev"
+								target="_blank"
+								sx={{
+									color: "text.secondary",
+									fontSize: "0.8rem",
+									"&:hover": { color: "primary.main" },
+								}}
+							>
+								Support on Ko-fi
+							</Button>
+						</Stack>
+
+						<Typography
+							variant="caption"
+							sx={{ color: "text.secondary", opacity: 0.5 }}
+						>
+							&copy; {new Date().getFullYear()} Bjorn Mod Team.
+							Not affiliated with Bethesda Game Studios.
+						</Typography>
+					</Stack>
+				</Container>
+			</Box>
+		</Box>
+	);
+};
+
+const QuestDropdown = ({ item }: { item: any }) => {
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const open = Boolean(anchorEl);
+	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+
+	return (
+		<>
+			<Button
+				id="quests-button"
+				aria-controls={open ? "quests-menu" : undefined}
+				aria-haspopup="true"
+				aria-expanded={open ? "true" : undefined}
+				onClick={handleClick}
+				startIcon={item.icon}
+				endIcon={<ChevronDown size={14} />}
+				sx={{
+					color: "text.secondary",
+					px: 2,
+					"&:hover": {
+						color: "primary.light",
+					},
+				}}
+			>
+				{item.text}
+			</Button>
+			<MuiMenu
+				id="quests-menu"
+				anchorEl={anchorEl}
+				open={open}
+				onClose={handleClose}
+				MenuListProps={{
+					"aria-labelledby": "quests-button",
+				}}
+				sx={{
+					"& .MuiPaper-root": {
+						bgcolor: "#151921",
+						border: "1px solid rgba(79, 195, 247, 0.2)",
+						minWidth: 160,
+					},
+				}}
+			>
+				{item.children.map((child: any) => (
+					<MenuItem
+						key={child.text}
+						onClick={handleClose}
+						component={NavLink}
+						to={child.path}
+						sx={{
+							color: "#ffffff",
+							fontSize: "0.9rem",
+							"&:hover": {
+								bgcolor: "rgba(79, 195, 247, 0.1)",
+								color: "primary.main",
+							},
+							"&.active": {
+								color: "primary.main",
+								bgcolor: "rgba(79, 195, 247, 0.05)",
+							},
+						}}
+					>
+						{child.text}
+					</MenuItem>
+				))}
+			</MuiMenu>
+		</>
+	);
+};
+
+export default MainLayout;
