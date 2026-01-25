@@ -3,22 +3,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
 
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-import pg from "pg";
-
-console.log("Starting server...");
-
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
-export const prisma = new PrismaClient({ adapter });
-
-// Verify database connection
-prisma
-	.$connect()
-	.then(() => console.log("Successfully connected to the database"))
-	.catch((err) => console.error("Failed to connect to the database:", err));
-
 import { login, register } from "./controllers/authController.js";
 import { authenticateToken } from "./middleware/auth.js";
 import {
@@ -28,7 +12,13 @@ import {
 	createQuest,
 	updateQuest,
 	deleteQuest,
+	createCategory,
 } from "./controllers/contentController.js";
+
+import { prisma, connectDB } from "./db.js";
+
+console.log("Starting server...");
+connectDB();
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -103,27 +93,18 @@ app.get("/api/quests", async (req, res) => {
 	}
 });
 
-import {
-	createArticle as createArt,
-	updateArticle as updateArt,
-	deleteArticle as deleteArt,
-	createQuest as createQ,
-	updateQuest as updateQ,
-	deleteQuest as deleteQ,
-} from "./controllers/contentController.js";
-
 // Auth Routes
 app.post("/auth/register", register);
 app.post("/auth/login", login);
 
 // Protected Content Routes
-app.post("/articles", authenticateToken, createArt);
-app.put("/articles/:id", authenticateToken, updateArt);
-app.delete("/articles/:id", authenticateToken, deleteArt);
+app.post("/articles", authenticateToken, createArticle);
+app.put("/articles/:id", authenticateToken, updateArticle);
+app.delete("/articles/:id", authenticateToken, deleteArticle);
 
-app.post("/quests", authenticateToken, createQ);
-app.put("/quests/:id", authenticateToken, updateQ);
-app.delete("/quests/:id", authenticateToken, deleteQ);
+app.post("/quests", authenticateToken, createQuest);
+app.put("/quests/:id", authenticateToken, updateQuest);
+app.delete("/quests/:id", authenticateToken, deleteQuest);
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);

@@ -1,6 +1,20 @@
 import { Request, Response } from "express";
 import { AuthRequest } from "../middleware/auth.js";
-import { prisma } from "../index.js";
+import { prisma } from "../db.js";
+
+// Categories
+export const createCategory = async (req: AuthRequest, res: Response) => {
+	const { name, description } = req.body;
+	try {
+		const category = await prisma.category.create({
+			data: { name, description },
+		});
+		res.status(201).json(category);
+	} catch (error) {
+		console.error("Create category error:", error);
+		res.status(500).json({ error: "Failed to create category" });
+	}
+};
 
 // Articles
 export const createArticle = async (req: AuthRequest, res: Response) => {
