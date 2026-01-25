@@ -13,12 +13,6 @@ const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 export const prisma = new PrismaClient({ adapter });
 
-// Verify database connection
-prisma
-	.$connect()
-	.then(() => console.log("Successfully connected to the database"))
-	.catch((err) => console.error("Failed to connect to the database:", err));
-
 import { login, register } from "./controllers/authController.js";
 import { authenticateToken } from "./middleware/auth.js";
 import {
