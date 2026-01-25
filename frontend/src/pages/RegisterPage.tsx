@@ -12,6 +12,7 @@ import {
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
+import { API_URL } from "../config/apiConfig";
 
 const RegisterPage = () => {
 	const [name, setName] = useState("");
@@ -24,9 +25,7 @@ const RegisterPage = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			const apiUrl =
-				import.meta.env.VITE_API_URL || "http://localhost:3000";
-			const response = await axios.post(`${apiUrl}/auth/register`, {
+			const response = await axios.post(`${API_URL}/auth/register`, {
 				name,
 				email,
 				password,

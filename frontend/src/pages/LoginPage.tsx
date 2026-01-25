@@ -13,6 +13,7 @@ import {
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
+import { API_URL } from "../config/apiConfig";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
@@ -24,10 +25,7 @@ const LoginPage = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			// In production, use environment variable for API URL
-			const apiUrl =
-				import.meta.env.VITE_API_URL || "http://localhost:3000";
-			const response = await axios.post(`${apiUrl}/auth/login`, {
+			const response = await axios.post(`${API_URL}/auth/login`, {
 				email,
 				password,
 			});

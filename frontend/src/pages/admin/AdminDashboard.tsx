@@ -16,6 +16,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useAuthStore } from "../../store/authStore";
+import { API_URL } from "../../config/apiConfig";
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -44,15 +45,14 @@ const AdminDashboard = () => {
 	const [articles, setArticles] = useState<any[]>([]);
 	const [quests, setQuests] = useState<any[]>([]);
 	const { token, user, logout } = useAuthStore();
-	const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 	// Form states
 	const [newItemTitle, setNewItemTitle] = useState("");
 
 	const fetchContent = async () => {
 		try {
-			const resArticles = await axios.get(`${apiUrl}/api/articles`);
-			const resQuests = await axios.get(`${apiUrl}/api/quests`);
+			const resArticles = await axios.get(`${API_URL}/api/articles`);
+			const resQuests = await axios.get(`${API_URL}/api/quests`);
 			setArticles(resArticles.data);
 			setQuests(resQuests.data);
 		} catch (error) {
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
 
 	useEffect(() => {
 		fetchContent();
-	}, [apiUrl]);
+	}, [API_URL]);
 
 	const handleCreate = async () => {
 		if (!newItemTitle) return;
@@ -82,7 +82,7 @@ const AdminDashboard = () => {
 							description: "Draft description",
 						};
 
-			await axios.post(`${apiUrl}${endpoint}`, payload, {
+			await axios.post(`${API_URL}${endpoint}`, payload, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			setNewItemTitle("");
@@ -95,7 +95,7 @@ const AdminDashboard = () => {
 	const handleDelete = async (id: string) => {
 		try {
 			const endpoint = value === 0 ? "/articles" : "/quests";
-			await axios.delete(`${apiUrl}${endpoint}/${id}`, {
+			await axios.delete(`${API_URL}${endpoint}/${id}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			fetchContent();
