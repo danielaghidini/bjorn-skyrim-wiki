@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
 import { AuthRequest } from "../middleware/auth.js";
-
-const prisma = new PrismaClient();
+import { prisma } from "../index.js";
 
 // Articles
 export const createArticle = async (req: AuthRequest, res: Response) => {
@@ -17,7 +15,7 @@ export const createArticle = async (req: AuthRequest, res: Response) => {
 				excerpt,
 				categoryId,
 				published,
-				author: req.user?.id,
+				authorId: req.user?.id,
 			},
 		});
 		res.status(201).json(article);
@@ -29,11 +27,23 @@ export const createArticle = async (req: AuthRequest, res: Response) => {
 export const updateArticle = async (req: AuthRequest, res: Response) => {
 	try {
 		const { id } = req.params as { id: string };
-		const article = await prisma.article.update({
+		const article = await prisma.article.findUnique({ where: { id } });
+
+		if (!article) {
+			return res.status(404).json({ error: "Article not found" });
+		}
+
+		if (req.user.role !== "ADMIN" && article.authorId !== req.user.id) {
+			return res
+				.status(403)
+				.json({ error: "Access denied. Not the author." });
+		}
+
+		const updatedArticle = await prisma.article.update({
 			where: { id },
 			data: req.body,
 		});
-		res.json(article);
+		res.json(updatedArticle);
 	} catch (error) {
 		res.status(500).json({ error: "Error updating article" });
 	}
@@ -42,6 +52,18 @@ export const updateArticle = async (req: AuthRequest, res: Response) => {
 export const deleteArticle = async (req: AuthRequest, res: Response) => {
 	try {
 		const { id } = req.params as { id: string };
+		const article = await prisma.article.findUnique({ where: { id } });
+
+		if (!article) {
+			return res.status(404).json({ error: "Article not found" });
+		}
+
+		if (req.user.role !== "ADMIN" && article.authorId !== req.user.id) {
+			return res
+				.status(403)
+				.json({ error: "Access denied. Not the author." });
+		}
+
 		await prisma.article.delete({ where: { id } });
 		res.status(204).send();
 	} catch (error) {
@@ -54,7 +76,14 @@ export const createQuest = async (req: AuthRequest, res: Response) => {
 	try {
 		const { title, slug, description, difficulty, rewards } = req.body;
 		const quest = await prisma.quest.create({
-			data: { title, slug, description, difficulty, rewards },
+			data: {
+				title,
+				slug,
+				description,
+				difficulty,
+				rewards,
+				authorId: req.user?.id,
+			},
 		});
 		res.status(201).json(quest);
 	} catch (error) {
@@ -65,11 +94,23 @@ export const createQuest = async (req: AuthRequest, res: Response) => {
 export const updateQuest = async (req: AuthRequest, res: Response) => {
 	try {
 		const { id } = req.params as { id: string };
-		const quest = await prisma.quest.update({
+		const quest = await prisma.quest.findUnique({ where: { id } });
+
+		if (!quest) {
+			return res.status(404).json({ error: "Quest not found" });
+		}
+
+		if (req.user.role !== "ADMIN" && quest.authorId !== req.user.id) {
+			return res
+				.status(403)
+				.json({ error: "Access denied. Not the author." });
+		}
+
+		const updatedQuest = await prisma.quest.update({
 			where: { id },
 			data: req.body,
 		});
-		res.json(quest);
+		res.json(updatedQuest);
 	} catch (error) {
 		res.status(500).json({ error: "Error updating quest" });
 	}
@@ -78,6 +119,18 @@ export const updateQuest = async (req: AuthRequest, res: Response) => {
 export const deleteQuest = async (req: AuthRequest, res: Response) => {
 	try {
 		const { id } = req.params as { id: string };
+		const quest = await prisma.quest.findUnique({ where: { id } });
+
+		if (!quest) {
+			return res.status(404).json({ error: "Quest not found" });
+		}
+
+		if (req.user.role !== "ADMIN" && quest.authorId !== req.user.id) {
+			return res
+				.status(403)
+				.json({ error: "Access denied. Not the author." });
+		}
+
 		await prisma.quest.delete({ where: { id } });
 		res.status(204).send();
 	} catch (error) {

@@ -41,9 +41,9 @@ function CustomTabPanel(props: TabPanelProps) {
 
 const AdminDashboard = () => {
 	const [value, setValue] = useState(0);
-	const [articles, setArticles] = useState([]);
-	const [quests, setQuests] = useState([]);
-	const { token, logout } = useAuthStore();
+	const [articles, setArticles] = useState<any[]>([]);
+	const [quests, setQuests] = useState<any[]>([]);
+	const { token, user, logout } = useAuthStore();
 	const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 	// Form states
@@ -51,18 +51,18 @@ const AdminDashboard = () => {
 
 	const fetchContent = async () => {
 		try {
-			// Assuming GET endpoints exist (if not public, need headers).
-			// Based on controller, we have CRUD. Usually GET is public.
-			// If GET is not implemented yet, we might fail here.
-			// But we implemented CRUD POST/PUT/DELETE.
-			// We should check if GET exists. Using placeholders for now if not.
-			// If GET /articles doesn't exist, we can't list.
-			// Let's assume we can add GET routes or they exist?
-			// Providing minimal implementation for now.
+			const resArticles = await axios.get(`${apiUrl}/api/articles`);
+			const resQuests = await axios.get(`${apiUrl}/api/quests`);
+			setArticles(resArticles.data);
+			setQuests(resQuests.data);
 		} catch (error) {
-			console.error(error);
+			console.error("Fetch error:", error);
 		}
 	};
+
+	useEffect(() => {
+		fetchContent();
+	}, [apiUrl]);
 
 	const handleCreate = async () => {
 		if (!newItemTitle) return;
@@ -86,7 +86,7 @@ const AdminDashboard = () => {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			setNewItemTitle("");
-			// Refresh list
+			fetchContent();
 		} catch (error) {
 			alert("Error creating item");
 		}
@@ -98,7 +98,7 @@ const AdminDashboard = () => {
 			await axios.delete(`${apiUrl}${endpoint}/${id}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
-			// Refresh list
+			fetchContent();
 		} catch (error) {
 			alert("Error deleting item");
 		}
@@ -108,12 +108,20 @@ const AdminDashboard = () => {
 		setValue(newValue);
 	};
 
+	const canManage = (item: any) => {
+		return user?.role === "ADMIN" || item.authorId === user?.id;
+	};
+
 	return (
 		<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 			<Box
 				sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
 			>
-				<Typography variant="h4">Admin Dashboard</Typography>
+				<Typography variant="h4">
+					{user?.role === "ADMIN"
+						? "Admin Dashboard"
+						: "My Dashboard"}
+				</Typography>
 				<Button variant="outlined" onClick={logout}>
 					Logout
 				</Button>
@@ -147,23 +155,62 @@ const AdminDashboard = () => {
 
 			<CustomTabPanel value={value} index={0}>
 				<List>
-					{/* Placeholder items until GET is implemented */}
-					<ListItem
-						secondaryAction={
-							<IconButton edge="end" aria-label="delete">
-								<DeleteIcon />
-							</IconButton>
-						}
-					>
-						<ListItemText primary="Sample Article (GET not implemented)" />
-					</ListItem>
+					{articles.length === 0 && (
+						<Typography sx={{ p: 2, opacity: 0.5 }}>
+							No articles found.
+						</Typography>
+					)}
+					{articles.map((article: any) => (
+						<ListItem
+							key={article.id}
+							secondaryAction={
+								canManage(article) && (
+									<IconButton
+										edge="end"
+										aria-label="delete"
+										onClick={() => handleDelete(article.id)}
+									>
+										<DeleteIcon />
+									</IconButton>
+								)
+							}
+						>
+							<ListItemText
+								primary={article.title}
+								secondary={article.slug}
+							/>
+						</ListItem>
+					))}
 				</List>
 			</CustomTabPanel>
 			<CustomTabPanel value={value} index={1}>
 				<List>
-					<ListItem>
-						<ListItemText primary="Sample Quest" />
-					</ListItem>
+					{quests.length === 0 && (
+						<Typography sx={{ p: 2, opacity: 0.5 }}>
+							No quests found.
+						</Typography>
+					)}
+					{quests.map((quest: any) => (
+						<ListItem
+							key={quest.id}
+							secondaryAction={
+								canManage(quest) && (
+									<IconButton
+										edge="end"
+										aria-label="delete"
+										onClick={() => handleDelete(quest.id)}
+									>
+										<DeleteIcon />
+									</IconButton>
+								)
+							}
+						>
+							<ListItemText
+								primary={quest.title}
+								secondary={quest.slug}
+							/>
+						</ListItem>
+					))}
 				</List>
 			</CustomTabPanel>
 		</Container>
