@@ -68,12 +68,11 @@ const hubItems = [
 		category: "Lore",
 	},
 	{
-		title: "Media Gallery",
-		description:
-			"A collection of screenshots and videos from Bjorn's journey.",
+		title: "Galleries",
+		description: "Explore Fan Art and official media from Bjorn's journey.",
 		icon: <ImageIcon size={40} color="#4fc3f7" />,
-		path: "/media",
-		category: "Media",
+		path: "/fan-art",
+		category: "Visuals",
 	},
 	{
 		title: "Other Followers",

@@ -1,0 +1,180 @@
+import React, { useEffect, useState } from "react";
+import {
+	Container,
+	Typography,
+	Grid,
+	Card,
+	CardMedia,
+	CardContent,
+	Box,
+	CircularProgress,
+	Alert,
+	useTheme,
+	Tooltip,
+	Link,
+} from "@mui/material";
+import axios from "axios";
+import { API_URL } from "../config/apiConfig";
+
+interface FanArt {
+	id: string;
+	title: string;
+	imageUrl: string;
+	artistName: string;
+	description?: string;
+}
+
+const FanArtPage: React.FC = () => {
+	const theme = useTheme();
+	const [fanArts, setFanArts] = useState<FanArt[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		const fetchFanArt = async () => {
+			try {
+				const response = await axios.get(`${API_URL}/api/fan-art`);
+				setFanArts(response.data);
+				setLoading(false);
+			} catch (err) {
+				console.error("Error fetching fan art:", err);
+				setError("Failed to load the art gallery.");
+				setLoading(false);
+			}
+		};
+
+		fetchFanArt();
+	}, []);
+
+	if (loading) {
+		return (
+			<Box
+				display="flex"
+				justifyContent="center"
+				alignItems="center"
+				minHeight="60vh"
+			>
+				<CircularProgress />
+			</Box>
+		);
+	}
+
+	return (
+		<Container maxWidth="lg" sx={{ py: 8 }}>
+			<Box textAlign="center" mb={8}>
+				<Typography
+					variant="h2"
+					component="h1"
+					gutterBottom
+					sx={{
+						fontFamily: "Bungee",
+						fontWeight: 700,
+						color: theme.palette.primary.main,
+						textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+					}}
+				>
+					Fan Art
+				</Typography>
+				<Typography
+					variant="h6"
+					color="text.secondary"
+					sx={{ maxWidth: 800, mx: "auto" }}
+				>
+					Explore the incredible community creations dedicated to
+					Bjorn and his adventures in Skyrim.
+				</Typography>
+			</Box>
+
+			{error && (
+				<Alert severity="error" sx={{ mb: 4 }}>
+					{error}
+				</Alert>
+			)}
+
+			{fanArts.length === 0 && !error ? (
+				<Typography
+					variant="body1"
+					textAlign="center"
+					color="text.secondary"
+				>
+					No art pieces in the gallery yet. Be the first to
+					contribute!
+				</Typography>
+			) : (
+				<Grid container spacing={4}>
+					{fanArts.map((art) => (
+						<Grid key={art.id} size={{ xs: 12, sm: 6, md: 4 }}>
+							<Card
+								sx={{
+									height: "100%",
+									display: "flex",
+									flexDirection: "column",
+									background: "rgba(30, 30, 30, 0.6)",
+									backdropFilter: "blur(10px)",
+									border: "1px solid rgba(139, 115, 85, 0.2)",
+									transition:
+										"transform 0.3s ease, box-shadow 0.3s ease",
+									"&:hover": {
+										transform: "translateY(-10px)",
+										boxShadow:
+											"0 10px 30px rgba(0,0,0,0.5)",
+										border: "1px solid rgba(139, 115, 85, 0.5)",
+									},
+								}}
+							>
+								<Tooltip
+									title={art.description || art.title}
+									arrow
+									placement="top"
+								>
+									<CardMedia
+										component="img"
+										image={art.imageUrl}
+										alt={art.title}
+										sx={{
+											height: 350,
+											objectFit: "cover",
+											borderBottom:
+												"1px solid rgba(139, 115, 85, 0.2)",
+										}}
+									/>
+								</Tooltip>
+								<CardContent sx={{ flexGrow: 1, p: 3 }}>
+									<Typography
+										variant="h5"
+										component="h2"
+										gutterBottom
+										sx={{
+											fontFamily: "'Cinzel', serif",
+											color: "#e0d8c3",
+										}}
+									>
+										{art.title}
+									</Typography>
+									<Typography
+										variant="body2"
+										color="primary"
+										sx={{ fontWeight: 600 }}
+									>
+										By: {art.artistName}
+									</Typography>
+									{art.description && (
+										<Typography
+											variant="body2"
+											color="text.secondary"
+											sx={{ mt: 1, fontStyle: "italic" }}
+										>
+											"{art.description}"
+										</Typography>
+									)}
+								</CardContent>
+							</Card>
+						</Grid>
+					))}
+				</Grid>
+			)}
+		</Container>
+	);
+};
+
+export default FanArtPage;

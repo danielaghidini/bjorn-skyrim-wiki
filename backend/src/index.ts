@@ -16,6 +16,12 @@ import {
 } from "./controllers/contentController.js";
 
 import { prisma, connectDB } from "./db.js";
+import {
+	getAllFanArt,
+	createFanArt,
+	updateFanArt,
+	deleteFanArt,
+} from "./controllers/fanArtController.js";
 
 console.log("Starting server...");
 connectDB();
@@ -93,6 +99,8 @@ app.get("/api/quests", async (req, res) => {
 	}
 });
 
+app.get("/api/fan-art", getAllFanArt);
+
 // Auth Routes
 app.post("/auth/register", register);
 app.post("/auth/login", login);
@@ -105,6 +113,10 @@ app.delete("/articles/:id", authenticateToken, deleteArticle);
 app.post("/quests", authenticateToken, createQuest);
 app.put("/quests/:id", authenticateToken, updateQuest);
 app.delete("/quests/:id", authenticateToken, deleteQuest);
+
+app.post("/fan-art", authenticateToken, createFanArt);
+app.put("/fan-art/:id", authenticateToken, updateFanArt);
+app.delete("/fan-art/:id", authenticateToken, deleteFanArt);
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);

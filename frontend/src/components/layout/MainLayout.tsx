@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 import { ChevronDown } from "lucide-react";
 import {
-	Home,
 	Scroll,
 	MessageSquare,
 	Image,
@@ -34,7 +33,6 @@ import { useAuthStore } from "../../store/authStore";
 const drawerWidth = 240;
 
 const menuItems = [
-	{ text: "Home", icon: <Home size={18} />, path: "/" },
 	{
 		text: "Quests",
 		icon: <Scroll size={18} />,
@@ -43,6 +41,11 @@ const menuItems = [
 			{ text: "Bjorn Quests", path: "/quests/bjorn" },
 			{ text: "Game Quests", path: "/quests/game" },
 		],
+	},
+	{
+		text: "Dialogues",
+		icon: <MessageSquare size={18} />,
+		path: "/dialogues",
 	},
 	{
 		text: "Followers",
@@ -55,11 +58,14 @@ const menuItems = [
 		path: "/forum",
 	},
 	{
-		text: "Dialogues",
-		icon: <MessageSquare size={18} />,
-		path: "/dialogues",
+		text: "Media",
+		icon: <Image size={18} />,
+		path: "#",
+		children: [
+			{ text: "Fan Art", path: "/fan-art" },
+			{ text: "Gallery", path: "/media" },
+		],
 	},
-	{ text: "Gallery", icon: <Image size={18} />, path: "/media" },
 ];
 
 const MainLayout: React.FC = () => {
@@ -83,7 +89,7 @@ const MainLayout: React.FC = () => {
 					textAlign: "center",
 				}}
 			>
-				Nordic Chronicles
+				Bjorn Wiki
 			</Typography>
 			<List>
 				{menuItems.map((item) => (
@@ -397,8 +403,10 @@ const QuestDropdown = ({ item }: { item: any }) => {
 	return (
 		<>
 			<Button
-				id="quests-button"
-				aria-controls={open ? "quests-menu" : undefined}
+				id={`${item.text.toLowerCase()}-button`}
+				aria-controls={
+					open ? `${item.text.toLowerCase()}-menu` : undefined
+				}
 				aria-haspopup="true"
 				aria-expanded={open ? "true" : undefined}
 				onClick={handleClick}
@@ -415,12 +423,12 @@ const QuestDropdown = ({ item }: { item: any }) => {
 				{item.text}
 			</Button>
 			<MuiMenu
-				id="quests-menu"
+				id={`${item.text.toLowerCase()}-menu`}
 				anchorEl={anchorEl}
 				open={open}
 				onClose={handleClose}
 				MenuListProps={{
-					"aria-labelledby": "quests-button",
+					"aria-labelledby": `${item.text.toLowerCase()}-button`,
 				}}
 				sx={{
 					"& .MuiPaper-root": {

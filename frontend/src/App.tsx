@@ -10,6 +10,7 @@ import FollowersPage from "./pages/FollowersPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import FanArtPage from "./pages/FanArtPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Placeholder components for other pages
@@ -144,7 +145,8 @@ function App() {
 							path="quests/game"
 							element={<GameQuestsPage />}
 						/>
-						<Route path="forum" element={<ForumPage />} />
+						<Route path="/forum" element={<ForumPage />} />
+						<Route path="/fan-art" element={<FanArtPage />} />
 						<Route path="followers" element={<FollowersPage />} />
 						<Route path="technical" element={<TechnicalPage />} />
 						<Route path="dialogues" element={<DialoguesPage />} />
