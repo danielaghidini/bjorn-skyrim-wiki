@@ -15,6 +15,7 @@ import FanArtPage from "./pages/FanArtPage";
 import DialoguesPage from "./pages/DialoguesPage";
 import SongsPage from "./pages/SongsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ChatPage from "./pages/ChatPage";
 
 // Placeholder components for other pages
 
@@ -118,6 +119,8 @@ function App() {
 							element={<Box sx={{ p: 4 }}>Page Not Found</Box>}
 						/>
 					</Route>
+					{/* Standalone Route for Chat (No MainLayout) */}
+					<Route path="/chat" element={<ChatPage />} />
 				</Routes>
 			</BrowserRouter>
 		</ThemeProvider>

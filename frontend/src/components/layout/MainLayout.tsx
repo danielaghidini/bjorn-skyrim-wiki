@@ -67,6 +67,11 @@ const menuItems = [
 		icon: <Image size={18} />,
 		path: "/media",
 	},
+	{
+		text: "Chatbot",
+		icon: <MessageSquare size={18} />,
+		path: "/chat",
+	},
 ];
 
 const MainLayout: React.FC = () => {

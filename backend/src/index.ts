@@ -23,6 +23,7 @@ import {
 	deleteFanArt,
 } from "./controllers/fanArtController.js";
 import { getDialogues, getScenes } from "./controllers/dialogueController.js";
+import { chatWithBjorn } from "./controllers/chatController.js";
 
 console.log("Starting server...");
 connectDB();
@@ -32,6 +33,9 @@ const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+
+// Chat Route
+app.post("/api/chat", chatWithBjorn);
 
 app.get("/api/health", (req, res) => {
 	res.json({ status: "ok", timestamp: new Date().toISOString() });
