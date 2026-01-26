@@ -148,15 +148,34 @@ const AdminDashboard = () => {
 	};
 
 	return (
-		<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-			<Box
-				sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}
+		<Container maxWidth="lg" sx={{ py: 8 }}>
+			<Typography
+				variant="h2"
+				component="h1"
+				gutterBottom
+				sx={{
+					fontFamily: "Bungee",
+					color: "#ffffff",
+					mb: 1,
+					textAlign: "center",
+				}}
 			>
-				<Typography variant="h4">
-					{user?.role === "ADMIN"
-						? "Admin Dashboard"
-						: "My Dashboard"}
-				</Typography>
+				{user?.role === "ADMIN" ? "Admin Dashboard" : "My Dashboard"}
+			</Typography>
+			<Typography
+				variant="h6"
+				gutterBottom
+				sx={{
+					fontFamily: "Alan Sans",
+					color: "primary.main",
+					mb: 4,
+					textAlign: "center",
+				}}
+			>
+				Manage the Wiki's content and destiny
+			</Typography>
+
+			<Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3 }}>
 				<Button variant="outlined" onClick={logout}>
 					Logout
 				</Button>

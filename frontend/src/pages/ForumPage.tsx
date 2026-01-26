@@ -95,7 +95,7 @@ const ForumPage: React.FC = () => {
 	};
 
 	return (
-		<Box sx={{ pb: 8 }}>
+		<Box sx={{ py: 8 }}>
 			{/* Header */}
 			<Box sx={{ mb: 6, textAlign: "center" }}>
 				<Typography

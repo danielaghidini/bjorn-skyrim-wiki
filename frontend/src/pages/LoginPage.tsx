@@ -41,7 +41,7 @@ const LoginPage = () => {
 		<Container component="main" maxWidth="xs">
 			<Box
 				sx={{
-					marginTop: 8,
+					py: 8,
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "center",
@@ -49,12 +49,29 @@ const LoginPage = () => {
 			>
 				<Paper sx={{ p: 4, width: "100%" }}>
 					<Typography
+						variant="h2"
 						component="h1"
-						variant="h5"
-						align="center"
 						gutterBottom
+						sx={{
+							fontFamily: "Bungee",
+							color: "#ffffff",
+							mb: 1,
+							textAlign: "center",
+						}}
 					>
 						Login
+					</Typography>
+					<Typography
+						variant="h6"
+						gutterBottom
+						sx={{
+							fontFamily: "Alan Sans",
+							color: "primary.main",
+							mb: 4,
+							textAlign: "center",
+						}}
+					>
+						Access the mercenary archives
 					</Typography>
 					{error && (
 						<Alert severity="error" sx={{ mb: 2 }}>

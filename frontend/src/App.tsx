@@ -11,54 +11,38 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import FanArtPage from "./pages/FanArtPage";
+
+import DialoguesPage from "./pages/DialoguesPage";
+import SongsPage from "./pages/SongsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Placeholder components for other pages
-const DialoguesPage = () => (
-	<Box sx={{ pb: 8 }}>
-		<Box sx={{ mb: 6, textAlign: "center" }}>
-			<Typography
-				variant="h2"
-				gutterBottom
-				sx={{
-					color: "#ffffff",
-					fontFamily: "Bungee",
-					fontSize: { xs: "2.5rem", md: "3.5rem" },
-				}}
-			>
-				Dialogues
-			</Typography>
-			<Typography
-				variant="h6"
-				sx={{ color: "primary.main", opacity: 0.8 }}
-			>
-				Explore over 4500 lines of fully voiced dialogue.
-			</Typography>
-		</Box>
-		<Typography variant="body1" sx={{ textAlign: "center", opacity: 0.7 }}>
-			Complete dialogue database coming soon...
-		</Typography>
-	</Box>
-);
+
 const BjornQuestsPage = () => (
-	<Box sx={{ pb: 8 }}>
+	<Box sx={{ py: 8 }}>
 		<Box sx={{ mb: 6, textAlign: "center" }}>
 			<Typography
 				variant="h2"
+				component="h1"
 				gutterBottom
 				sx={{
 					color: "#ffffff",
 					fontFamily: "Bungee",
-					fontSize: { xs: "2.5rem", md: "3.5rem" },
+					mb: 1,
 				}}
 			>
 				Bjorn Quests
 			</Typography>
 			<Typography
-				variant="h6"
-				sx={{ color: "primary.main", opacity: 0.8 }}
+				variant="h5"
+				gutterBottom
+				sx={{
+					fontFamily: "Alan Sans",
+					color: "primary.main",
+					mb: 6,
+				}}
 			>
-				Discover the specific journey of the Nordic Follower.
+				Discover the specific journey of the Nordic Follower
 			</Typography>
 		</Box>
 		<Typography variant="body1" sx={{ textAlign: "center", opacity: 0.7 }}>
@@ -66,51 +50,31 @@ const BjornQuestsPage = () => (
 		</Typography>
 	</Box>
 );
-const GameQuestsPage = () => (
-	<Box sx={{ pb: 8 }}>
-		<Box sx={{ mb: 6, textAlign: "center" }}>
-			<Typography
-				variant="h2"
-				gutterBottom
-				sx={{
-					color: "#ffffff",
-					fontFamily: "Bungee",
-					fontSize: { xs: "2.5rem", md: "3.5rem" },
-				}}
-			>
-				Game Quests
-			</Typography>
-			<Typography
-				variant="h6"
-				sx={{ color: "primary.main", opacity: 0.8 }}
-			>
-				See how Bjorn interacts with the world's original challenges.
-			</Typography>
-		</Box>
-		<Typography variant="body1" sx={{ textAlign: "center", opacity: 0.7 }}>
-			Vanilla game interaction details coming soon...
-		</Typography>
-	</Box>
-);
 const MediaPage = () => (
-	<Box sx={{ pb: 8 }}>
+	<Box sx={{ py: 8 }}>
 		<Box sx={{ mb: 6, textAlign: "center" }}>
 			<Typography
 				variant="h2"
+				component="h1"
 				gutterBottom
 				sx={{
 					color: "#ffffff",
 					fontFamily: "Bungee",
-					fontSize: { xs: "2.5rem", md: "3.5rem" },
+					mb: 1,
 				}}
 			>
 				Gallery
 			</Typography>
 			<Typography
-				variant="h6"
-				sx={{ color: "primary.main", opacity: 0.8 }}
+				variant="h5"
+				gutterBottom
+				sx={{
+					fontFamily: "Alan Sans",
+					color: "primary.main",
+					mb: 6,
+				}}
 			>
-				A collection of screenshots and videos from Bjorn's journey.
+				Screenshots and memories from Skyrim
 			</Typography>
 		</Box>
 		<Typography variant="body1" sx={{ textAlign: "center", opacity: 0.7 }}>
@@ -141,16 +105,18 @@ function App() {
 							path="quests/bjorn"
 							element={<BjornQuestsPage />}
 						/>
-						<Route
-							path="quests/game"
-							element={<GameQuestsPage />}
-						/>
-						<Route path="/forum" element={<ForumPage />} />
-						<Route path="/fan-art" element={<FanArtPage />} />
+						<Route path="forum" element={<ForumPage />} />
+						<Route path="fan-art" element={<FanArtPage />} />
 						<Route path="followers" element={<FollowersPage />} />
 						<Route path="technical" element={<TechnicalPage />} />
+
 						<Route path="dialogues" element={<DialoguesPage />} />
+						<Route path="songs" element={<SongsPage />} />
 						<Route path="media" element={<MediaPage />} />
+						<Route
+							path="*"
+							element={<Box sx={{ p: 4 }}>Page Not Found</Box>}
+						/>
 					</Route>
 				</Routes>
 			</BrowserRouter>

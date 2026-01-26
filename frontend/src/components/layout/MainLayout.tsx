@@ -14,10 +14,7 @@ import {
 	IconButton,
 	Button,
 	Stack,
-	Menu as MuiMenu,
-	MenuItem,
 } from "@mui/material";
-import { ChevronDown } from "lucide-react";
 import {
 	Scroll,
 	MessageSquare,
@@ -26,6 +23,8 @@ import {
 	MessageCircle,
 	Users,
 	Wrench,
+	Palette,
+	Music,
 } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
@@ -36,16 +35,17 @@ const menuItems = [
 	{
 		text: "Quests",
 		icon: <Scroll size={18} />,
-		path: "#", // Just a trigger for the dropdown
-		children: [
-			{ text: "Bjorn Quests", path: "/quests/bjorn" },
-			{ text: "Game Quests", path: "/quests/game" },
-		],
+		path: "/quests/bjorn",
 	},
 	{
 		text: "Dialogues",
 		icon: <MessageSquare size={18} />,
 		path: "/dialogues",
+	},
+	{
+		text: "Songs",
+		icon: <Music size={18} />,
+		path: "/songs",
 	},
 	{
 		text: "Followers",
@@ -58,13 +58,14 @@ const menuItems = [
 		path: "/forum",
 	},
 	{
-		text: "Media",
+		text: "Fan Art",
+		icon: <Palette size={18} />,
+		path: "/fan-art",
+	},
+	{
+		text: "Gallery",
 		icon: <Image size={18} />,
-		path: "#",
-		children: [
-			{ text: "Fan Art", path: "/fan-art" },
-			{ text: "Gallery", path: "/media" },
-		],
+		path: "/media",
 	},
 ];
 
@@ -118,32 +119,6 @@ const MainLayout: React.FC = () => {
 								<ListItemText primary={item.text} />
 							</ListItemButton>
 						</ListItem>
-						{item.children &&
-							item.children.map((child) => (
-								<ListItem
-									key={child.text}
-									disablePadding
-									sx={{ mb: 1, pl: 4 }}
-								>
-									<ListItemButton
-										component={NavLink}
-										to={child.path}
-										onClick={() => setMobileOpen(false)}
-										sx={{
-											"&.active": {
-												color: "primary.main",
-											},
-										}}
-									>
-										<ListItemText
-											primary={child.text}
-											primaryTypographyProps={{
-												fontSize: "0.9rem",
-											}}
-										/>
-									</ListItemButton>
-								</ListItem>
-							))}
 					</React.Fragment>
 				))}
 			</List>
@@ -205,38 +180,28 @@ const MainLayout: React.FC = () => {
 							spacing={1}
 							sx={{ display: { xs: "none", sm: "flex" } }}
 						>
-							{menuItems.map((item) => {
-								if (item.children) {
-									return (
-										<QuestDropdown
-											key={item.text}
-											item={item}
-										/>
-									);
-								}
-								return (
-									<Button
-										key={item.text}
-										component={NavLink}
-										to={item.path}
-										startIcon={item.icon}
-										sx={{
-											color: "text.secondary",
-											px: 2,
-											"&.active": {
-												color: "primary.main",
-												backgroundColor:
-													"rgba(79, 195, 247, 0.05)",
-											},
-											"&:hover": {
-												color: "primary.light",
-											},
-										}}
-									>
-										{item.text}
-									</Button>
-								);
-							})}
+							{menuItems.map((item) => (
+								<Button
+									key={item.text}
+									component={NavLink}
+									to={item.path}
+									startIcon={item.icon}
+									sx={{
+										color: "text.secondary",
+										px: 2,
+										"&.active": {
+											color: "primary.main",
+											backgroundColor:
+												"rgba(79, 195, 247, 0.05)",
+										},
+										"&:hover": {
+											color: "primary.light",
+										},
+									}}
+								>
+									{item.text}
+								</Button>
+							))}
 							<Box
 								sx={{
 									borderLeft:
@@ -387,81 +352,6 @@ const MainLayout: React.FC = () => {
 				</Container>
 			</Box>
 		</Box>
-	);
-};
-
-const QuestDropdown = ({ item }: { item: any }) => {
-	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-	const open = Boolean(anchorEl);
-	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
-	return (
-		<>
-			<Button
-				id={`${item.text.toLowerCase()}-button`}
-				aria-controls={
-					open ? `${item.text.toLowerCase()}-menu` : undefined
-				}
-				aria-haspopup="true"
-				aria-expanded={open ? "true" : undefined}
-				onClick={handleClick}
-				startIcon={item.icon}
-				endIcon={<ChevronDown size={14} />}
-				sx={{
-					color: "text.secondary",
-					px: 2,
-					"&:hover": {
-						color: "primary.light",
-					},
-				}}
-			>
-				{item.text}
-			</Button>
-			<MuiMenu
-				id={`${item.text.toLowerCase()}-menu`}
-				anchorEl={anchorEl}
-				open={open}
-				onClose={handleClose}
-				MenuListProps={{
-					"aria-labelledby": `${item.text.toLowerCase()}-button`,
-				}}
-				sx={{
-					"& .MuiPaper-root": {
-						bgcolor: "#151921",
-						border: "1px solid rgba(79, 195, 247, 0.2)",
-						minWidth: 160,
-					},
-				}}
-			>
-				{item.children.map((child: any) => (
-					<MenuItem
-						key={child.text}
-						onClick={handleClose}
-						component={NavLink}
-						to={child.path}
-						sx={{
-							color: "#ffffff",
-							fontSize: "0.9rem",
-							"&:hover": {
-								bgcolor: "rgba(79, 195, 247, 0.1)",
-								color: "primary.main",
-							},
-							"&.active": {
-								color: "primary.main",
-								bgcolor: "rgba(79, 195, 247, 0.05)",
-							},
-						}}
-					>
-						{child.text}
-					</MenuItem>
-				))}
-			</MuiMenu>
-		</>
 	);
 };
 

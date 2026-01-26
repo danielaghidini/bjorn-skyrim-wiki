@@ -9,7 +9,6 @@ import {
 	Box,
 	CircularProgress,
 	Alert,
-	useTheme,
 	Tooltip,
 } from "@mui/material";
 import axios from "axios";
@@ -24,7 +23,6 @@ interface FanArt {
 }
 
 const FanArtPage: React.FC = () => {
-	const theme = useTheme();
 	const [fanArts, setFanArts] = useState<FanArt[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -67,20 +65,24 @@ const FanArtPage: React.FC = () => {
 					gutterBottom
 					sx={{
 						fontFamily: "Bungee",
-						fontWeight: 700,
-						color: theme.palette.primary.main,
-						textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+						color: "#ffffff",
+						mb: 1,
+						textAlign: "center",
 					}}
 				>
 					Fan Art
 				</Typography>
 				<Typography
-					variant="h6"
-					color="text.secondary"
-					sx={{ maxWidth: 800, mx: "auto" }}
+					variant="h5"
+					gutterBottom
+					sx={{
+						fontFamily: "Alan Sans",
+						color: "primary.main",
+						mb: 6,
+						textAlign: "center",
+					}}
 				>
-					Explore the incredible community creations dedicated to
-					Bjorn and his adventures in Skyrim.
+					Explore incredible creations from the community
 				</Typography>
 			</Box>
 

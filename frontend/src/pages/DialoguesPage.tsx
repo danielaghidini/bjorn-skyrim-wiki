@@ -589,85 +589,103 @@ const DialoguesPage: React.FC = () => {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{dialogues.map((row) => (
-									<TableRow
-										hover
-										role="checkbox"
-										tabIndex={-1}
-										key={row.id}
-									>
-										<TableCell sx={{ maxWidth: 300 }}>
-											{subtype.includes("Scenes") ||
-											sceneNPC
-												? getActorName(row.voiceType)
-												: row.topicText || "—"}
-										</TableCell>
-										<TableCell>
-											{row.responseText}
-										</TableCell>
-										<TableCell align="center">
-											{row.voiceType ===
-												"DG04BjornVoice" &&
-												(row.audioFileName ||
-													row.fileName) && (
-													<Button
-														variant={
-															playingId === row.id
-																? "contained"
-																: "outlined"
-														}
-														size="small"
-														onClick={() =>
-															handlePlayAudio(row)
-														}
-														startIcon={
-															playingId ===
-															row.id ? (
-																<Pause
-																	size={16}
-																/>
-															) : (
-																<Play
-																	size={16}
-																/>
-															)
-														}
-														sx={{
-															minWidth: "90px",
-															textTransform:
-																"none",
-															borderRadius:
-																"20px",
-															animation:
+								{dialogues
+									.filter(
+										(row) =>
+											!/^===.+===$/.test(
+												row.responseText,
+											),
+									)
+									.map((row) => (
+										<TableRow
+											hover
+											role="checkbox"
+											tabIndex={-1}
+											key={row.id}
+										>
+											<TableCell sx={{ maxWidth: 300 }}>
+												{subtype.includes("Scenes") ||
+												sceneNPC
+													? getActorName(
+															row.voiceType,
+														)
+													: row.topicText || "—"}
+											</TableCell>
+											<TableCell>
+												{row.responseText}
+											</TableCell>
+											<TableCell align="center">
+												{row.voiceType ===
+													"DG04BjornVoice" &&
+													(row.audioFileName ||
+														row.fileName) && (
+														<Button
+															variant={
 																playingId ===
 																row.id
-																	? "pulse 2s infinite"
-																	: "none",
-															"@keyframes pulse":
-																{
-																	"0%": {
-																		boxShadow:
-																			"0 0 0 0 rgba(79, 195, 247, 0.4)",
+																	? "contained"
+																	: "outlined"
+															}
+															size="small"
+															onClick={() =>
+																handlePlayAudio(
+																	row,
+																)
+															}
+															startIcon={
+																playingId ===
+																row.id ? (
+																	<Pause
+																		size={
+																			16
+																		}
+																	/>
+																) : (
+																	<Play
+																		size={
+																			16
+																		}
+																	/>
+																)
+															}
+															sx={{
+																minWidth:
+																	"90px",
+																textTransform:
+																	"none",
+																borderRadius:
+																	"20px",
+																animation:
+																	playingId ===
+																	row.id
+																		? "pulse 2s infinite"
+																		: "none",
+																"@keyframes pulse":
+																	{
+																		"0%": {
+																			boxShadow:
+																				"0 0 0 0 rgba(79, 195, 247, 0.4)",
+																		},
+																		"70%": {
+																			boxShadow:
+																				"0 0 0 10px rgba(79, 195, 247, 0)",
+																		},
+																		"100%": {
+																			boxShadow:
+																				"0 0 0 0 rgba(79, 195, 247, 0)",
+																		},
 																	},
-																	"70%": {
-																		boxShadow:
-																			"0 0 0 10px rgba(79, 195, 247, 0)",
-																	},
-																	"100%": {
-																		boxShadow:
-																			"0 0 0 0 rgba(79, 195, 247, 0)",
-																	},
-																},
-														}}
-													>
-														{playingId === row.id
-															? "Stop"
-															: "Play"}
-													</Button>
-												)}
-										</TableCell>
-									</TableRow>
-								))}
+															}}
+														>
+															{playingId ===
+															row.id
+																? "Stop"
+																: "Play"}
+														</Button>
+													)}
+											</TableCell>
+										</TableRow>
+									))}
 								{dialogues.length === 0 && (
 									<TableRow>
 										<TableCell colSpan={3} align="center">

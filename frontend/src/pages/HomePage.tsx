@@ -16,12 +16,12 @@ import {
 import {
 	Shield,
 	Scroll,
-	Sword,
 	MessageCircle,
 	MessageSquare,
 	Image as ImageIcon,
 	ArrowRight,
-	Users,
+	Palette,
+	Music,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -45,14 +45,6 @@ const hubItems = [
 		category: "Mod Content",
 	},
 	{
-		title: "Game Quests",
-		description:
-			"Bjorn's unique interactions with Skyrim's main storylines.",
-		icon: <Sword size={40} color="#ffffff" />,
-		path: "/quests/game",
-		category: "Vanilla Interaction",
-	},
-	{
 		title: "Adventures' Tavern",
 		description:
 			"Join the community to share suggestions and your own tales.",
@@ -68,19 +60,26 @@ const hubItems = [
 		category: "Lore",
 	},
 	{
-		title: "Galleries",
-		description: "Explore Fan Art and official media from Bjorn's journey.",
-		icon: <ImageIcon size={40} color="#4fc3f7" />,
+		title: "Fan Art",
+		description: "See the amazing art created by the community.",
+		icon: <Palette size={40} color="#4fc3f7" />,
 		path: "/fan-art",
 		category: "Visuals",
 	},
 	{
-		title: "Other Followers",
+		title: "Gallery",
+		description: "Official screenshots and media from Bjorn's journey.",
+		icon: <ImageIcon size={40} color="#ffffff" />,
+		path: "/media",
+		category: "Visuals",
+	},
+	{
+		title: "Bjorn's Songs",
 		description:
-			"Meet Little Shadow, Thruzar, and Barni—unique companions added by the mod.",
-		icon: <Users size={40} color="#ffffff" />,
-		path: "/followers",
-		category: "Companions",
+			"Listen to the melodies and verses Bjorn learned as a bard.",
+		icon: <Music size={40} color="#4fc3f7" />,
+		path: "/songs",
+		category: "Lore",
 	},
 ];
 
@@ -140,9 +139,25 @@ const HomePage: React.FC = () => {
 			<Grid container spacing={6} sx={{ mb: 8 }}>
 				<Grid size={{ xs: 12, md: 7 }}>
 					<Typography
-						variant="h3"
+						variant="h2"
+						component="h1"
 						gutterBottom
-						sx={{ fontSize: "2rem", mb: 3, color: "#ffffff" }}
+						sx={{
+							fontFamily: "Bungee",
+							color: "#ffffff",
+							mb: 1,
+						}}
+					>
+						Bjorn Wiki
+					</Typography>
+					<Typography
+						variant="h5"
+						gutterBottom
+						sx={{
+							fontFamily: "Alan Sans",
+							color: "primary.main",
+							mb: 4,
+						}}
 					>
 						The Mercenary Follower
 					</Typography>

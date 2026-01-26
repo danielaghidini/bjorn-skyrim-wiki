@@ -19,29 +19,32 @@ import {
 
 const TechnicalPage: React.FC = () => {
 	return (
-		<Box sx={{ pb: 8 }}>
+		<Box sx={{ py: 8 }}>
 			<Box sx={{ mb: 6, textAlign: "center" }}>
 				<Typography
 					variant="h2"
+					component="h1"
 					gutterBottom
 					sx={{
-						color: "#ffffff",
 						fontFamily: "Bungee",
-						fontSize: { xs: "2.5rem", md: "3.5rem" },
+						color: "#ffffff",
+						mb: 1,
+						textAlign: "center",
 					}}
 				>
-					Technical Information
+					Technical Info
 				</Typography>
 				<Typography
-					variant="h6"
+					variant="h5"
+					gutterBottom
 					sx={{
-						color: "primary.main",
 						fontFamily: "Alan Sans",
-						opacity: 0.8,
+						color: "primary.main",
+						mb: 6,
+						textAlign: "center",
 					}}
 				>
-					Everything you need to know about installing and running
-					Bjorn smoothly.
+					Behind the scenes of the Bjorn Follower project
 				</Typography>
 			</Box>
 

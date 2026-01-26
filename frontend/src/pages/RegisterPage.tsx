@@ -42,7 +42,7 @@ const RegisterPage = () => {
 		<Container component="main" maxWidth="xs">
 			<Box
 				sx={{
-					marginTop: 8,
+					py: 8,
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "center",
@@ -50,12 +50,29 @@ const RegisterPage = () => {
 			>
 				<Paper sx={{ p: 4, width: "100%" }}>
 					<Typography
+						variant="h2"
 						component="h1"
-						variant="h5"
-						align="center"
 						gutterBottom
+						sx={{
+							fontFamily: "Bungee",
+							color: "#ffffff",
+							mb: 1,
+							textAlign: "center",
+						}}
 					>
-						Create Account
+						Register
+					</Typography>
+					<Typography
+						variant="h6"
+						gutterBottom
+						sx={{
+							fontFamily: "Alan Sans",
+							color: "primary.main",
+							mb: 4,
+							textAlign: "center",
+						}}
+					>
+						Join the Bjorn follower community
 					</Typography>
 					{error && (
 						<Alert severity="error" sx={{ mb: 2 }}>

@@ -44,18 +44,32 @@ const followers = [
 
 const FollowersPage: React.FC = () => {
 	return (
-		<Box sx={{ pb: 8 }}>
+		<Box sx={{ py: 8 }}>
 			<Box sx={{ mb: 6, textAlign: "center" }}>
 				<Typography
 					variant="h2"
+					component="h1"
 					gutterBottom
 					sx={{
-						color: "#ffffff",
 						fontFamily: "Bungee",
-						fontSize: { xs: "2.5rem", md: "3.5rem" },
+						color: "#ffffff",
+						mb: 1,
+						textAlign: "center",
 					}}
 				>
 					Additional Followers
+				</Typography>
+				<Typography
+					variant="h5"
+					gutterBottom
+					sx={{
+						fontFamily: "Alan Sans",
+						color: "primary.main",
+						mb: 6,
+						textAlign: "center",
+					}}
+				>
+					Companions who joined the journey
 				</Typography>
 				<Typography
 					variant="h6"

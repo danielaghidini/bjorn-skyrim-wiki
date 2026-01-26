@@ -22,6 +22,7 @@ import {
 	updateFanArt,
 	deleteFanArt,
 } from "./controllers/fanArtController.js";
+import { getDialogues, getScenes } from "./controllers/dialogueController.js";
 
 console.log("Starting server...");
 connectDB();
@@ -100,6 +101,8 @@ app.get("/api/quests", async (req, res) => {
 });
 
 app.get("/api/fan-art", getAllFanArt);
+app.get("/api/dialogues", getDialogues);
+app.get("/api/scenes", getScenes);
 
 // Auth Routes
 app.post("/auth/register", register);

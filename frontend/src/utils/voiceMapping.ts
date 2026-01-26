@@ -1,0 +1,38 @@
+export const voiceMap: Record<string, string> = {
+	DG04BjornVoice: "Bjorn",
+	DG04AdielleVoice: "Adielle",
+	DG04ThruzarVoice: "Thruzar",
+	DG04BarniVoice: "Barni",
+	DG04GarakhVoice: "Garakh",
+	DG04ShagraVoice: "Shagra",
+	DG04NanoudVoice: "Nanoud",
+	DG04RoggvarVoice: "Roggvar",
+	DG04UlainVoice: "Ulain",
+	DG04GroshakVoice: "Groshak",
+	DG04KaiVoice: "Kaidan",
+	KaiVoice: "Kaidan",
+	DG04Inigofollowervoice: "Inigo",
+	Inigofollowervoice: "Inigo",
+	DG04GoreVoice: "Gore",
+	HD1GoreVoice: "Gore",
+	DG04JRLucienVoice: "Lucien",
+	JRLucienVoice: "Lucien",
+	FemaleUniqueDelphine: "Delphine",
+	MaleUniqueEsbern: "Esbern",
+	MaleUniqueDelvinMallory: "Delvin Mallory",
+	MaleUniqueGalmar: "Galmar Stone-Fist",
+	FemaleCommander: "Commander",
+	MaleBrute: "Brute",
+	MaleNord: "Nord",
+	FemaleNord: "Nord (Female)",
+	FemaleEvenToned: "Lydia",
+	MaleYoungEager: "Sven",
+	FemaleYoungEager: "Young Eager (Female)",
+	MaleDrunk: "Drunk",
+	MaleOrc: "Orc",
+	MaleArgonian: "Stands-In-Shallows",
+};
+
+export const getActorName = (voiceType: string): string => {
+	return voiceMap[voiceType] || voiceType;
+};
