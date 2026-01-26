@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, ArrowLeft, Terminal, Sparkles, User } from "lucide-react";
+import { Send, ArrowLeft, Terminal, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -8,10 +8,8 @@ import {
 	Typography,
 	Paper,
 	Avatar,
-	TextField,
 	IconButton,
 	Stack,
-	useTheme,
 	InputBase,
 } from "@mui/material";
 
@@ -24,7 +22,6 @@ interface Message {
 }
 
 const ChatPage: React.FC = () => {
-	const theme = useTheme();
 	// Initialize with the Greeting
 	const [messages, setMessages] = useState<Message[]>([
 		{
