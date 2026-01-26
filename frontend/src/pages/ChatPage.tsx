@@ -51,8 +51,11 @@ const ChatPage: React.FC = () => {
 		setIsLoading(true);
 
 		try {
-			// Use relative URL to support deployment and mobile access
-			const response = await fetch("/api/chat", {
+			// Determine API URL: Use env var in prod, or relative path in dev (to use proxy)
+			const baseUrl = import.meta.env.VITE_API_ORIGIN || "";
+			const apiUrl = `${baseUrl}/api/chat`;
+
+			const response = await fetch(apiUrl, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
