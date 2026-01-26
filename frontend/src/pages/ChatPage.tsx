@@ -51,7 +51,8 @@ const ChatPage: React.FC = () => {
 		setIsLoading(true);
 
 		try {
-			const response = await fetch("http://localhost:3000/api/chat", {
+			// Use relative URL to support deployment and mobile access
+			const response = await fetch("/api/chat", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
@@ -103,7 +104,7 @@ const ChatPage: React.FC = () => {
 	return (
 		<Box
 			sx={{
-				height: "100vh",
+				height: "100dvh", // Mobile viewport fix
 				width: "100vw",
 				display: "flex",
 				flexDirection: "column",
