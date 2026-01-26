@@ -2,6 +2,10 @@
 
 An interactive React-based wiki for the Bjorn Skyrim mod, designed to organize dialogues, videos, quests, and mod details. This project aims to provide a seamless experience for players and modders to explore the content of the Bjorn Follower mod.
 
+## Live Demo
+
+Check out the live version of the project here: [Bjorn Wiki - Production](https://frontend-production-7abb.up.railway.app/)
+
 ## Tech Stack
 
 **Frontend:**
