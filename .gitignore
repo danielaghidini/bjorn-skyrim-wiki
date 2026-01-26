@@ -5,3 +5,7 @@ node_modules
 dist
 # Admin utility scripts
 **/src/scripts/promoteAdmin.ts
+
+# Scripts and data exports
+backend/src/scripts/
+frontend/src/assets/json-export-creationkit/
