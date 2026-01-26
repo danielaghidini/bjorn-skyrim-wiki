@@ -181,6 +181,22 @@ const ChatPage: React.FC = () => {
 					>
 						Talk to Bjorn
 					</Typography>
+					<Typography
+						variant="caption"
+						sx={{
+							fontFamily: "Alan Sans",
+							color: "grey.500",
+							textTransform: "uppercase",
+							letterSpacing: 1,
+							fontSize: "0.65rem",
+							maxWidth: "300px",
+							textAlign: "center",
+							mb: 1,
+						}}
+					>
+						This chatbot responds based on content created by the
+						author, but may not be fully accurate.
+					</Typography>
 					<Stack direction="row" alignItems="center" spacing={1}>
 						<Box
 							sx={{
@@ -478,6 +494,22 @@ const ChatPage: React.FC = () => {
 							}}
 						>
 							NVIDIA NIM Powered • Llama 3.1 70B • Roleplay Mode
+						</Typography>
+						<Typography
+							variant="caption"
+							sx={{
+								display: "block",
+								textAlign: "center",
+								mt: 0.5,
+								color: "grey.700",
+								fontSize: "0.65rem",
+								opacity: 0.7,
+								maxWidth: "400px",
+								mx: "auto",
+							}}
+						>
+							This chatbot responds based on content created by
+							the author, but may not be fully accurate.
 						</Typography>
 					</Box>
 				</Paper>
