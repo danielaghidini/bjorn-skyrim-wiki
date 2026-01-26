@@ -9,5 +9,13 @@ export default defineConfig({
 	},
 	server: {
 		allowedHosts: true,
+		host: true, // Listen on all addresses (0.0.0.0)
+		proxy: {
+			"/api": {
+				target: "http://127.0.0.1:3000",
+				changeOrigin: true,
+				secure: false,
+			},
+		},
 	},
 });

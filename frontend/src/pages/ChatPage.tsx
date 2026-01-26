@@ -80,14 +80,13 @@ const ChatPage: React.FC = () => {
 					},
 				]);
 			}
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Chat error:", error);
 			setMessages((prev) => [
 				...prev,
 				{
 					role: "assistant",
-					content:
-						"(Connection to the spirit world lost... check backend port)",
+					content: `(Connection error: ${error.message || "Unknown error"}. Ensure backend is running.)`,
 				},
 			]);
 		} finally {
