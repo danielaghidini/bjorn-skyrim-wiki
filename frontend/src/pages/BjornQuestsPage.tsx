@@ -24,7 +24,7 @@ const getYouTubeEmbedUrl = (url: string): string => {
 	} else if (url.includes("embed/")) {
 		videoId = url.split("embed/")[1]?.split(/[?&]/)[0] || "";
 	}
-	return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+	return videoId ? `https://www.youtube.com/embed/${videoId}?vq=hd1080` : url;
 };
 
 const BjornQuestsPage: React.FC = () => {
