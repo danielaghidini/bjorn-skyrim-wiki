@@ -21,23 +21,52 @@ interface Song {
 
 const songs: Song[] = [
 	{
-		id: "1",
+		id: "00",
 		title: "The Dragonborn Comes",
-		description:
-			"A classic Nordic ballad about the arrival of the Dovahkiin.",
-		fileName: "dragonborn_comes.wav",
+		description: "Bjorn's raw rendition of the classic prophecy.",
+		fileName: "00-TheDragonbornComes.wav",
 	},
 	{
-		id: "2",
-		title: "Steel and Mead",
-		description: "A rowdy tavern song celebrating the life of a mercenary.",
-		fileName: "steel_and_mead.wav",
+		id: "01",
+		title: "Steel And Mead",
+		description: "A drinking song for those who live by the sword.",
+		fileName: "01-SteelAndMead.wav",
 	},
 	{
-		id: "3",
-		title: "Song of the Dragonborn (Bjorn's Version)",
-		description: "Bjorn's unique take on the ancient dragon hymns.",
-		fileName: "bjorn_dragon_song.wav",
+		id: "02",
+		title: "The Winter Kept Her Voice",
+		description: "A melancholic ballad about loss and silence.",
+		fileName: "02-TheWinterKeptHerVoice.wav",
+	},
+	{
+		id: "03",
+		title: "The Mead is Gone but the Fire Remains",
+		description: "Reflecting on what stays when the party ends.",
+		fileName: "03-TheMeadisGonebuttheFireRemains.wav",
+	},
+	{
+		id: "04",
+		title: "No Road Leads Back",
+		description: "A song about moving forward when there is no return.",
+		fileName: "04-NoRoadLeadsBack.wav",
+	},
+	{
+		id: "05",
+		title: "Where the Storm Ends",
+		description: "Searching for peace in a land of turmoil.",
+		fileName: "05-WheretheStormEnds.wav",
+	},
+	{
+		id: "06",
+		title: "By the Nine",
+		description: "A hymn to the divines, sung with rough reverence.",
+		fileName: "06-By the Nine.wav",
+	},
+	{
+		id: "07",
+		title: "The One With The Voice",
+		description: "Honoring the power of the Thu'um.",
+		fileName: "07-TheOneWithTheVoice.wav",
 	},
 ];
 
