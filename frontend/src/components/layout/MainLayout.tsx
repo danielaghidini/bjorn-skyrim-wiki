@@ -275,7 +275,7 @@ const MainLayout: React.FC = () => {
 				component="main"
 				sx={{
 					flexGrow: 1,
-					p: 3,
+					p: { xs: 1, md: 3 },
 					mt: "80px",
 				}}
 			>

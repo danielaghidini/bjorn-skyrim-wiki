@@ -213,7 +213,7 @@ const DialoguesPage: React.FC = () => {
 	};
 
 	return (
-		<Container maxWidth="lg" sx={{ py: 8 }}>
+		<Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
 			<Typography
 				variant="h2"
 				component="h1"

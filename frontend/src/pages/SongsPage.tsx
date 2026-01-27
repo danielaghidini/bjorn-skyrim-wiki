@@ -91,8 +91,8 @@ const SongsPage: React.FC = () => {
 	};
 
 	return (
-		<Container maxWidth="md" sx={{ py: 8 }}>
-			<Box textAlign="center" mb={8}>
+		<Container maxWidth="md" sx={{ py: { xs: 4, md: 8 } }}>
+			<Box textAlign="center" mb={{ xs: 4, md: 8 }}>
 				<Typography
 					variant="h2"
 					component="h1"
@@ -114,7 +114,8 @@ const SongsPage: React.FC = () => {
 						mb: 6,
 					}}
 				>
-					Melodies and verses learned on the road to Bard's College
+					Well, I'm no bard, but I'll give it a go. Just don't expect
+					the moons and stars, alright?
 				</Typography>
 			</Box>
 
@@ -139,7 +140,7 @@ const SongsPage: React.FC = () => {
 							)}
 							<ListItem
 								sx={{
-									p: 3,
+									p: { xs: 1.5, md: 3 },
 									transition: "background-color 0.3s ease",
 									"&:hover": {
 										bgcolor: "rgba(79, 195, 247, 0.05)",
@@ -151,7 +152,7 @@ const SongsPage: React.FC = () => {
 										display: "flex",
 										alignItems: "center",
 										width: "100%",
-										gap: 3,
+										gap: { xs: 1.5, md: 3 },
 									}}
 								>
 									<IconButton
@@ -171,19 +172,29 @@ const SongsPage: React.FC = () => {
 														? "primary.main"
 														: "rgba(79, 195, 247, 0.2)",
 											},
-											width: 60,
-											height: 60,
+											width: { xs: 48, md: 60 },
+											height: { xs: 48, md: 60 },
 										}}
 									>
 										{playingId === song.id ? (
 											<Pause
-												size={30}
+												size={24}
 												fill="currentColor"
+												style={{
+													width: "100%",
+													height: "100%",
+													padding: 4,
+												}}
 											/>
 										) : (
 											<Play
-												size={30}
+												size={24}
 												fill="currentColor"
+												style={{
+													width: "100%",
+													height: "100%",
+													padding: 4,
+												}}
 											/>
 										)}
 									</IconButton>
@@ -232,7 +243,7 @@ const SongsPage: React.FC = () => {
 					sx={{ color: "text.secondary", opacity: 0.6 }}
 				>
 					Tip: Bjorn's unique songs are unlocked after completing his
-					Bard Quest in Solitude.
+					personal quest, <strong>The Bard Within</strong>.
 				</Typography>
 			</Box>
 		</Container>

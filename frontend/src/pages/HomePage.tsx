@@ -136,7 +136,7 @@ const HomePage: React.FC = () => {
 			</Box>
 
 			{/* Intro Section */}
-			<Grid container spacing={6} sx={{ mb: 8 }}>
+			<Grid container spacing={6} sx={{ mb: { xs: 4, md: 8 } }}>
 				<Grid size={{ xs: 12, md: 7 }}>
 					<Typography
 						variant="h2"
@@ -288,7 +288,7 @@ const HomePage: React.FC = () => {
 			</Grid>
 
 			{/* Wiki Hub Section */}
-			<Box sx={{ mb: 8 }}>
+			<Box sx={{ mb: { xs: 4, md: 8 } }}>
 				<Typography
 					variant="h3"
 					gutterBottom
@@ -386,7 +386,7 @@ const HomePage: React.FC = () => {
 			{/* Footnote / Call to Action */}
 			<Paper
 				sx={{
-					p: 6,
+					p: { xs: 3, md: 6 },
 					textAlign: "center",
 					backgroundColor: "rgba(79, 195, 247, 0.1)",
 					color: "#ffffff",
@@ -396,7 +396,12 @@ const HomePage: React.FC = () => {
 			>
 				<Typography
 					variant="h4"
-					sx={{ color: "primary.main", mb: 2, fontFamily: "Bungee" }}
+					sx={{
+						color: "primary.main",
+						mb: 2,
+						fontFamily: "Bungee",
+						fontSize: { xs: "1.5rem", md: "2.125rem" },
+					}}
 				>
 					Support the Project
 				</Typography>

@@ -95,16 +95,15 @@ const ForumPage: React.FC = () => {
 	};
 
 	return (
-		<Box sx={{ py: 8 }}>
+		<Box sx={{ py: { xs: 4, md: 8 } }}>
 			{/* Header */}
-			<Box sx={{ mb: 6, textAlign: "center" }}>
+			<Box sx={{ mb: { xs: 4, md: 6 }, textAlign: "center" }}>
 				<Typography
 					variant="h2"
 					gutterBottom
 					sx={{
 						color: "#ffffff",
 						fontFamily: "Bungee",
-						fontSize: { xs: "2.5rem", md: "3.5rem" },
 					}}
 				>
 					Adventures' Tavern
