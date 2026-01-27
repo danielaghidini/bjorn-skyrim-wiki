@@ -140,43 +140,47 @@ const ChatPage: React.FC = () => {
 			{/* Header */}
 			<Box
 				sx={{
-					p: 2,
+					p: { xs: 1.5, md: 2 },
 					zIndex: 10,
 					display: "flex",
-					alignItems: "center",
+					flexDirection: { xs: "column", md: "row" },
+					alignItems: { xs: "flex-start", md: "center" },
 					justifyContent: "space-between",
+					gap: { xs: 1, md: 0 },
 				}}
 			>
-				<Link to="/" style={{ textDecoration: "none" }}>
-					<Stack
-						direction="row"
-						alignItems="center"
-						spacing={1}
-						sx={{
-							color: "rgba(255,255,255,0.7)",
-							"&:hover": { color: "white" },
-						}}
-					>
-						<Box
+				<Box sx={{ width: { xs: "100%", md: "auto" } }}>
+					<Link to="/" style={{ textDecoration: "none" }}>
+						<Stack
+							direction="row"
+							alignItems="center"
+							spacing={1}
 							sx={{
-								p: 0.5,
-								borderRadius: "50%",
-								border: "1px solid rgba(255,255,255,0.2)",
-								display: "flex",
+								color: "rgba(255,255,255,0.7)",
+								"&:hover": { color: "white" },
 							}}
 						>
-							<ArrowLeft size={20} />
-						</Box>
-						<Typography
-							variant="body2"
-							sx={{ fontFamily: "Bungee", letterSpacing: 1 }}
-						>
-							Back to Wiki
-						</Typography>
-					</Stack>
-				</Link>
+							<Box
+								sx={{
+									p: 0.5,
+									borderRadius: "50%",
+									border: "1px solid rgba(255,255,255,0.2)",
+									display: "flex",
+								}}
+							>
+								<ArrowLeft size={20} />
+							</Box>
+							<Typography
+								variant="body2"
+								sx={{ fontFamily: "Bungee", letterSpacing: 1 }}
+							>
+								Back to Wiki
+							</Typography>
+						</Stack>
+					</Link>
+				</Box>
 
-				<Stack alignItems="center">
+				<Stack alignItems="center" sx={{ width: "100%" }}>
 					<Typography
 						variant="h5"
 						sx={{
@@ -191,13 +195,14 @@ const ChatPage: React.FC = () => {
 						variant="caption"
 						sx={{
 							fontFamily: "Alan Sans",
-							color: "grey.500",
-							textTransform: "uppercase",
-							letterSpacing: 1,
-							fontSize: "0.65rem",
-							maxWidth: "300px",
+							color: "#22d3ee",
+							textTransform: "none",
+							letterSpacing: 0.5,
+							fontSize: "0.95rem",
+							maxWidth: { xs: "100%", md: "100%" },
 							textAlign: "center",
 							mb: 1,
+							lineHeight: 1.4,
 						}}
 					>
 						This chatbot responds based on content created by the
@@ -226,12 +231,13 @@ const ChatPage: React.FC = () => {
 					</Stack>
 				</Stack>
 
-				<Box sx={{ width: 40 }} />
+				<Box sx={{ width: 40, display: { xs: "none", md: "block" } }} />
 			</Box>
 
 			{/* Chat Area Container */}
 			<Container
 				maxWidth="md"
+				disableGutters
 				sx={{
 					flex: 1,
 					display: "flex",
@@ -240,20 +246,28 @@ const ChatPage: React.FC = () => {
 					position: "relative",
 					overflow: "hidden",
 					pb: 2,
+					px: { xs: 1, md: 0 },
 				}}
 			>
 				<Paper
 					elevation={4}
 					sx={{
 						flex: 1,
-						bgcolor: "rgba(10, 13, 20, 0.6)",
-						backdropFilter: "blur(12px)",
-						border: "1px solid rgba(255, 255, 255, 0.08)",
-						borderRadius: 4,
+						bgcolor: {
+							xs: "transparent",
+							md: "rgba(10, 13, 20, 0.6)",
+						},
+						backdropFilter: { xs: "none", md: "blur(12px)" },
+						border: {
+							xs: "none",
+							md: "1px solid rgba(255, 255, 255, 0.08)",
+						},
+						borderRadius: { xs: 0, md: 4 },
 						display: "flex",
 						flexDirection: "column",
 						overflow: "hidden",
 						mb: 2,
+						boxShadow: { xs: "none", md: 4 }, // Explicitly remove shadow on mobile
 					}}
 				>
 					{/* Scrollable Messages */}
@@ -261,10 +275,10 @@ const ChatPage: React.FC = () => {
 						sx={{
 							flex: 1,
 							overflowY: "auto",
-							p: 4,
+							p: { xs: 2, md: 4 },
 							display: "flex",
 							flexDirection: "column",
-							gap: 3,
+							gap: { xs: 2, md: 3 },
 						}}
 					>
 						<AnimatePresence mode="popLayout">
@@ -336,7 +350,7 @@ const ChatPage: React.FC = () => {
 											<Paper
 												elevation={0}
 												sx={{
-													p: 2.5,
+													p: { xs: 1.5, md: 2.5 },
 													borderRadius: 3,
 													borderTopLeftRadius:
 														msg.role === "assistant"
@@ -412,12 +426,27 @@ const ChatPage: React.FC = () => {
 										border: "1px solid rgba(255,255,255,0.1)",
 									}}
 								>
-									<Typography
-										variant="caption"
-										sx={{ color: "grey.500" }}
-									>
-										Bjorn is writing...
-									</Typography>
+									<Stack direction="row" spacing={0.5}>
+										{[0, 1, 2].map((dot) => (
+											<motion.div
+												key={dot}
+												style={{
+													width: 8,
+													height: 8,
+													backgroundColor: "#94a3b8", // grey.400
+													borderRadius: "50%",
+												}}
+												animate={{
+													opacity: [0.4, 1, 0.4],
+												}}
+												transition={{
+													duration: 1.4,
+													repeat: Infinity,
+													delay: dot * 0.2,
+												}}
+											/>
+										))}
+									</Stack>
 								</Paper>
 							</Stack>
 						)}
@@ -427,7 +456,7 @@ const ChatPage: React.FC = () => {
 					{/* Input Area */}
 					<Box
 						sx={{
-							p: 2,
+							p: { xs: 1.5, md: 2 },
 							borderTop: "1px solid rgba(255,255,255,0.1)",
 							bgcolor: "rgba(0,0,0,0.2)",
 						}}
@@ -493,6 +522,7 @@ const ChatPage: React.FC = () => {
 								display: "block",
 								textAlign: "center",
 								mt: 1.5,
+								mb: 1,
 								color: "grey.600",
 								letterSpacing: 1,
 								fontSize: "0.7rem",
@@ -500,22 +530,6 @@ const ChatPage: React.FC = () => {
 							}}
 						>
 							NVIDIA NIM Powered • Llama 3.1 70B • Roleplay Mode
-						</Typography>
-						<Typography
-							variant="caption"
-							sx={{
-								display: "block",
-								textAlign: "center",
-								mt: 0.5,
-								color: "grey.700",
-								fontSize: "0.65rem",
-								opacity: 0.7,
-								maxWidth: "400px",
-								mx: "auto",
-							}}
-						>
-							This chatbot responds based on content created by
-							the author, but may not be fully accurate.
 						</Typography>
 					</Box>
 				</Paper>
