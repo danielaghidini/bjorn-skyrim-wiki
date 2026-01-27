@@ -9,4 +9,4 @@ dist
 # Scripts and data exports
 backend/src/scripts/
 frontend/src/assets/json-export-creationkit/
-frontend/src/assets/author-docs/
+
