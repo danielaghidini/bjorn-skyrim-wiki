@@ -365,7 +365,7 @@ const AdminQuestsPage: React.FC = () => {
 									size="small"
 									fullWidth
 									multiline
-									rows={2}
+									rows={6}
 									value={step.description}
 									onChange={(e) =>
 										handleStepChange(

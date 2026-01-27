@@ -44,7 +44,10 @@ const BjornQuestsPage: React.FC = () => {
 	}, []);
 
 	return (
-		<Container maxWidth="lg" sx={{ py: 8 }}>
+		<Container
+			maxWidth="lg"
+			sx={{ py: { xs: 4, sm: 6, md: 8 }, px: { xs: 1, sm: 2, md: 3 } }}
+		>
 			<Box sx={{ mb: 6, textAlign: "center" }}>
 				<Typography
 					variant="h2"
@@ -101,9 +104,14 @@ const BjornQuestsPage: React.FC = () => {
 
 					<Paper
 						sx={{
-							p: { xs: 2, sm: 4 },
+							p: { xs: 0, sm: 3, md: 4 },
 							mb: 4,
-							backgroundColor: "rgba(0, 0, 0, 0.7)",
+							backgroundColor: {
+								xs: "transparent",
+								sm: "rgba(0, 0, 0, 0.7)",
+							},
+							boxShadow: { xs: "none", sm: 1 },
+							border: { xs: "none", sm: undefined },
 						}}
 					>
 						<Typography
@@ -217,6 +225,9 @@ const BjornQuestsPage: React.FC = () => {
 													variant="body1"
 													color="text.secondary"
 													paragraph
+													sx={{
+														whiteSpace: "pre-line",
+													}}
 												>
 													{step.description}
 												</Typography>
