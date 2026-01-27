@@ -21,7 +21,6 @@ import {
 	Image,
 	Menu,
 	MessageCircle,
-	Users,
 	Wrench,
 	Palette,
 	Music,
@@ -43,16 +42,6 @@ const menuItems = [
 		path: "/dialogues",
 	},
 	{
-		text: "Songs",
-		icon: <Music size={18} />,
-		path: "/songs",
-	},
-	{
-		text: "Followers",
-		icon: <Users size={18} />,
-		path: "/followers",
-	},
-	{
 		text: "Forum",
 		icon: <MessageCircle size={18} />,
 		path: "/forum",
@@ -66,6 +55,11 @@ const menuItems = [
 		text: "Gallery",
 		icon: <Image size={18} />,
 		path: "/media",
+	},
+	{
+		text: "Songs",
+		icon: <Music size={18} />,
+		path: "/songs",
 	},
 	{
 		text: "Chatbot",

@@ -45,6 +45,13 @@ const hubItems = [
 		category: "Mod Content",
 	},
 	{
+		title: "Dialogues",
+		description: "Explore over 4500 lines of fully voiced Nordic wisdom.",
+		icon: <MessageSquare size={40} color="#ffffff" />,
+		path: "/dialogues",
+		category: "Lore",
+	},
+	{
 		title: "Adventures' Tavern",
 		description:
 			"Join the community to share suggestions and your own tales.",
@@ -53,23 +60,16 @@ const hubItems = [
 		category: "Community",
 	},
 	{
-		title: "Dialogues",
-		description: "Explore over 4500 lines of fully voiced Nordic wisdom.",
-		icon: <MessageSquare size={40} color="#ffffff" />,
-		path: "/dialogues",
-		category: "Lore",
-	},
-	{
 		title: "Fan Art",
 		description: "See the amazing art created by the community.",
-		icon: <Palette size={40} color="#4fc3f7" />,
+		icon: <Palette size={40} color="#ffffff" />,
 		path: "/fan-art",
 		category: "Visuals",
 	},
 	{
 		title: "Gallery",
 		description: "Official screenshots and media from Bjorn's journey.",
-		icon: <ImageIcon size={40} color="#ffffff" />,
+		icon: <ImageIcon size={40} color="#4fc3f7" />,
 		path: "/media",
 		category: "Visuals",
 	},
@@ -77,7 +77,7 @@ const hubItems = [
 		title: "Bjorn's Songs",
 		description:
 			"Listen to the melodies and verses Bjorn learned as a bard.",
-		icon: <Music size={40} color="#4fc3f7" />,
+		icon: <Music size={40} color="#ffffff" />,
 		path: "/songs",
 		category: "Lore",
 	},
@@ -195,28 +195,6 @@ const HomePage: React.FC = () => {
 						ready to lend a hand. Though he has a troubled past, he
 						still possesses a heart of gold that understands the
 						meaning of honor.
-					</Typography>
-					<Typography
-						variant="body1"
-						sx={{
-							fontSize: "1rem",
-							color: "primary.main",
-							fontWeight: "bold",
-							mt: 2,
-						}}
-					>
-						Support the development of Bjorn on Ko-fi:{" "}
-						<a
-							href="https://ko-fi.com/bjorndev"
-							target="_blank"
-							rel="noopener noreferrer"
-							style={{
-								color: "inherit",
-								textDecoration: "underline",
-							}}
-						>
-							https://ko-fi.com/bjorndev
-						</a>
 					</Typography>
 				</Grid>
 
@@ -420,7 +398,7 @@ const HomePage: React.FC = () => {
 					variant="h4"
 					sx={{ color: "primary.main", mb: 2, fontFamily: "Bungee" }}
 				>
-					Join the Journey
+					Support the Project
 				</Typography>
 				<Typography
 					variant="h6"
@@ -429,10 +407,14 @@ const HomePage: React.FC = () => {
 						fontFamily: "Alan Sans",
 						fontWeight: 400,
 						opacity: 0.8,
+						maxWidth: "800px",
+						mx: "auto",
 					}}
 				>
-					Bjorn's story is still being written. Be a part of the
-					adventure.
+					Creating and maintaining mods like Bjorn takes time and
+					effort, so any support you can offer is greatly appreciated!
+					Thank you for considering supporting my work, and I hope you
+					enjoy having Bjorn as your trusty follower!
 				</Typography>
 				<Button
 					variant="contained"
@@ -444,10 +426,11 @@ const HomePage: React.FC = () => {
 						px: 6,
 						py: 2,
 					}}
-					component={Link}
-					to="/forum"
+					component="a"
+					href="https://ko-fi.com/bjorndev"
+					target="_blank"
 				>
-					Tavern Board
+					Support on Ko-fi
 				</Button>
 			</Paper>
 		</Box>
