@@ -221,16 +221,29 @@ const BjornQuestsPage: React.FC = () => {
 												>
 													{step.order}. {step.title}
 												</Typography>
-												<Typography
-													variant="body1"
-													color="text.secondary"
-													paragraph
+												<Box
 													sx={{
-														whiteSpace: "pre-line",
+														color: "text.secondary",
+														"& p": {
+															mb: 1,
+															lineHeight: 1.6,
+														},
+														"& a": {
+															color: "secondary.light",
+															textDecoration:
+																"underline",
+														},
+														"& ul, & ol": {
+															pl: 3,
+															mb: 1,
+														},
+														"& li": { mb: 0.5 },
 													}}
 												>
-													{step.description}
-												</Typography>
+													<ReactMarkdown>
+														{step.description}
+													</ReactMarkdown>
+												</Box>
 												{step.videoUrl && (
 													<Box
 														sx={{
