@@ -191,56 +191,64 @@ const AdminDashboard = () => {
 				</Tabs>
 			</Box>
 
-			{/* Simple Create Form */}
-			<Paper
-				sx={{
-					p: 2,
-					mt: 2,
-					display: "flex",
-					flexDirection: "column",
-					gap: 2,
-				}}
-			>
-				<Box sx={{ display: "flex", gap: 2 }}>
-					<TextField
-						label="New Title"
-						variant="outlined"
-						size="small"
-						fullWidth
-						value={newItemTitle}
-						onChange={(e) => setNewItemTitle(e.target.value)}
-					/>
-					{value === 2 && (
-						<>
+			{
+				/* Simple Create Form - Hidden for Quests (Tab 1) as it has its own manager */
+				value !== 1 && (
+					<Paper
+						sx={{
+							p: 2,
+							mt: 2,
+							display: "flex",
+							flexDirection: "column",
+							gap: 2,
+						}}
+					>
+						<Box sx={{ display: "flex", gap: 2 }}>
 							<TextField
-								label="Image URL"
+								label="New Title"
 								variant="outlined"
 								size="small"
 								fullWidth
-								value={newImageUrl}
-								onChange={(e) => setNewImageUrl(e.target.value)}
-							/>
-							<TextField
-								label="Artist Name"
-								variant="outlined"
-								size="small"
-								fullWidth
-								value={newArtistName}
+								value={newItemTitle}
 								onChange={(e) =>
-									setNewArtistName(e.target.value)
+									setNewItemTitle(e.target.value)
 								}
 							/>
-						</>
-					)}
-					<Button
-						variant="contained"
-						onClick={handleCreate}
-						sx={{ minWidth: 100 }}
-					>
-						Create
-					</Button>
-				</Box>
-			</Paper>
+							{value === 2 && (
+								<>
+									<TextField
+										label="Image URL"
+										variant="outlined"
+										size="small"
+										fullWidth
+										value={newImageUrl}
+										onChange={(e) =>
+											setNewImageUrl(e.target.value)
+										}
+									/>
+									<TextField
+										label="Artist Name"
+										variant="outlined"
+										size="small"
+										fullWidth
+										value={newArtistName}
+										onChange={(e) =>
+											setNewArtistName(e.target.value)
+										}
+									/>
+								</>
+							)}
+							<Button
+								variant="contained"
+								onClick={handleCreate}
+								sx={{ minWidth: 100 }}
+							>
+								Create
+							</Button>
+						</Box>
+					</Paper>
+				)
+			}
 
 			<CustomTabPanel value={value} index={0}>
 				<List>

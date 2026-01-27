@@ -230,68 +230,106 @@ const BjornQuestsPage: React.FC = () => {
 					</Paper>
 				</Box>
 			) : (
-				<Box sx={{ display: "grid", gap: 3 }}>
-					{quests.map((quest) => (
-						<Paper
-							key={quest.id}
-							sx={{
-								p: 3,
-								backgroundColor: "rgba(0, 0, 0, 0.6)",
-								border: "1px solid rgba(255, 255, 255, 0.1)",
-								cursor: "pointer",
-								transition:
-									"transform 0.2s, background-color 0.2s",
-								"&:hover": {
-									transform: "translateY(-2px)",
-									backgroundColor: "rgba(0, 0, 0, 0.7)",
-									borderColor: "primary.main",
-								},
-							}}
-							onClick={async () => {
-								try {
-									// Fetch full quest details including steps
-									const fullQuest = await getQuestBySlug(
-										quest.slug,
-									);
-									setSelectedQuest(fullQuest);
-								} catch (error) {
-									console.error(
-										"Failed to fetch quest details",
-										error,
-									);
-									// Fallback to basic details if fetch fails
-									setSelectedQuest(quest);
-								}
-							}}
-						>
-							<Box
-								display="flex"
-								justifyContent="space-between"
-								alignItems="center"
-							>
-								<Box>
-									<Typography
-										variant="h5"
-										color="primary.main"
-										gutterBottom
-									>
-										{quest.title}
-									</Typography>
-									<Typography
-										variant="body1"
-										color="text.secondary"
-									>
-										{quest.summary ||
-											quest.description.substring(
-												0,
-												150,
-											) + "..."}
-									</Typography>
+				<Box sx={{ display: "flex", flexDirection: "column", gap: 6 }}>
+					{[
+						{ title: "Main Quests", type: "Main" },
+						{ title: "Side Quests", type: "Side" },
+						{ title: "Other Quests", type: "Other" },
+					].map((section) => {
+						const sectionQuests = quests.filter(
+							(q) =>
+								(q.category || "Side") === section.type ||
+								(section.type === "Other" &&
+									!["Main", "Side"].includes(
+										q.category || "Side",
+									)),
+						);
+
+						if (sectionQuests.length === 0) return null;
+
+						return (
+							<Box key={section.type}>
+								<Typography
+									variant="h4"
+									sx={{
+										color: "primary.main",
+										fontFamily: "Bungee",
+										mb: 3,
+										borderBottom:
+											"2px solid rgba(255,255,255,0.1)",
+										pb: 1,
+									}}
+								>
+									{section.title}
+								</Typography>
+								<Box sx={{ display: "grid", gap: 3 }}>
+									{sectionQuests.map((quest) => (
+										<Paper
+											key={quest.id}
+											sx={{
+												p: 3,
+												backgroundColor:
+													"rgba(0, 0, 0, 0.6)",
+												border: "1px solid rgba(255, 255, 255, 0.1)",
+												cursor: "pointer",
+												transition:
+													"transform 0.2s, background-color 0.2s",
+												"&:hover": {
+													transform:
+														"translateY(-2px)",
+													backgroundColor:
+														"rgba(0, 0, 0, 0.7)",
+													borderColor: "primary.main",
+												},
+											}}
+											onClick={async () => {
+												try {
+													const fullQuest =
+														await getQuestBySlug(
+															quest.slug,
+														);
+													setSelectedQuest(fullQuest);
+												} catch (error) {
+													console.error(
+														"Failed to fetch quest details",
+														error,
+													);
+													setSelectedQuest(quest);
+												}
+											}}
+										>
+											<Box
+												display="flex"
+												justifyContent="space-between"
+												alignItems="center"
+											>
+												<Box>
+													<Typography
+														variant="h5"
+														color="primary.main"
+														gutterBottom
+													>
+														{quest.title}
+													</Typography>
+													<Typography
+														variant="body1"
+														color="text.secondary"
+													>
+														{quest.summary ||
+															quest.description.substring(
+																0,
+																150,
+															) + "..."}
+													</Typography>
+												</Box>
+												<ChevronRight color="#aaa" />
+											</Box>
+										</Paper>
+									))}
 								</Box>
-								<ChevronRight color="#aaa" />
 							</Box>
-						</Paper>
-					))}
+						);
+					})}
 				</Box>
 			)}
 		</Container>

@@ -17,8 +17,6 @@ import {
 	TableRow,
 	TextField,
 	Typography,
-	FormControlLabel,
-	Checkbox,
 	Alert,
 	Divider,
 } from "@mui/material";
@@ -42,7 +40,7 @@ const AdminQuestsPage: React.FC = () => {
 		description: "",
 		summary: "",
 		order: 0,
-		isMainQuest: false,
+		category: "Side",
 		difficulty: "",
 		rewards: "",
 		steps: [],
@@ -76,7 +74,7 @@ const AdminQuestsPage: React.FC = () => {
 					description: fullQuest.description,
 					summary: fullQuest.summary || "",
 					order: fullQuest.order,
-					isMainQuest: fullQuest.isMainQuest,
+					category: fullQuest.category,
 					difficulty: fullQuest.difficulty || "",
 					rewards: fullQuest.rewards || "",
 					steps: fullQuest.steps || [],
@@ -94,7 +92,7 @@ const AdminQuestsPage: React.FC = () => {
 				description: "",
 				summary: "",
 				order: quests.length + 1,
-				isMainQuest: false,
+				category: "Side",
 				difficulty: "",
 				rewards: "",
 				steps: [],
@@ -212,11 +210,7 @@ const AdminQuestsPage: React.FC = () => {
 										? quest.summary.substring(0, 50) + "..."
 										: "-"}
 								</TableCell>
-								<TableCell>
-									{quest.isMainQuest
-										? "Main Quest"
-										: "Side Quest"}
-								</TableCell>
+								<TableCell>{quest.category}</TableCell>
 								<TableCell align="right">
 									<IconButton
 										color="primary"
@@ -329,20 +323,25 @@ const AdminQuestsPage: React.FC = () => {
 								})
 							}
 						/>
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={formData.isMainQuest}
-									onChange={(e) =>
-										setFormData({
-											...formData,
-											isMainQuest: e.target.checked,
-										})
-									}
-								/>
+						<TextField
+							select
+							label="Category"
+							fullWidth
+							value={formData.category || "Side"}
+							onChange={(e) =>
+								setFormData({
+									...formData,
+									category: e.target.value,
+								})
 							}
-							label="Is Main Quest"
-						/>
+							SelectProps={{
+								native: true,
+							}}
+						>
+							<option value="Main">Main Quest</option>
+							<option value="Side">Side Quest</option>
+							<option value="Other">Other</option>
+						</TextField>
 
 						<Divider sx={{ my: 2 }} />
 						<Typography variant="h6">

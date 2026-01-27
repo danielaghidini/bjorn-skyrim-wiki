@@ -13,7 +13,7 @@ export interface Quest {
 	description: string;
 	summary?: string;
 	order: number;
-	isMainQuest: boolean;
+	category: string;
 	difficulty?: string;
 	rewards?: string;
 	createdAt: string;
