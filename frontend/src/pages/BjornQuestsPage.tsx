@@ -14,6 +14,19 @@ import ReactMarkdown from "react-markdown";
 import type { Quest } from "../types/Quest";
 import { getQuests, getQuestBySlug } from "../services/questService";
 
+// Convert various YouTube URL formats to embed URL
+const getYouTubeEmbedUrl = (url: string): string => {
+	let videoId = "";
+	if (url.includes("youtu.be/")) {
+		videoId = url.split("youtu.be/")[1]?.split(/[?&]/)[0] || "";
+	} else if (url.includes("watch?v=")) {
+		videoId = url.split("watch?v=")[1]?.split(/[?&]/)[0] || "";
+	} else if (url.includes("embed/")) {
+		videoId = url.split("embed/")[1]?.split(/[?&]/)[0] || "";
+	}
+	return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+};
+
 const BjornQuestsPage: React.FC = () => {
 	const [quests, setQuests] = useState<Quest[]>([]);
 	const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
@@ -41,6 +54,8 @@ const BjornQuestsPage: React.FC = () => {
 						color: "#ffffff",
 						fontFamily: "Bungee",
 						mb: 1,
+						wordBreak: "break-word",
+						fontSize: { xs: "1.75rem", sm: "2.5rem", md: "3rem" },
 					}}
 				>
 					Bjorn's Quests
@@ -54,6 +69,7 @@ const BjornQuestsPage: React.FC = () => {
 						mb: 6,
 						maxWidth: "80%",
 						mx: "auto",
+						fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
 					}}
 				>
 					"Let's move. Before the day gets old and our blades get
@@ -75,14 +91,17 @@ const BjornQuestsPage: React.FC = () => {
 						>
 							Quests Index
 						</Link>
-						<Typography color="primary.main">
+						<Typography
+							color="primary.main"
+							sx={{ wordBreak: "break-word" }}
+						>
 							{selectedQuest.title}
 						</Typography>
 					</Breadcrumbs>
 
 					<Paper
 						sx={{
-							p: 4,
+							p: { xs: 2, sm: 4 },
 							mb: 4,
 							backgroundColor: "rgba(0, 0, 0, 0.7)",
 						}}
@@ -91,6 +110,14 @@ const BjornQuestsPage: React.FC = () => {
 							variant="h3"
 							gutterBottom
 							color="primary.main"
+							sx={{
+								wordBreak: "break-word",
+								fontSize: {
+									xs: "1.5rem",
+									sm: "2rem",
+									md: "2.5rem",
+								},
+							}}
 						>
 							{selectedQuest.title}
 						</Typography>
@@ -147,7 +174,15 @@ const BjornQuestsPage: React.FC = () => {
 										variant="h4"
 										color="primary.main"
 										gutterBottom
-										sx={{ fontFamily: "Bungee" }}
+										sx={{
+											fontFamily: "Bungee",
+											fontSize: {
+												xs: "1.25rem",
+												sm: "1.5rem",
+												md: "2rem",
+											},
+											wordBreak: "break-word",
+										}}
 									>
 										Quest Steps
 									</Typography>
@@ -162,7 +197,7 @@ const BjornQuestsPage: React.FC = () => {
 											<Paper
 												key={step.id}
 												sx={{
-													p: 3,
+													p: { xs: 2, sm: 3 },
 													backgroundColor:
 														"rgba(0, 0, 0, 0.4)",
 													border: "1px solid rgba(255, 255, 255, 0.05)",
@@ -172,6 +207,9 @@ const BjornQuestsPage: React.FC = () => {
 													variant="h6"
 													color="secondary.main"
 													gutterBottom
+													sx={{
+														wordBreak: "break-word",
+													}}
 												>
 													{step.order}. {step.title}
 												</Typography>
@@ -189,16 +227,15 @@ const BjornQuestsPage: React.FC = () => {
 															position:
 																"relative",
 															paddingTop:
-																"56.25%", // 16:9 aspect ratio
+																"56.25%",
 															width: "100%",
 															overflow: "hidden",
 															borderRadius: 1,
 														}}
 													>
 														<iframe
-															src={step.videoUrl.replace(
-																"watch?v=",
-																"embed/",
+															src={getYouTubeEmbedUrl(
+																step.videoUrl,
 															)}
 															title={`Video for ${step.title}`}
 															allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -258,6 +295,12 @@ const BjornQuestsPage: React.FC = () => {
 										borderBottom:
 											"2px solid rgba(255,255,255,0.1)",
 										pb: 1,
+										fontSize: {
+											xs: "1.25rem",
+											sm: "1.5rem",
+											md: "2rem",
+										},
+										wordBreak: "break-word",
 									}}
 								>
 									{section.title}
@@ -267,7 +310,7 @@ const BjornQuestsPage: React.FC = () => {
 										<Paper
 											key={quest.id}
 											sx={{
-												p: 3,
+												p: { xs: 2, sm: 3 },
 												backgroundColor:
 													"rgba(0, 0, 0, 0.6)",
 												border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -303,17 +346,35 @@ const BjornQuestsPage: React.FC = () => {
 												justifyContent="space-between"
 												alignItems="center"
 											>
-												<Box>
+												<Box
+													sx={{
+														minWidth: 0,
+														flex: 1,
+													}}
+												>
 													<Typography
 														variant="h5"
 														color="primary.main"
 														gutterBottom
+														sx={{
+															wordBreak:
+																"break-word",
+															fontSize: {
+																xs: "1rem",
+																sm: "1.25rem",
+																md: "1.5rem",
+															},
+														}}
 													>
 														{quest.title}
 													</Typography>
 													<Typography
 														variant="body1"
 														color="text.secondary"
+														sx={{
+															wordBreak:
+																"break-word",
+														}}
 													>
 														{quest.summary ||
 															quest.description.substring(
