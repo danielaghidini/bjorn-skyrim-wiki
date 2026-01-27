@@ -168,9 +168,23 @@ const BjornQuestsPage: React.FC = () => {
 									fontStyle: "italic",
 									opacity: 0.8,
 								},
+								"& a": {
+									color: "primary.main",
+									textDecoration: "underline",
+								},
 							}}
 						>
-							<ReactMarkdown>
+							<ReactMarkdown
+								components={{
+									a: ({ node, ...props }) => (
+										<a
+											{...props}
+											target="_blank"
+											rel="noopener noreferrer"
+										/>
+									),
+								}}
+							>
 								{selectedQuest.description}
 							</ReactMarkdown>
 						</Box>
@@ -229,7 +243,7 @@ const BjornQuestsPage: React.FC = () => {
 															lineHeight: 1.6,
 														},
 														"& a": {
-															color: "secondary.light",
+															color: "primary.main",
 															textDecoration:
 																"underline",
 														},
@@ -240,7 +254,20 @@ const BjornQuestsPage: React.FC = () => {
 														"& li": { mb: 0.5 },
 													}}
 												>
-													<ReactMarkdown>
+													<ReactMarkdown
+														components={{
+															a: ({
+																node,
+																...props
+															}) => (
+																<a
+																	{...props}
+																	target="_blank"
+																	rel="noopener noreferrer"
+																/>
+															),
+														}}
+													>
 														{step.description}
 													</ReactMarkdown>
 												</Box>
