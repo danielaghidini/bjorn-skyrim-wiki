@@ -69,6 +69,12 @@ const ChatPage: React.FC = () => {
 
 			const data = await response.json();
 
+			if (!response.ok) {
+				throw new Error(
+					data.error || data.details || "Failed to fetch response",
+				);
+			}
+
 			if (data.reply) {
 				setMessages((prev) => [
 					...prev,
