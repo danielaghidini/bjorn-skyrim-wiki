@@ -44,7 +44,6 @@ function CustomTabPanel(props: TabPanelProps) {
 const AdminDashboard = () => {
 	const [value, setValue] = useState(0);
 	const [articles, setArticles] = useState<any[]>([]);
-	const [quests, setQuests] = useState<any[]>([]);
 	const [fanArts, setFanArts] = useState<any[]>([]);
 	const { token, user, logout } = useAuthStore();
 
@@ -56,10 +55,8 @@ const AdminDashboard = () => {
 	const fetchContent = async () => {
 		try {
 			const resArticles = await axios.get(`${API_URL}/api/articles`);
-			const resQuests = await axios.get(`${API_URL}/api/quests`);
 			const resFanArt = await axios.get(`${API_URL}/api/fan-art`);
 			setArticles(resArticles.data);
-			setQuests(resQuests.data);
 			setFanArts(resFanArt.data);
 		} catch (error) {
 			console.error("Fetch error:", error);
