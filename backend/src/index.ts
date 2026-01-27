@@ -92,17 +92,7 @@ app.post("/api/categories", async (req, res) => {
 	}
 });
 
-app.get("/api/quests", async (req, res) => {
-	try {
-		const quests = await prisma.quest.findMany({
-			include: { steps: { orderBy: { order: "asc" } } },
-		});
-		res.json(quests);
-	} catch (error) {
-		console.error("Fetch quests error:", error);
-		res.status(500).json({ error: "Failed to fetch quests" });
-	}
-});
+// app.get("/api/quests", ...); // Handled by questRoutes
 
 app.get("/api/fan-art", getAllFanArt);
 app.get("/api/dialogues", getDialogues);
@@ -112,14 +102,18 @@ app.get("/api/scenes", getScenes);
 app.post("/auth/register", register);
 app.post("/auth/login", login);
 
+import questRoutes from "./routes/questRoutes.js";
+
+app.use("/api/quests", questRoutes);
+
 // Protected Content Routes
 app.post("/articles", authenticateToken, createArticle);
 app.put("/articles/:id", authenticateToken, updateArticle);
 app.delete("/articles/:id", authenticateToken, deleteArticle);
 
-app.post("/quests", authenticateToken, createQuest);
-app.put("/quests/:id", authenticateToken, updateQuest);
-app.delete("/quests/:id", authenticateToken, deleteQuest);
+// app.post("/quests", authenticateToken, createQuest); // Removed in favor of questRoutes
+// app.put("/quests/:id", authenticateToken, updateQuest); // Removed in favor of questRoutes
+// app.delete("/quests/:id", authenticateToken, deleteQuest); // Removed in favor of questRoutes
 
 app.post("/fan-art", authenticateToken, createFanArt);
 app.put("/fan-art/:id", authenticateToken, updateFanArt);

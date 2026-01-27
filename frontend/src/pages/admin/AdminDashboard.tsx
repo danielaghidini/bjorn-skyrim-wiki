@@ -17,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useAuthStore } from "../../store/authStore";
 import { API_URL } from "../../config/apiConfig";
+import AdminQuestsPage from "./AdminQuestsPage";
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -275,34 +276,7 @@ const AdminDashboard = () => {
 				</List>
 			</CustomTabPanel>
 			<CustomTabPanel value={value} index={1}>
-				<List>
-					{quests.length === 0 && (
-						<Typography sx={{ p: 2, opacity: 0.5 }}>
-							No quests found.
-						</Typography>
-					)}
-					{quests.map((quest: any) => (
-						<ListItem
-							key={quest.id}
-							secondaryAction={
-								canManage(quest) && (
-									<IconButton
-										edge="end"
-										aria-label="delete"
-										onClick={() => handleDelete(quest.id)}
-									>
-										<DeleteIcon />
-									</IconButton>
-								)
-							}
-						>
-							<ListItemText
-								primary={quest.title}
-								secondary={quest.slug}
-							/>
-						</ListItem>
-					))}
-				</List>
+				<AdminQuestsPage />
 			</CustomTabPanel>
 			<CustomTabPanel value={value} index={2}>
 				<List>

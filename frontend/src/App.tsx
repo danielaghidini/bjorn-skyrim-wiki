@@ -16,43 +16,10 @@ import DialoguesPage from "./pages/DialoguesPage";
 import SongsPage from "./pages/SongsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ChatPage from "./pages/ChatPage";
+import BjornQuestsPage from "./pages/BjornQuestsPage";
 
 // Placeholder components for other pages
 
-const BjornQuestsPage = () => (
-	<Box sx={{ py: 8 }}>
-		<Box sx={{ mb: 6, textAlign: "center" }}>
-			<Typography
-				variant="h2"
-				component="h1"
-				gutterBottom
-				sx={{
-					color: "#ffffff",
-					fontFamily: "Bungee",
-					mb: 1,
-				}}
-			>
-				Bjorn Quests
-			</Typography>
-			<Typography
-				variant="h5"
-				gutterBottom
-				sx={{
-					fontFamily: "Alan Sans",
-					color: "primary.main",
-					mb: 6,
-					maxWidth: "80%",
-					mx: "auto",
-				}}
-			>
-				"Let's move. Before the day gets old and our blades get bored."
-			</Typography>
-		</Box>
-		<Typography variant="body1" sx={{ textAlign: "center", opacity: 0.7 }}>
-			Detailed quest information coming soon...
-		</Typography>
-	</Box>
-);
 const MediaPage = () => (
 	<Box sx={{ py: 8 }}>
 		<Box sx={{ mb: 6, textAlign: "center" }}>

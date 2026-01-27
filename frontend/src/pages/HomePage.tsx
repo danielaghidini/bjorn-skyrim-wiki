@@ -47,7 +47,7 @@ const hubItems = [
 	{
 		title: "Dialogues",
 		description: "Explore over 4500 lines of fully voiced Nordic wisdom.",
-		icon: <MessageSquare size={40} color="#ffffff" />,
+		icon: <MessageSquare size={40} color="#4fc3f7" />,
 		path: "/dialogues",
 		category: "Lore",
 	},
@@ -148,21 +148,20 @@ const HomePage: React.FC = () => {
 							mb: 1,
 						}}
 					>
-						Bjorn Wiki
+						I'm Bjorn.
 					</Typography>
 					<Typography
-						variant="h5"
+						variant="h6"
 						gutterBottom
 						sx={{
 							fontFamily: "Alan Sans",
 							color: "primary.main",
 							mb: 4,
-							maxWidth: "80%",
+							maxWidth: "100%",
 							mx: "auto",
 						}}
 					>
-						"Aye, take a seat then. Let's talk and have a drink
-						together."
+						Looking for someone to watch your back? I can do it.
 					</Typography>
 					<Typography
 						variant="body1"

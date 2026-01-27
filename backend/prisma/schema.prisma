@@ -33,6 +33,9 @@ model Quest {
   title       String
   slug        String      @unique
   description String
+  summary     String?
+  order       Int         @default(0)
+  isMainQuest Boolean     @default(false)
   difficulty  String?
   rewards     String?
   authorId    String?

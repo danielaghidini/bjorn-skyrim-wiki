@@ -24,6 +24,7 @@ import {
 	Wrench,
 	Palette,
 	Music,
+	Bot,
 } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
@@ -63,7 +64,7 @@ const menuItems = [
 	},
 	{
 		text: "Chatbot",
-		icon: <MessageSquare size={18} />,
+		icon: <Bot size={18} />,
 		path: "/chat",
 	},
 ];
