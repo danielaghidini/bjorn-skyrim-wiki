@@ -47,6 +47,7 @@ export const createQuest = async (req: Request, res: Response) => {
 		summary,
 		order,
 		isMainQuest,
+		category,
 		difficulty,
 		rewards,
 		steps,
@@ -59,7 +60,11 @@ export const createQuest = async (req: Request, res: Response) => {
 				description,
 				summary,
 				order: parseInt(order),
-				isMainQuest: isMainQuest === "true" || isMainQuest === true,
+				category:
+					category ||
+					(isMainQuest === "true" || isMainQuest === true
+						? "Main"
+						: "Side"),
 				difficulty,
 				rewards,
 				steps: {
@@ -91,6 +96,7 @@ export const updateQuest = async (req: Request, res: Response) => {
 		summary,
 		order,
 		isMainQuest,
+		category,
 		difficulty,
 		rewards,
 		steps,
@@ -106,7 +112,11 @@ export const updateQuest = async (req: Request, res: Response) => {
 					description,
 					summary,
 					order: parseInt(order),
-					isMainQuest: isMainQuest === "true" || isMainQuest === true,
+					category:
+						category ||
+						(isMainQuest === "true" || isMainQuest === true
+							? "Main"
+							: undefined),
 					difficulty,
 					rewards,
 				},

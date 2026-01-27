@@ -17,8 +17,8 @@ model Article {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
   user       User?    @relation(fields: [authorId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model Category {
@@ -33,16 +33,16 @@ model Quest {
   title       String
   slug        String      @unique
   description String
-  summary     String?
-  order       Int         @default(0)
-  isMainQuest Boolean     @default(false)
   difficulty  String?
   rewards     String?
   authorId    String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-  steps       QuestStep[]
+  category    String      @default("Side")
+  order       Int         @default(0)
+  summary     String?
   user        User?       @relation(fields: [authorId], references: [id])
+  steps       QuestStep[]
 }
 
 model QuestStep {
@@ -64,8 +64,8 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   articles  Article[]
-  quests    Quest[]
   fanArts   FanArt[]
+  quests    Quest[]
 }
 
 model FanArt {
@@ -81,16 +81,16 @@ model FanArt {
 }
 
 model Dialogue {
-  id           String   @id @default(uuid())
-  voiceType    String?
-  questName    String?
-  branch       String?
-  topicText    String?
-  responseText String
-  emotion      String?
-  fileName     String?
+  id            String   @id @default(uuid())
+  voiceType     String?
+  questName     String?
+  branch        String?
+  topicText     String?
+  responseText  String
+  emotion       String?
+  fileName      String?
   audioFileName String?
-  topicInfo    String?
-  subtype      String?
-  createdAt    DateTime @default(now())
+  topicInfo     String?
+  subtype       String?
+  createdAt     DateTime @default(now())
 }
