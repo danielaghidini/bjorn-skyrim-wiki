@@ -84,3 +84,33 @@ export const login = async (req: Request, res: Response) => {
 		});
 	}
 };
+
+export const getMe = async (req: Request, res: Response) => {
+	try {
+		// req.user is set by authenticateToken middleware
+		const userId = (req as any).user?.id;
+
+		if (!userId) {
+			return res.status(401).json({ error: "Unauthorized" });
+		}
+
+		const user = await prisma.user.findUnique({
+			where: { id: userId },
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				role: true,
+			},
+		});
+
+		if (!user) {
+			return res.status(404).json({ error: "User not found" });
+		}
+
+		res.json(user);
+	} catch (error) {
+		console.error("GetMe error:", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};

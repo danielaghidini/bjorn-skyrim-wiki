@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider, CssBaseline, Box, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useAuthStore } from "./store/authStore";
 import skyrimTheme from "./styles/Theme";
 import MainLayout from "./components/layout/MainLayout";
 import HomePage from "./pages/HomePage";
@@ -57,6 +59,10 @@ const MediaPage = () => (
 );
 
 function App() {
+	useEffect(() => {
+		useAuthStore.getState().checkAuth();
+	}, []);
+
 	return (
 		<ThemeProvider theme={skyrimTheme}>
 			<CssBaseline />

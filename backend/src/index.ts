@@ -101,6 +101,12 @@ app.get("/api/scenes", getScenes);
 // Auth Routes
 app.post("/auth/register", register);
 app.post("/auth/login", login);
+app.get("/auth/me", authenticateToken, (req, res) => {
+	// Wrapper to handle Promise if not using express-async-handler or similar
+	import("./controllers/authController.js").then((mod) =>
+		mod.getMe(req, res),
+	);
+});
 
 import questRoutes from "./routes/questRoutes.js";
 
