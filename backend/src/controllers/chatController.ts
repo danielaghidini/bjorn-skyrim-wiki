@@ -45,6 +45,9 @@ export const chatWithBjorn = async (req: Request, res: Response) => {
 		return;
 	}
 
+	// Debug log for API Key (do not log the actual key in production!)
+	console.log("API Key present:", !!apiKey);
+
 	// Construct message history for the AI
 	// history is expected to be an array of { role: 'user' | 'assistant', content: string }
 	const messages = [
@@ -54,6 +57,7 @@ export const chatWithBjorn = async (req: Request, res: Response) => {
 	];
 
 	try {
+		console.log("Sending request to NVIDIA API...");
 		const response = await fetch(
 			"https://integrate.api.nvidia.com/v1/chat/completions",
 			{
@@ -74,13 +78,28 @@ export const chatWithBjorn = async (req: Request, res: Response) => {
 
 		if (!response.ok) {
 			const errorText = await response.text();
-			console.error("NVIDIA API Error:", errorText);
-			res.status(response.status).json({ error: "AI Service Error" });
+			console.error("NVIDIA API Error Status:", response.status);
+			console.error("NVIDIA API Error Text:", errorText);
+			res.status(response.status).json({
+				error: "AI Service Error",
+				details: errorText,
+			});
 			return;
 		}
 
 		const data: any = await response.json();
+		console.log("NVIDIA API Raw Response:", JSON.stringify(data, null, 2));
+
 		const reply = data.choices?.[0]?.message?.content;
+
+		if (!reply) {
+			console.error("NVIDIA API returned no reply. Full data:", data);
+			res.status(500).json({
+				error: "Empty response from AI",
+				data: data,
+			});
+			return;
+		}
 
 		res.json({ reply });
 	} catch (error) {
