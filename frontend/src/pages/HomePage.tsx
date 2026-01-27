@@ -157,9 +157,12 @@ const HomePage: React.FC = () => {
 							fontFamily: "Alan Sans",
 							color: "primary.main",
 							mb: 4,
+							maxWidth: "80%",
+							mx: "auto",
 						}}
 					>
-						The Mercenary Follower
+						"Aye, take a seat then. Let's talk and have a drink
+						together."
 					</Typography>
 					<Typography
 						variant="body1"

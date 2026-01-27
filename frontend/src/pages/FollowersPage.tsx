@@ -67,9 +67,12 @@ const FollowersPage: React.FC = () => {
 						color: "primary.main",
 						mb: 6,
 						textAlign: "center",
+						maxWidth: "80%",
+						mx: "auto",
 					}}
 				>
-					Companions who joined the journey
+					"If today is our last, I want you to know how proud I am to
+					have stood by your side, friend. It has been an honor."
 				</Typography>
 				<Typography
 					variant="h6"

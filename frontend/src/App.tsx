@@ -41,9 +41,11 @@ const BjornQuestsPage = () => (
 					fontFamily: "Alan Sans",
 					color: "primary.main",
 					mb: 6,
+					maxWidth: "80%",
+					mx: "auto",
 				}}
 			>
-				Discover the specific journey of the Nordic Follower
+				"Let's move. Before the day gets old and our blades get bored."
 			</Typography>
 		</Box>
 		<Typography variant="body1" sx={{ textAlign: "center", opacity: 0.7 }}>
@@ -73,9 +75,12 @@ const MediaPage = () => (
 					fontFamily: "Alan Sans",
 					color: "primary.main",
 					mb: 6,
+					maxWidth: "80%",
+					mx: "auto",
 				}}
 			>
-				Screenshots and memories from Skyrim
+				"I've always enjoyed the way the morning sun reflects off the
+				lake."
 			</Typography>
 		</Box>
 		<Typography variant="body1" sx={{ textAlign: "center", opacity: 0.7 }}>

@@ -112,6 +112,8 @@ const SongsPage: React.FC = () => {
 						fontFamily: "Alan Sans",
 						color: "primary.main",
 						mb: 6,
+						maxWidth: "80%",
+						mx: "auto",
 					}}
 				>
 					Well, I'm no bard, but I'll give it a go. Just don't expect

@@ -80,9 +80,12 @@ const FanArtPage: React.FC = () => {
 						color: "primary.main",
 						mb: 6,
 						textAlign: "center",
+						maxWidth: "80%",
+						mx: "auto",
 					}}
 				>
-					Explore incredible creations from the community
+					"This land holds many secrets, but it also holds much
+					beauty. I try to appreciate both."
 				</Typography>
 			</Box>
 

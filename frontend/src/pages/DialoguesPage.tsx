@@ -235,9 +235,12 @@ const DialoguesPage: React.FC = () => {
 					color: "primary.main",
 					mb: 4,
 					textAlign: "center",
+					maxWidth: "80%",
+					mx: "auto",
 				}}
 			>
-				Nordic wisdom and mercenary chronicles
+				"I'm a man of action, not words. But if you give me a mug of
+				mead, I might just start spilling my secrets."
 			</Typography>
 
 			<Box mb={4}>

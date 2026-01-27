@@ -109,15 +109,16 @@ const ForumPage: React.FC = () => {
 					Adventures' Tavern
 				</Typography>
 				<Typography
-					variant="h6"
+					variant="h5"
 					sx={{
 						color: "primary.main",
 						fontFamily: "Alan Sans",
-						opacity: 0.8,
+						maxWidth: "80%",
+						mx: "auto",
 					}}
 				>
-					Welcome to the forum! Share your suggestions and experiences
-					here.
+					"I might hit a tavern or two... purely for scouting
+					purposes, of course."
 				</Typography>
 			</Box>
 
