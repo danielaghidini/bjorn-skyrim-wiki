@@ -41,8 +41,6 @@ const AdminQuestsPage: React.FC = () => {
 		summary: "",
 		order: 0,
 		category: "Side",
-		difficulty: "",
-		rewards: "",
 		steps: [],
 	});
 	const [error, setError] = useState<string | null>(null);
@@ -75,8 +73,6 @@ const AdminQuestsPage: React.FC = () => {
 					summary: fullQuest.summary || "",
 					order: fullQuest.order,
 					category: fullQuest.category,
-					difficulty: fullQuest.difficulty || "",
-					rewards: fullQuest.rewards || "",
 					steps: fullQuest.steps || [],
 				});
 				setOpen(true);
@@ -93,8 +89,6 @@ const AdminQuestsPage: React.FC = () => {
 				summary: "",
 				order: quests.length + 1,
 				category: "Side",
-				difficulty: "",
-				rewards: "",
 				steps: [],
 			});
 			setOpen(true);
@@ -237,6 +231,39 @@ const AdminQuestsPage: React.FC = () => {
 				</DialogTitle>
 				<DialogContent>
 					<Box display="flex" flexDirection="column" gap={2} mt={1}>
+						<Box display="flex" gap={2}>
+							<TextField
+								label="Order"
+								type="number"
+								value={formData.order}
+								onChange={(e) =>
+									setFormData({
+										...formData,
+										order: parseInt(e.target.value),
+									})
+								}
+								sx={{ width: 100 }}
+							/>
+							<TextField
+								select
+								label="Category"
+								fullWidth
+								value={formData.category || "Side"}
+								onChange={(e) =>
+									setFormData({
+										...formData,
+										category: e.target.value,
+									})
+								}
+								SelectProps={{
+									native: true,
+								}}
+							>
+								<option value="Main">Main Quest</option>
+								<option value="Side">Side Quest</option>
+								<option value="Other">Other</option>
+							</TextField>
+						</Box>
 						<TextField
 							label="Title"
 							fullWidth
@@ -275,10 +302,10 @@ const AdminQuestsPage: React.FC = () => {
 							helperText="Appears on the main quests page index (2-3 lines)."
 						/>
 						<TextField
-							label="Description (Markdown Content)"
+							label="Introduction (Lore)"
 							fullWidth
 							multiline
-							rows={10}
+							rows={4}
 							value={formData.description}
 							onChange={(e) =>
 								setFormData({
@@ -286,62 +313,8 @@ const AdminQuestsPage: React.FC = () => {
 									description: e.target.value,
 								})
 							}
+							helperText="Explain the quest lore and background (Markdown supported)"
 						/>
-						<Box display="flex" gap={2}>
-							<TextField
-								label="Order"
-								type="number"
-								value={formData.order}
-								onChange={(e) =>
-									setFormData({
-										...formData,
-										order: parseInt(e.target.value),
-									})
-								}
-								sx={{ width: 100 }}
-							/>
-							<TextField
-								label="Difficulty"
-								fullWidth
-								value={formData.difficulty}
-								onChange={(e) =>
-									setFormData({
-										...formData,
-										difficulty: e.target.value,
-									})
-								}
-							/>
-						</Box>
-						<TextField
-							label="Rewards"
-							fullWidth
-							value={formData.rewards}
-							onChange={(e) =>
-								setFormData({
-									...formData,
-									rewards: e.target.value,
-								})
-							}
-						/>
-						<TextField
-							select
-							label="Category"
-							fullWidth
-							value={formData.category || "Side"}
-							onChange={(e) =>
-								setFormData({
-									...formData,
-									category: e.target.value,
-								})
-							}
-							SelectProps={{
-								native: true,
-							}}
-						>
-							<option value="Main">Main Quest</option>
-							<option value="Side">Side Quest</option>
-							<option value="Other">Other</option>
-						</TextField>
 
 						<Divider sx={{ my: 2 }} />
 						<Typography variant="h6">
@@ -388,20 +361,6 @@ const AdminQuestsPage: React.FC = () => {
 									}
 								/>
 								<TextField
-									label="Video URL (YouTube)"
-									size="small"
-									fullWidth
-									value={step.videoUrl || ""}
-									onChange={(e) =>
-										handleStepChange(
-											index,
-											"videoUrl",
-											e.target.value,
-										)
-									}
-									helperText="e.g., https://www.youtube.com/watch?v=..."
-								/>
-								<TextField
 									label="Step Description"
 									size="small"
 									fullWidth
@@ -415,6 +374,20 @@ const AdminQuestsPage: React.FC = () => {
 											e.target.value,
 										)
 									}
+								/>
+								<TextField
+									label="Video URL (YouTube)"
+									size="small"
+									fullWidth
+									value={step.videoUrl || ""}
+									onChange={(e) =>
+										handleStepChange(
+											index,
+											"videoUrl",
+											e.target.value,
+										)
+									}
+									helperText="e.g., https://www.youtube.com/watch?v=..."
 								/>
 							</Paper>
 						))}

@@ -46,6 +46,7 @@ const AdminDashboard = () => {
 	const [articles, setArticles] = useState<any[]>([]);
 	const [fanArts, setFanArts] = useState<any[]>([]);
 	const { token, user, logout } = useAuthStore();
+	const isAdmin = user?.role === "ADMIN";
 
 	// Form states
 	const [newItemTitle, setNewItemTitle] = useState("");
@@ -186,14 +187,14 @@ const AdminDashboard = () => {
 					aria-label="admin tabs"
 				>
 					<Tab label="Articles" />
-					<Tab label="Quests" />
+					{isAdmin && <Tab label="Quests" />}
 					<Tab label="Fan Art" />
 				</Tabs>
 			</Box>
 
 			{
-				/* Simple Create Form - Hidden for Quests (Tab 1) as it has its own manager */
-				value !== 1 && (
+				/* Simple Create Form - Hidden for Quests as it has its own manager */
+				!(isAdmin && value === 1) && (
 					<Paper
 						sx={{
 							p: 2,
@@ -214,7 +215,7 @@ const AdminDashboard = () => {
 									setNewItemTitle(e.target.value)
 								}
 							/>
-							{value === 2 && (
+							{(isAdmin ? value === 2 : value === 1) && (
 								<>
 									<TextField
 										label="Image URL"
@@ -280,10 +281,12 @@ const AdminDashboard = () => {
 					))}
 				</List>
 			</CustomTabPanel>
-			<CustomTabPanel value={value} index={1}>
-				<AdminQuestsPage />
-			</CustomTabPanel>
-			<CustomTabPanel value={value} index={2}>
+			{isAdmin && (
+				<CustomTabPanel value={value} index={1}>
+					<AdminQuestsPage />
+				</CustomTabPanel>
+			)}
+			<CustomTabPanel value={value} index={isAdmin ? 2 : 1}>
 				<List>
 					{fanArts.length === 0 && (
 						<Typography sx={{ p: 2, opacity: 0.5 }}>

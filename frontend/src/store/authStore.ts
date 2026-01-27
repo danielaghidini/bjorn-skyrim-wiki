@@ -34,10 +34,6 @@ export const useAuthStore = create<AuthState>((set) => ({
 			return;
 		}
 		try {
-			// Dynamic import to avoid circular dependency if using axios instance which uses store,
-			// but here we use direct axios or fetch.
-			// Wait, we need the API_URL. I will fetch it or hardcode relative path if proxy used?
-			// LocalStorage has token.
 			const API_URL =
 				import.meta.env.VITE_API_URL || "http://localhost:3000";
 			const response = await fetch(`${API_URL}/auth/me`, {

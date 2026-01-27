@@ -233,8 +233,8 @@ const BjornQuestsPage: React.FC = () => {
 				<Box sx={{ display: "flex", flexDirection: "column", gap: 6 }}>
 					{[
 						{ title: "Main Quests", type: "Main" },
-						{ title: "Side Quests", type: "Side" },
 						{ title: "Other Quests", type: "Other" },
+						{ title: "Side Quests", type: "Side" },
 					].map((section) => {
 						const sectionQuests = quests.filter(
 							(q) =>
