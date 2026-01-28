@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Article {
@@ -103,4 +104,13 @@ model AccessLog {
   userId    String?
   userAgent String?
   createdAt DateTime @default(now())
+}
+
+model Song {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  fileName    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

@@ -20,6 +20,7 @@ import { API_URL } from "../../config/apiConfig";
 import AdminQuestsPage from "./AdminQuestsPage";
 import AdminMetrics from "./AdminMetrics";
 import AdminUsers from "./AdminUsers";
+import AdminSongs from "./AdminSongs";
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -189,12 +190,16 @@ const AdminDashboard = () => {
 					<Tab label="Fan Art" />
 					{isAdmin && <Tab label="Users" />}
 					{isAdmin && <Tab label="Metrics" />}
+					{isAdmin && <Tab label="Songs" />}
 				</Tabs>
 			</Box>
 
 			{
-				/* Simple Create Form - Hidden for Quests, Users, and Metrics as they have their own managers */
-				!(isAdmin && (value === 1 || value === 3 || value === 4)) && (
+				/* Simple Create Form - Hidden for Managers */
+				!(
+					isAdmin &&
+					(value === 1 || value === 3 || value === 4 || value === 5)
+				) && (
 					<Paper
 						sx={{
 							p: 2,
@@ -324,6 +329,11 @@ const AdminDashboard = () => {
 			{isAdmin && (
 				<CustomTabPanel value={value} index={4}>
 					<AdminMetrics />
+				</CustomTabPanel>
+			)}
+			{isAdmin && (
+				<CustomTabPanel value={value} index={5}>
+					<AdminSongs />
 				</CustomTabPanel>
 			)}
 		</Container>

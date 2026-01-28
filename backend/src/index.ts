@@ -30,6 +30,12 @@ import {
 	getAllUsers,
 	updateUserRole,
 } from "./controllers/adminUserController.js";
+import {
+	getAllSongs,
+	createSong,
+	updateSong,
+	deleteSong,
+} from "./controllers/songController.js";
 import { authorizeRole } from "./middleware/auth.js";
 
 console.log("Starting server...");
@@ -105,6 +111,7 @@ app.post("/api/categories", async (req, res) => {
 app.get("/api/fan-art", getAllFanArt);
 app.get("/api/dialogues", getDialogues);
 app.get("/api/scenes", getScenes);
+app.get("/api/songs", getAllSongs);
 app.get(
 	"/api/admin/metrics",
 	authenticateToken,
@@ -150,6 +157,25 @@ app.delete("/articles/:id", authenticateToken, deleteArticle);
 app.post("/fan-art", authenticateToken, createFanArt);
 app.put("/fan-art/:id", authenticateToken, updateFanArt);
 app.delete("/fan-art/:id", authenticateToken, deleteFanArt);
+
+app.post(
+	"/api/admin/songs",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	createSong,
+);
+app.put(
+	"/api/admin/songs/:id",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	updateSong,
+);
+app.delete(
+	"/api/admin/songs/:id",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	deleteSong,
+);
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);

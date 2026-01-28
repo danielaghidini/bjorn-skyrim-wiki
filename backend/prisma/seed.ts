@@ -150,11 +150,61 @@ In the aftermath, Adielle survives but remembers little of what happened inside 
 			console.log(`Created quest: ${quest.title}`);
 		} else {
 			console.log(`Quest already exists: ${quest.title}`);
-			// Optional: Update if exists
-			// await prisma.quest.update({
-			//   where: { slug: quest.slug },
-			//   data: quest,
-			// });
+		}
+	}
+
+	const songs = [
+		{
+			title: "The Dragonborn Comes",
+			description: "Bjorn's raw rendition of the classic prophecy.",
+			fileName: "00-TheDragonbornComes.wav",
+		},
+		{
+			title: "Steel And Mead",
+			description: "A drinking song for those who live by the sword.",
+			fileName: "01-SteelAndMead.wav",
+		},
+		{
+			title: "The Winter Kept Her Voice",
+			description: "A melancholic ballad about loss and silence.",
+			fileName: "02-TheWinterKeptHerVoice.wav",
+		},
+		{
+			title: "The Mead is Gone but the Fire Remains",
+			description: "Reflecting on what stays when the party ends.",
+			fileName: "03-TheMeadisGonebuttheFireRemains.wav",
+		},
+		{
+			title: "No Road Leads Back",
+			description: "A song about moving forward when there is no return.",
+			fileName: "04-NoRoadLeadsBack.wav",
+		},
+		{
+			title: "Where the Storm Ends",
+			description: "Searching for peace in a land of turmoil.",
+			fileName: "05-WheretheStormEnds.wav",
+		},
+		{
+			title: "By the Nine",
+			description: "A hymn to the divines, sung with rough reverence.",
+			fileName: "06-By the Nine.wav",
+		},
+		{
+			title: "The One With The Voice",
+			description: "Honoring the power of the Thu'um.",
+			fileName: "07-TheOneWithTheVoice.wav",
+		},
+	];
+
+	for (const s of songs) {
+		const existing = await prisma.song.findFirst({
+			where: { title: s.title },
+		});
+		if (!existing) {
+			await prisma.song.create({ data: s });
+			console.log(`Created song: ${s.title}`);
+		} else {
+			console.log(`Song already exists: ${s.title}`);
 		}
 	}
 
