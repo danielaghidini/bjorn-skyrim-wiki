@@ -22,8 +22,8 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Play, Pause } from "lucide-react";
-import axios from "axios";
-import { API_URL, SUPABASE_STORAGE_URL } from "../config/apiConfig";
+import api from "../api/api";
+import { SUPABASE_STORAGE_URL } from "../config/apiConfig";
 import { getActorName } from "../utils/voiceMapping";
 
 interface Dialogue {
@@ -117,7 +117,7 @@ const DialoguesPage: React.FC = () => {
 			setPlayingId(null);
 		}
 		try {
-			const response = await axios.get(`${API_URL}/api/dialogues`, {
+			const response = await api.get(`/api/dialogues`, {
 				params: {
 					page: page + 1,
 					limit: rowsPerPage,

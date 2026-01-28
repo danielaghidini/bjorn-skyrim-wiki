@@ -11,8 +11,7 @@ import {
 	Alert,
 	Tooltip,
 } from "@mui/material";
-import axios from "axios";
-import { API_URL } from "../config/apiConfig";
+import api from "../api/api";
 
 interface FanArt {
 	id: string;
@@ -30,7 +29,7 @@ const FanArtPage: React.FC = () => {
 	useEffect(() => {
 		const fetchFanArt = async () => {
 			try {
-				const response = await axios.get(`${API_URL}/api/fan-art`);
+				const response = await api.get(`/api/fan-art`);
 				setFanArts(response.data);
 				setLoading(false);
 			} catch (err) {

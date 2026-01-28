@@ -24,6 +24,13 @@ import {
 } from "./controllers/fanArtController.js";
 import { getDialogues, getScenes } from "./controllers/dialogueController.js";
 import { chatWithBjorn } from "./controllers/chatController.js";
+import { metricsMiddleware } from "./middleware/metricsMiddleware.js";
+import { getMetrics } from "./controllers/metricsController.js";
+import {
+	getAllUsers,
+	updateUserRole,
+} from "./controllers/adminUserController.js";
+import { authorizeRole } from "./middleware/auth.js";
 
 console.log("Starting server...");
 connectDB();
@@ -33,6 +40,7 @@ const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use(metricsMiddleware);
 
 // Chat Route
 app.post("/api/chat", chatWithBjorn);
@@ -97,6 +105,24 @@ app.post("/api/categories", async (req, res) => {
 app.get("/api/fan-art", getAllFanArt);
 app.get("/api/dialogues", getDialogues);
 app.get("/api/scenes", getScenes);
+app.get(
+	"/api/admin/metrics",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	getMetrics,
+);
+app.get(
+	"/api/admin/users",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	getAllUsers,
+);
+app.put(
+	"/api/admin/users/:userId/role",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	updateUserRole,
+);
 
 // Auth Routes
 app.post("/auth/register", register);

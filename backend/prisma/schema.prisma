@@ -94,3 +94,13 @@ model Dialogue {
   subtype       String?
   createdAt     DateTime @default(now())
 }
+
+model AccessLog {
+  id        String   @id @default(uuid())
+  path      String
+  method    String
+  referer   String?
+  userId    String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}

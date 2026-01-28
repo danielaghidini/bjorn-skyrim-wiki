@@ -14,10 +14,12 @@ import {
 	Paper,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
+import api from "../../api/api";
 import { useAuthStore } from "../../store/authStore";
 import { API_URL } from "../../config/apiConfig";
 import AdminQuestsPage from "./AdminQuestsPage";
+import AdminMetrics from "./AdminMetrics";
+import AdminUsers from "./AdminUsers";
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -45,7 +47,7 @@ const AdminDashboard = () => {
 	const [value, setValue] = useState(0);
 	const [articles, setArticles] = useState<any[]>([]);
 	const [fanArts, setFanArts] = useState<any[]>([]);
-	const { token, user, logout } = useAuthStore();
+	const { user, logout } = useAuthStore();
 	const isAdmin = user?.role === "ADMIN";
 
 	// Form states
@@ -55,8 +57,8 @@ const AdminDashboard = () => {
 
 	const fetchContent = async () => {
 		try {
-			const resArticles = await axios.get(`${API_URL}/api/articles`);
-			const resFanArt = await axios.get(`${API_URL}/api/fan-art`);
+			const resArticles = await api.get(`/api/articles`);
+			const resFanArt = await api.get(`/api/fan-art`);
 			setArticles(resArticles.data);
 			setFanArts(resFanArt.data);
 		} catch (error) {
@@ -103,9 +105,7 @@ const AdminDashboard = () => {
 					break;
 			}
 
-			await axios.post(`${API_URL}${endpoint}`, payload, {
-				headers: { Authorization: `Bearer ${token}` },
-			});
+			await api.post(`${endpoint}`, payload);
 			setNewItemTitle("");
 			setNewImageUrl("");
 			setNewArtistName("");
@@ -129,9 +129,7 @@ const AdminDashboard = () => {
 					endpoint = "/fan-art";
 					break;
 			}
-			await axios.delete(`${API_URL}${endpoint}/${id}`, {
-				headers: { Authorization: `Bearer ${token}` },
-			});
+			await api.delete(`${endpoint}/${id}`);
 			fetchContent();
 		} catch (error) {
 			alert("Error deleting item");
@@ -189,12 +187,14 @@ const AdminDashboard = () => {
 					<Tab label="Articles" />
 					{isAdmin && <Tab label="Quests" />}
 					<Tab label="Fan Art" />
+					{isAdmin && <Tab label="Users" />}
+					{isAdmin && <Tab label="Metrics" />}
 				</Tabs>
 			</Box>
 
 			{
-				/* Simple Create Form - Hidden for Quests as it has its own manager */
-				!(isAdmin && value === 1) && (
+				/* Simple Create Form - Hidden for Quests, Users, and Metrics as they have their own managers */
+				!(isAdmin && (value === 1 || value === 3 || value === 4)) && (
 					<Paper
 						sx={{
 							p: 2,
@@ -316,6 +316,16 @@ const AdminDashboard = () => {
 					))}
 				</List>
 			</CustomTabPanel>
+			{isAdmin && (
+				<CustomTabPanel value={value} index={3}>
+					<AdminUsers />
+				</CustomTabPanel>
+			)}
+			{isAdmin && (
+				<CustomTabPanel value={value} index={4}>
+					<AdminMetrics />
+				</CustomTabPanel>
+			)}
 		</Container>
 	);
 };

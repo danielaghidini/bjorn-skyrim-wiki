@@ -11,9 +11,8 @@ import {
 } from "@mui/material";
 
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import axios from "axios";
+import api from "../api/api";
 import { useAuthStore } from "../store/authStore";
-import { API_URL } from "../config/apiConfig";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
@@ -25,7 +24,7 @@ const LoginPage = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			const response = await axios.post(`${API_URL}/auth/login`, {
+			const response = await api.post(`/auth/login`, {
 				email,
 				password,
 			});
