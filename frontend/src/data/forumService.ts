@@ -63,4 +63,10 @@ export const forumService = {
 			{ headers: getAuthHeaders() },
 		);
 	},
+
+	deletePost: async (postId: string): Promise<void> => {
+		await axios.delete(`${API_URL}/${postId}`, {
+			headers: getAuthHeaders(),
+		});
+	},
 };

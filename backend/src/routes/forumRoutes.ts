@@ -5,6 +5,7 @@ import {
 	createPost,
 	addComment,
 	likePost,
+	deletePost,
 } from "../controllers/forumController.js";
 import {
 	authenticateToken,
@@ -21,5 +22,6 @@ router.post("/:id/like", authenticateToken, likePost);
 // Protected routes
 router.post("/", authenticateToken, createPost);
 router.post("/:id/comments", authenticateToken, addComment);
+router.delete("/:id", authenticateToken, deletePost);
 
 export default router;

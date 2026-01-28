@@ -16,4 +16,6 @@ export interface Post {
 	likes: number;
 	isLiked: boolean;
 	comments: Comment[];
+	isAuthor?: boolean; // Added on frontend processing or backend response
+	authorId?: string;
 }

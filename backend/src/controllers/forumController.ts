@@ -59,6 +59,7 @@ export const getPosts = async (req: AuthRequest, res: Response) => {
 				text: c.content,
 				date: c.createdAt.toISOString().split("T")[0],
 			})),
+			isAuthor: userId === p.authorId,
 		}));
 
 		res.json(formattedPosts);
@@ -124,6 +125,7 @@ export const getPostById = async (req: AuthRequest, res: Response) => {
 				text: c.content,
 				date: c.createdAt.toISOString().split("T")[0],
 			})),
+			isAuthor: userId === post.authorId,
 		};
 
 		res.json(formattedPost);
@@ -143,6 +145,18 @@ export const createPost = async (req: AuthRequest, res: Response) => {
 	const userId = user.id || user.userId;
 
 	try {
+		// Check if user is trying to post an Announcement (admin only)
+		if (category === "Announcements") {
+			const dbUser = await prisma.user.findUnique({
+				where: { id: userId },
+			});
+			if (dbUser?.role !== "ADMIN") {
+				return res
+					.status(403)
+					.json({ error: "Only admins can post Announcements" });
+			}
+		}
+
 		const slug = generateSlug(title);
 
 		const post = await prisma.forumPost.create({
@@ -295,5 +309,49 @@ export const likePost = async (req: AuthRequest, res: Response) => {
 	} catch (error) {
 		console.error("Error liking post:", error);
 		res.status(500).json({ error: "Failed to like post" });
+	}
+};
+
+export const deletePost = async (req: AuthRequest, res: Response) => {
+	const { id } = req.params;
+	const user = req.user;
+
+	if (!id) {
+		return res.status(400).json({ error: "Invalid ID" });
+	}
+
+	if (!user || (!user.id && !user.userId)) {
+		return res.status(401).json({ error: "Unauthorized" });
+	}
+	const userId = user.id || user.userId;
+
+	try {
+		// Find post to check ownership
+		let post = await prisma.forumPost.findUnique({
+			where: { slug: id as string },
+		});
+		if (!post) {
+			post = await prisma.forumPost.findUnique({
+				where: { id: id as string },
+			});
+		}
+
+		if (!post) {
+			return res.status(404).json({ error: "Post not found" });
+		}
+
+		const dbUser = await prisma.user.findUnique({ where: { id: userId } });
+
+		if (dbUser?.role !== "ADMIN" && post.authorId !== userId) {
+			return res.status(403).json({
+				error: "Forbidden: You are not authorized to delete this post",
+			});
+		}
+
+		await prisma.forumPost.delete({ where: { id: post.id } });
+		res.json({ message: "Post deleted successfully" });
+	} catch (error) {
+		console.error("Error deleting post:", error);
+		res.status(500).json({ error: "Failed to delete post" });
 	}
 };

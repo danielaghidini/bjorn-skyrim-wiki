@@ -9,6 +9,7 @@ import {
 	Divider,
 	Avatar,
 	Chip,
+	CircularProgress,
 } from "@mui/material";
 import {
 	ThumbsUp,
@@ -17,10 +18,11 @@ import {
 	ArrowLeft,
 	Calendar,
 	User,
+	Trash2,
 } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { Post } from "../../types/forum";
-import { forumService } from "../../data/mockForum";
+import { forumService } from "../../data/forumService";
 
 const ForumPostPage: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
@@ -28,11 +30,20 @@ const ForumPostPage: React.FC = () => {
 	const [post, setPost] = useState<Post | null>(null);
 	const [newComment, setNewComment] = useState("");
 
+	const [isLoading, setIsLoading] = useState(true);
+
 	useEffect(() => {
 		if (id) {
 			const fetchPost = async () => {
-				const foundPost = await forumService.getPostById(id);
-				setPost(foundPost || null);
+				setIsLoading(true);
+				try {
+					const foundPost = await forumService.getPostById(id);
+					setPost(foundPost || null);
+				} catch (error) {
+					console.error("Failed to fetch post", error);
+				} finally {
+					setIsLoading(false);
+				}
 			};
 			fetchPost();
 		}
@@ -81,6 +92,27 @@ const ForumPostPage: React.FC = () => {
 			}
 		}
 	};
+
+	const handleDelete = async () => {
+		if (!post || !id) return;
+		if (window.confirm("Are you sure you want to delete this post?")) {
+			try {
+				await forumService.deletePost(id);
+				navigate("/forum");
+			} catch (error) {
+				console.error("Failed to delete post", error);
+				alert("Failed to delete post");
+			}
+		}
+	};
+
+	if (isLoading) {
+		return (
+			<Box sx={{ py: 8, display: "flex", justifyContent: "center" }}>
+				<CircularProgress />
+			</Box>
+		);
+	}
 
 	if (!post) {
 		return (
@@ -168,6 +200,18 @@ const ForumPostPage: React.FC = () => {
 							<Typography variant="body2">{post.date}</Typography>
 						</Box>
 					</Stack>
+
+					{/* Author Actions */}
+					{post.isAuthor && (
+						<Button
+							color="error"
+							startIcon={<Trash2 size={18} />}
+							onClick={handleDelete}
+							sx={{ mt: 2 }}
+						>
+							Delete Post
+						</Button>
+					)}
 				</Box>
 
 				<Divider
