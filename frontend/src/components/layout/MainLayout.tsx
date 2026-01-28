@@ -14,6 +14,7 @@ import {
 	IconButton,
 	Button,
 	Stack,
+	Divider,
 } from "@mui/material";
 import {
 	Scroll,
@@ -25,6 +26,7 @@ import {
 	Palette,
 	Music,
 	Bot,
+	LayoutDashboard,
 } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
@@ -122,6 +124,50 @@ const MainLayout: React.FC = () => {
 					</React.Fragment>
 				))}
 			</List>
+
+			<Divider sx={{ my: 2, borderColor: "rgba(255,255,255,0.1)" }} />
+
+			<List>
+				{useAuthStore((state) => state.token) ? (
+					<ListItem disablePadding>
+						<ListItemButton
+							component={NavLink}
+							to="/admin"
+							onClick={() => setMobileOpen(false)}
+							sx={{
+								color: "primary.main",
+								fontWeight: "bold",
+							}}
+						>
+							<ListItemIcon
+								sx={{ minWidth: 40, color: "primary.main" }}
+							>
+								<LayoutDashboard size={18} />
+							</ListItemIcon>
+							<ListItemText primary="Dashboard" />
+						</ListItemButton>
+					</ListItem>
+				) : (
+					<ListItem disablePadding>
+						<ListItemButton
+							component={NavLink}
+							to="/login"
+							onClick={() => setMobileOpen(false)}
+							sx={{
+								color: "primary.main",
+								fontWeight: "bold",
+							}}
+						>
+							<ListItemIcon
+								sx={{ minWidth: 40, color: "primary.main" }}
+							>
+								<Menu size={18} />
+							</ListItemIcon>
+							<ListItemText primary="Login" />
+						</ListItemButton>
+					</ListItem>
+				)}
+			</List>
 		</Box>
 	);
 
@@ -217,6 +263,9 @@ const MainLayout: React.FC = () => {
 										<Button
 											component={NavLink}
 											to="/admin"
+											startIcon={
+												<LayoutDashboard size={18} />
+											}
 											sx={{
 												color: "text.secondary",
 												"&:hover": {
