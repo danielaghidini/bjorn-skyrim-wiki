@@ -67,6 +67,9 @@ model User {
   articles  Article[]
   fanArts   FanArt[]
   quests    Quest[]
+  forumPosts    ForumPost[]
+  forumComments ForumComment[]
+  likes         PostLike[]
 }
 
 model FanArt {
@@ -113,4 +116,41 @@ model Song {
   fileName    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model ForumPost {
+  id        String   @id @default(uuid())
+  title     String
+  slug      String   @unique
+  content   String
+  category  String
+  likes     Int      @default(0)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  comments  ForumComment[]
+  likedBy   PostLike[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ForumComment {
+  id        String   @id @default(uuid())
+  content   String
+  postId    String
+  post      ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model PostLike {
+  id        String    @id @default(uuid())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
+  post      ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  createdAt DateTime  @default(now())
+
+  @@unique([userId, postId])
 }

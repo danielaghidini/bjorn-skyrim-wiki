@@ -142,8 +142,10 @@ app.get("/auth/me", authenticateToken, (req, res) => {
 });
 
 import questRoutes from "./routes/questRoutes.js";
+import forumRoutes from "./routes/forumRoutes.js";
 
 app.use("/api/quests", questRoutes);
+app.use("/api/forum", forumRoutes);
 
 // Protected Content Routes
 app.post("/articles", authenticateToken, createArticle);

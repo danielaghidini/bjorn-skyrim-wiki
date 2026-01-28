@@ -40,3 +40,25 @@ export const authorizeRole = (roles: string[]) => {
 		next();
 	};
 };
+
+export const optionalAuthenticateToken = (
+	req: AuthRequest,
+	res: Response,
+	next: NextFunction,
+) => {
+	const authHeader = req.headers["authorization"];
+	const token = authHeader && authHeader.split(" ")[1];
+
+	if (!token) {
+		return next();
+	}
+
+	try {
+		const verified = jwt.verify(token, JWT_SECRET);
+		req.user = verified;
+		next();
+	} catch (error) {
+		// If token is invalid, just proceed as guest
+		next();
+	}
+};

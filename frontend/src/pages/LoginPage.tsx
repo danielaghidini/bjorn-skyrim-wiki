@@ -10,7 +10,7 @@ import {
 	Link,
 } from "@mui/material";
 
-import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useNavigate, Link as RouterLink, useLocation } from "react-router-dom";
 import api from "../api/api";
 import { useAuthStore } from "../store/authStore";
 
@@ -19,7 +19,10 @@ const LoginPage = () => {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
+	const location = useLocation();
 	const setAuth = useAuthStore((state) => state.setAuth);
+	// @ts-ignore
+	const message = location.state?.message;
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -72,6 +75,11 @@ const LoginPage = () => {
 					>
 						Access the mercenary archives
 					</Typography>
+					{message && (
+						<Alert severity="info" sx={{ mb: 2 }}>
+							{message}
+						</Alert>
+					)}
 					{error && (
 						<Alert severity="error" sx={{ mb: 2 }}>
 							{error}

@@ -5,7 +5,6 @@ import { useAuthStore } from "./store/authStore";
 import skyrimTheme from "./styles/Theme";
 import MainLayout from "./components/layout/MainLayout";
 import HomePage from "./pages/HomePage";
-import ForumPage from "./pages/ForumPage";
 import TechnicalPage from "./pages/TechnicalPage";
 import FollowersPage from "./pages/FollowersPage";
 
@@ -19,6 +18,10 @@ import SongsPage from "./pages/SongsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ChatPage from "./pages/ChatPage";
 import BjornQuestsPage from "./pages/BjornQuestsPage";
+
+// Forum Pages
+import ForumListPage from "./pages/forum/ForumListPage";
+import ForumPostPage from "./pages/forum/ForumPostPage";
 
 // Placeholder components for other pages
 
@@ -84,7 +87,11 @@ function App() {
 							path="quests/bjorn"
 							element={<BjornQuestsPage />}
 						/>
-						<Route path="forum" element={<ForumPage />} />
+
+						{/* Forum Routes */}
+						<Route path="forum" element={<ForumListPage />} />
+						<Route path="forum/:id" element={<ForumPostPage />} />
+
 						<Route path="fan-art" element={<FanArtPage />} />
 						<Route path="followers" element={<FollowersPage />} />
 						<Route path="technical" element={<TechnicalPage />} />
