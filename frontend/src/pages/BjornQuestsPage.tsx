@@ -24,7 +24,9 @@ const getYouTubeEmbedUrl = (url: string): string => {
 	} else if (url.includes("embed/")) {
 		videoId = url.split("embed/")[1]?.split(/[?&]/)[0] || "";
 	}
-	return videoId ? `https://www.youtube.com/embed/${videoId}?vq=hd1080` : url;
+	return videoId
+		? `https://www.youtube.com/embed/${videoId}?vq=hd1080&modestbranding=1&rel=0&showinfo=0&controls=1`
+		: url;
 };
 
 const BjornQuestsPage: React.FC = () => {
@@ -274,33 +276,42 @@ const BjornQuestsPage: React.FC = () => {
 												{step.videoUrl && (
 													<Box
 														sx={{
-															mt: 2,
-															position:
-																"relative",
-															paddingTop:
-																"56.25%",
+															maxWidth: "720px",
+															mx: "auto",
+															my: 5,
 															width: "100%",
-															overflow: "hidden",
-															borderRadius: 1,
 														}}
 													>
-														<iframe
-															src={getYouTubeEmbedUrl(
-																step.videoUrl,
-															)}
-															title={`Video for ${step.title}`}
-															allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-															allowFullScreen
-															style={{
+														<Box
+															sx={{
 																position:
-																	"absolute",
-																top: 0,
-																left: 0,
+																	"relative",
+																paddingTop:
+																	"56.25%",
 																width: "100%",
-																height: "100%",
-																border: 0,
+																overflow:
+																	"hidden",
+																borderRadius: 1,
 															}}
-														/>
+														>
+															<iframe
+																src={getYouTubeEmbedUrl(
+																	step.videoUrl,
+																)}
+																title={`Video for ${step.title}`}
+																allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+																allowFullScreen
+																style={{
+																	position:
+																		"absolute",
+																	top: 0,
+																	left: 0,
+																	width: "100%",
+																	height: "100%",
+																	border: 0,
+																}}
+															/>
+														</Box>
 													</Box>
 												)}
 											</Paper>
