@@ -14,6 +14,8 @@ interface AuthState {
 	checkAuth: () => Promise<void>;
 }
 
+import { API_URL } from "../config/apiConfig";
+
 export const useAuthStore = create<AuthState>((set) => ({
 	user: JSON.parse(localStorage.getItem("user") || "null"),
 	token: localStorage.getItem("token"),
@@ -34,8 +36,6 @@ export const useAuthStore = create<AuthState>((set) => ({
 			return;
 		}
 		try {
-			const API_URL =
-				import.meta.env.VITE_API_URL || "http://localhost:3000";
 			const response = await fetch(`${API_URL}/auth/me`, {
 				headers: {
 					Authorization: `Bearer ${token}`,

@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 import type { Post } from "../types/forum";
+import { API_URL as BASE_URL } from "../config/apiConfig";
 
-const API_URL = "http://localhost:3000/api/forum";
+const API_URL = `${BASE_URL}/api/forum`;
 
 const getAuthHeaders = () => {
 	const token = useAuthStore.getState().token;
