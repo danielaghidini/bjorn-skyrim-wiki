@@ -14,6 +14,7 @@ import {
 	Paper,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useLocation } from "react-router-dom";
 import api from "../../api/api";
 import { useAuthStore } from "../../store/authStore";
 import { API_URL } from "../../config/apiConfig";
@@ -22,6 +23,7 @@ import AdminMetrics from "./AdminMetrics";
 import AdminUsers from "./AdminUsers";
 import AdminSongs from "./AdminSongs";
 import AdminForum from "./AdminForum";
+import AdminProfile from "./AdminProfile";
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -46,15 +48,36 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 const AdminDashboard = () => {
-	const [value, setValue] = useState(0);
-	const [fanArts, setFanArts] = useState<any[]>([]);
-	const { user, logout } = useAuthStore();
+	const location = useLocation();
+	const { user } = useAuthStore();
 	const isAdmin = user?.role === "ADMIN";
+
+	// Calculate profile tab index based on role
+	const getProfileTabIndex = () => (isAdmin ? 6 : 2);
+
+	// Initialize tab based on navigation state
+	const [value, setValue] = useState(() => {
+		if (location.state?.tab === "profile") {
+			return getProfileTabIndex();
+		}
+		return 0;
+	});
+
+	const [fanArts, setFanArts] = useState<any[]>([]);
 
 	// Form states
 	const [newItemTitle, setNewItemTitle] = useState("");
 	const [newImageUrl, setNewImageUrl] = useState("");
 	const [newArtistName, setNewArtistName] = useState("");
+
+	// Handle navigation state changes
+	useEffect(() => {
+		if (location.state?.tab === "profile") {
+			setValue(getProfileTabIndex());
+			// Clear the state to prevent re-triggering
+			window.history.replaceState({}, document.title);
+		}
+	}, [location.state]);
 
 	const fetchContent = async () => {
 		try {
@@ -155,7 +178,7 @@ const AdminDashboard = () => {
 	// Admin: Metrics (0), Users (1), Quests (2), Songs (3), Fan Art (4), Forum (5)
 	// User: Fan Art (0)
 
-	const showFanArtForm = isAdmin ? value === 4 : value === 0;
+	const showFanArtForm = isAdmin ? value === 5 : value === 1;
 
 	return (
 		<Container maxWidth="lg" sx={{ py: 8 }}>
@@ -185,12 +208,6 @@ const AdminDashboard = () => {
 				Manage the Wiki's content and destiny
 			</Typography>
 
-			<Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3 }}>
-				<Button variant="outlined" onClick={logout}>
-					Logout
-				</Button>
-			</Box>
-
 			<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
 				<Tabs
 					value={value}
@@ -203,9 +220,10 @@ const AdminDashboard = () => {
 					{isAdmin && <Tab label="Users" />} {/* 1 */}
 					{isAdmin && <Tab label="Quests" />} {/* 2 */}
 					{isAdmin && <Tab label="Songs" />} {/* 3 */}
-					<Tab label="Fan Art" /> {/* 4 (Admin) / 0 (User) */}
-					<Tab label="My Posts" /> {/* 5 (Admin) / 1 (User) */}
-					{isAdmin && <Tab label="All Forum Posts" />} {/* 6 */}
+					<Tab label="My Posts" /> {/* 4 (Admin) / 0 (User) */}
+					<Tab label="Fan Art" /> {/* 5 (Admin) / 1 (User) */}
+					<Tab label="Profile" /> {/* 6 (Admin) / 2 (User) */}
+					{isAdmin && <Tab label="All Forum Posts" />} {/* 7 */}
 				</Tabs>
 			</Box>
 
@@ -275,8 +293,8 @@ const AdminDashboard = () => {
 				</>
 			)}
 
-			{/* Fan Art Panel - Index 4 for Admin, 0 for User */}
-			<CustomTabPanel value={value} index={isAdmin ? 4 : 0}>
+			{/* Fan Art Panel - Index 5 for Admin, 1 for User */}
+			<CustomTabPanel value={value} index={isAdmin ? 5 : 1}>
 				<List>
 					{fanArts.length === 0 && (
 						<Typography sx={{ p: 2, opacity: 0.5 }}>
@@ -309,14 +327,19 @@ const AdminDashboard = () => {
 
 			{/* Forum Panel - Admin only sees all */}
 			{isAdmin && (
-				<CustomTabPanel value={value} index={6}>
+				<CustomTabPanel value={value} index={7}>
 					<AdminForum />
 				</CustomTabPanel>
 			)}
 
 			{/* My Posts Panel - User's own posts */}
-			<CustomTabPanel value={value} index={isAdmin ? 5 : 1}>
+			<CustomTabPanel value={value} index={isAdmin ? 4 : 0}>
 				<AdminForum showOnlyMine />
+			</CustomTabPanel>
+
+			{/* Profile Panel */}
+			<CustomTabPanel value={value} index={isAdmin ? 6 : 2}>
+				<AdminProfile />
 			</CustomTabPanel>
 		</Container>
 	);

@@ -245,7 +245,7 @@ const HomePage: React.FC = () => {
 							<ListItem>
 								<ListItemText
 									primary="Quests"
-									secondary="9 Quests with Hours of New Content"
+									secondary="13 Quests with Hours of New Content"
 									primaryTypographyProps={{
 										color: "primary.main",
 									}}

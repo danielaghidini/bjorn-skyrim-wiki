@@ -15,6 +15,9 @@ import {
 	Button,
 	Stack,
 	Divider,
+	Avatar,
+	Menu as MuiMenu,
+	MenuItem,
 } from "@mui/material";
 import {
 	Scroll,
@@ -26,9 +29,12 @@ import {
 	Palette,
 	Music,
 	Bot,
+	User,
+	LogOut,
 	LayoutDashboard,
+	ChevronDown,
 } from "lucide-react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
 
 const drawerWidth = 240;
@@ -73,9 +79,32 @@ const menuItems = [
 
 const MainLayout: React.FC = () => {
 	const [mobileOpen, setMobileOpen] = React.useState(false);
+	const [userMenuAnchor, setUserMenuAnchor] =
+		React.useState<null | HTMLElement>(null);
+	const navigate = useNavigate();
+	const { user, logout } = useAuthStore();
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
+	};
+
+	const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+		setUserMenuAnchor(event.currentTarget);
+	};
+
+	const handleUserMenuClose = () => {
+		setUserMenuAnchor(null);
+	};
+
+	const handleProfile = () => {
+		handleUserMenuClose();
+		navigate("/admin", { state: { tab: "profile" } });
+	};
+
+	const handleLogout = () => {
+		handleUserMenuClose();
+		logout();
+		navigate("/");
 	};
 
 	const mobileDrawer = (
@@ -258,23 +287,103 @@ const MainLayout: React.FC = () => {
 									alignItems: "center",
 								}}
 							>
-								{useAuthStore((state) => state.token) ? (
+								{user ? (
 									<>
 										<Button
-											component={NavLink}
-											to="/admin"
-											startIcon={
-												<LayoutDashboard size={18} />
-											}
+											onClick={handleUserMenuOpen}
+											endIcon={<ChevronDown size={16} />}
 											sx={{
 												color: "text.secondary",
+												textTransform: "none",
 												"&:hover": {
 													color: "primary.main",
 												},
 											}}
 										>
-											Dashboard
+											<Avatar
+												src={user.avatar}
+												alt={user.name || user.email}
+												sx={{
+													width: 28,
+													height: 28,
+													mr: 1,
+													bgcolor: "primary.main",
+													fontSize: "0.8rem",
+												}}
+											>
+												{user.name
+													?.charAt(0)
+													?.toUpperCase() ||
+													user.email
+														?.charAt(0)
+														?.toUpperCase()}
+											</Avatar>
+											{user.name ||
+												user.email?.split("@")[0]}
 										</Button>
+										<MuiMenu
+											anchorEl={userMenuAnchor}
+											open={Boolean(userMenuAnchor)}
+											onClose={handleUserMenuClose}
+											anchorOrigin={{
+												vertical: "bottom",
+												horizontal: "right",
+											}}
+											transformOrigin={{
+												vertical: "top",
+												horizontal: "right",
+											}}
+											PaperProps={{
+												sx: {
+													bgcolor:
+														"rgba(21, 25, 33, 0.95)",
+													border: "1px solid rgba(79, 195, 247, 0.2)",
+													minWidth: 180,
+												},
+											}}
+										>
+											<MenuItem
+												component={NavLink}
+												to="/admin"
+												onClick={handleUserMenuClose}
+											>
+												<ListItemIcon>
+													<LayoutDashboard
+														size={18}
+													/>
+												</ListItemIcon>
+												<ListItemText>
+													Dashboard
+												</ListItemText>
+											</MenuItem>
+											<MenuItem onClick={handleProfile}>
+												<ListItemIcon>
+													<User size={18} />
+												</ListItemIcon>
+												<ListItemText>
+													My Profile
+												</ListItemText>
+											</MenuItem>
+											<Divider
+												sx={{
+													borderColor:
+														"rgba(255,255,255,0.1)",
+												}}
+											/>
+											<MenuItem
+												onClick={handleLogout}
+												sx={{ color: "error.main" }}
+											>
+												<ListItemIcon
+													sx={{ color: "error.main" }}
+												>
+													<LogOut size={18} />
+												</ListItemIcon>
+												<ListItemText>
+													Logout
+												</ListItemText>
+											</MenuItem>
+										</MuiMenu>
 									</>
 								) : (
 									<Button

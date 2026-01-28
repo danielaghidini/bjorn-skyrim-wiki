@@ -41,6 +41,7 @@ export const register = async (req: Request, res: Response) => {
 				id: user.id,
 				email: user.email,
 				name: user.name,
+				avatar: null,
 				role: user.role,
 			},
 		});
@@ -73,6 +74,7 @@ export const login = async (req: Request, res: Response) => {
 				id: user.id,
 				email: user.email,
 				name: user.name,
+				avatar: user.avatar,
 				role: user.role,
 			},
 		});
@@ -100,6 +102,7 @@ export const getMe = async (req: Request, res: Response) => {
 				id: true,
 				email: true,
 				name: true,
+				avatar: true,
 				role: true,
 			},
 		});
@@ -112,5 +115,75 @@ export const getMe = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error("GetMe error:", error);
 		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const updateProfile = async (req: Request, res: Response) => {
+	try {
+		const userId = (req as any).user?.id;
+
+		if (!userId) {
+			return res.status(401).json({ error: "Unauthorized" });
+		}
+
+		const { name, currentPassword, newPassword, avatar } = req.body;
+
+		const user = await prisma.user.findUnique({ where: { id: userId } });
+		if (!user) {
+			return res.status(404).json({ error: "User not found" });
+		}
+
+		// Build update data
+		const updateData: any = {};
+
+		if (name !== undefined) {
+			updateData.name = name;
+		}
+
+		if (avatar !== undefined) {
+			updateData.avatar = avatar;
+		}
+
+		// If changing password, verify current password first
+		if (newPassword) {
+			if (!currentPassword) {
+				return res.status(400).json({
+					error: "Current password is required to change password",
+				});
+			}
+
+			const validPassword = await bcrypt.compare(
+				currentPassword,
+				user.password,
+			);
+			if (!validPassword) {
+				return res
+					.status(400)
+					.json({ error: "Current password is incorrect" });
+			}
+
+			const salt = await bcrypt.genSalt(10);
+			updateData.password = await bcrypt.hash(newPassword, salt);
+		}
+
+		const updatedUser = await prisma.user.update({
+			where: { id: userId },
+			data: updateData,
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				avatar: true,
+				role: true,
+			},
+		});
+
+		res.json({
+			message: "Profile updated successfully",
+			user: updatedUser,
+		});
+	} catch (error) {
+		console.error("UpdateProfile error:", error);
+		res.status(500).json({ error: "Error updating profile" });
 	}
 };

@@ -3,7 +3,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
 
-import { login, register } from "./controllers/authController.js";
+import {
+	login,
+	register,
+	getMe,
+	updateProfile,
+} from "./controllers/authController.js";
 import { authenticateToken } from "./middleware/auth.js";
 import {
 	createArticle,
@@ -134,12 +139,8 @@ app.put(
 // Auth Routes
 app.post("/auth/register", register);
 app.post("/auth/login", login);
-app.get("/auth/me", authenticateToken, (req, res) => {
-	// Wrapper to handle Promise if not using express-async-handler or similar
-	import("./controllers/authController.js").then((mod) =>
-		mod.getMe(req, res),
-	);
-});
+app.get("/auth/me", authenticateToken, getMe);
+app.put("/auth/profile", authenticateToken, updateProfile);
 
 import questRoutes from "./routes/questRoutes.js";
 import forumRoutes from "./routes/forumRoutes.js";
