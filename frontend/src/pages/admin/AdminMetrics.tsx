@@ -458,13 +458,49 @@ const AdminMetrics = () => {
 										/>
 										<Box
 											sx={{
-												height: "6px",
-												width: "40px",
-												bgcolor: "primary.dark",
-												borderRadius: "10px",
-												opacity: 0.3,
+												display: "flex",
+												alignItems: "center",
+												gap: 1.5,
 											}}
-										/>
+										>
+											<Box
+												sx={{
+													height: "6px",
+													width: "60px",
+													bgcolor:
+														"rgba(255,255,255,0.1)",
+													borderRadius: "10px",
+													overflow: "hidden",
+												}}
+											>
+												<Box
+													sx={{
+														height: "100%",
+														width: `${(item.count / Math.max(metrics.totalViews, 1)) * 100}%`,
+														bgcolor: "primary.main",
+														borderRadius: "10px",
+													}}
+												/>
+											</Box>
+											<Typography
+												variant="caption"
+												sx={{
+													opacity: 0.5,
+													minWidth: "35px",
+													textAlign: "right",
+												}}
+											>
+												{Math.round(
+													(item.count /
+														Math.max(
+															metrics.totalViews,
+															1,
+														)) *
+														100,
+												)}
+												%
+											</Typography>
+										</Box>
 									</ListItem>
 								))}
 								{metrics.viewsByPath.length === 0 && (
