@@ -21,6 +21,9 @@ RUN npm run build
 # Production stage
 FROM node:20-alpine
 
+# Install OpenSSL (required for Prisma on Alpine)
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 # Copy production files
