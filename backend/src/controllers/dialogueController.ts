@@ -450,7 +450,7 @@ export const deleteDialogue = async (req: Request, res: Response) => {
 
 	try {
 		await prisma.dialogue.delete({
-			where: { id },
+			where: { id: String(id) },
 		});
 		res.json({ message: "Dialogue deleted successfully" });
 	} catch (error) {
