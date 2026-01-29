@@ -113,8 +113,6 @@ const FanArtPage: React.FC = () => {
 				<Tabs
 					value={selectedTab}
 					onChange={handleTabChange}
-					variant="scrollable"
-					scrollButtons="auto"
 					centered={true}
 					textColor="primary"
 					indicatorColor="primary"
