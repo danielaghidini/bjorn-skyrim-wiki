@@ -78,6 +78,7 @@ model FanArt {
   title       String
   imageUrl    String
   artistName  String
+  type        String   @default("Fan Art")
   description String?
   authorId    String?
   createdAt   DateTime @default(now())

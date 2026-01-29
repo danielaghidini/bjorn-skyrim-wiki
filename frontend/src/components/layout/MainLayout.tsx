@@ -26,7 +26,6 @@ import {
 	Menu,
 	MessageCircle,
 	Wrench,
-	Palette,
 	Music,
 	Bot,
 	User,
@@ -56,14 +55,9 @@ const menuItems = [
 		path: "/forum",
 	},
 	{
-		text: "Fan Art",
-		icon: <Palette size={18} />,
-		path: "/fan-art",
-	},
-	{
 		text: "Gallery",
 		icon: <Image size={18} />,
-		path: "/media",
+		path: "/gallery",
 	},
 	{
 		text: "Songs",

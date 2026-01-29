@@ -2,10 +2,18 @@ import { Request, Response } from "express";
 import { AuthRequest } from "../middleware/auth.js";
 import { prisma } from "../db.js";
 
-// GET all fan art
+// GET all fan art (supports filtering by type)
 export const getAllFanArt = async (req: Request, res: Response) => {
+	const { type } = req.query;
+
 	try {
+		const where: any = {};
+		if (type) {
+			where.type = String(type);
+		}
+
 		const fanArt = await prisma.fanArt.findMany({
+			where,
 			orderBy: { createdAt: "desc" },
 			include: {
 				user: {
@@ -22,7 +30,7 @@ export const getAllFanArt = async (req: Request, res: Response) => {
 
 // POST new fan art
 export const createFanArt = async (req: AuthRequest, res: Response) => {
-	const { title, imageUrl, artistName, description } = req.body;
+	const { title, imageUrl, artistName, description, type } = req.body;
 
 	if (!title || !imageUrl || !artistName) {
 		return res
@@ -37,6 +45,7 @@ export const createFanArt = async (req: AuthRequest, res: Response) => {
 				imageUrl,
 				artistName,
 				description,
+				type: type || "Fan Art",
 				authorId: req.user?.id,
 			},
 		});

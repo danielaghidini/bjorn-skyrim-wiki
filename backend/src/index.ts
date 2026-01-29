@@ -27,7 +27,12 @@ import {
 	updateFanArt,
 	deleteFanArt,
 } from "./controllers/fanArtController.js";
-import { getDialogues, getScenes } from "./controllers/dialogueController.js";
+import {
+	getDialogues,
+	getScenes,
+	createDialogue,
+	deleteDialogue,
+} from "./controllers/dialogueController.js";
 import { chatWithBjorn } from "./controllers/chatController.js";
 import { metricsMiddleware } from "./middleware/metricsMiddleware.js";
 import { getMetrics } from "./controllers/metricsController.js";
@@ -115,6 +120,18 @@ app.post("/api/categories", async (req, res) => {
 
 app.get("/api/fan-art", getAllFanArt);
 app.get("/api/dialogues", getDialogues);
+app.post(
+	"/api/dialogues",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	createDialogue,
+);
+app.delete(
+	"/api/dialogues/:id",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	deleteDialogue,
+);
 app.get("/api/scenes", getScenes);
 app.get("/api/songs", getAllSongs);
 app.get(

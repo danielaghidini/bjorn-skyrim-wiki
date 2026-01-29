@@ -30,7 +30,10 @@ export const getDialogues = async (req: Request, res: Response) => {
 				{ fileName: { startsWith: "SceneDialogue" } },
 			];
 		} else {
-			where.fileName = { startsWith: "dialogueExport" };
+			where.OR = [
+				{ fileName: { startsWith: "dialogueExport" } },
+				{ fileName: { equals: "ManualEntry" } },
+			];
 		}
 
 		if (voiceType) {
@@ -413,5 +416,45 @@ export const getScenes = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error("Fetch scenes error:", error);
 		res.status(500).json({ error: "Failed to fetch scenes" });
+	}
+};
+
+// CREATE dialogue (Admin)
+export const createDialogue = async (req: Request, res: Response) => {
+	const { topicText, responseText, audioFileName } = req.body;
+
+	if (!topicText || !responseText || !audioFileName) {
+		return res.status(400).json({ error: "Missing required fields" });
+	}
+
+	try {
+		const newDialogue = await prisma.dialogue.create({
+			data: {
+				topicText,
+				responseText,
+				audioFileName,
+				voiceType: "DG04BjornVoice", // Defaulting to Bjorn
+				fileName: "ManualEntry", // Placeholder
+			},
+		});
+		res.status(201).json(newDialogue);
+	} catch (error) {
+		console.error("Create dialogue error:", error);
+		res.status(500).json({ error: "Failed to create dialogue" });
+	}
+};
+
+// DELETE dialogue (Admin)
+export const deleteDialogue = async (req: Request, res: Response) => {
+	const { id } = req.params;
+
+	try {
+		await prisma.dialogue.delete({
+			where: { id },
+		});
+		res.json({ message: "Dialogue deleted successfully" });
+	} catch (error) {
+		console.error("Delete dialogue error:", error);
+		res.status(500).json({ error: "Failed to delete dialogue" });
 	}
 };

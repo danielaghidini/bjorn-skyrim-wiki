@@ -12,6 +12,10 @@ import {
 	IconButton,
 	TextField,
 	Paper,
+	Select,
+	MenuItem,
+	FormControl,
+	InputLabel,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useLocation } from "react-router-dom";
@@ -24,6 +28,7 @@ import AdminUsers from "./AdminUsers";
 import AdminSongs from "./AdminSongs";
 import AdminForum from "./AdminForum";
 import AdminProfile from "./AdminProfile";
+import AdminDialoguesManager from "./AdminDialoguesManager";
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -53,7 +58,9 @@ const AdminDashboard = () => {
 	const isAdmin = user?.role === "ADMIN";
 
 	// Calculate profile tab index based on role
-	const getProfileTabIndex = () => (isAdmin ? 6 : 2);
+	// Admin: 0:Metrics, 1:Users, 2:Quests, 3:Dialogues, 4:All Forum Posts, 5:Gallery, 6:Songs, 7:My Posts, 8:Profile
+	// User: 0:Gallery, 1:My Posts, 2:Profile
+	const getProfileTabIndex = () => (isAdmin ? 8 : 2);
 
 	// Initialize tab based on navigation state
 	const [value, setValue] = useState(() => {
@@ -69,6 +76,7 @@ const AdminDashboard = () => {
 	const [newItemTitle, setNewItemTitle] = useState("");
 	const [newImageUrl, setNewImageUrl] = useState("");
 	const [newArtistName, setNewArtistName] = useState("");
+	const [newItemType, setNewItemType] = useState("Fan Art");
 
 	// Handle navigation state changes
 	useEffect(() => {
@@ -98,9 +106,8 @@ const AdminDashboard = () => {
 			let endpoint = "";
 			let payload = {};
 
-			// Calculate indices for create logic
-			// Admin Order: 0:Metrics, 1:Users, 2:Quests, 3:Songs, 4:Fan Art, 5:Forum
-			// User Order: 0:Fan Art
+			// Admin: 0:Metrics, 1:Users, 2:Quests, 3:Dialogues, 4:All Forum Posts, 5:Gallery, 6:Songs, 7:My Posts, 8:Profile
+			// User: 0:Gallery, 1:My Posts, 2:Profile
 
 			if (isAdmin) {
 				if (value === 2) {
@@ -111,25 +118,27 @@ const AdminDashboard = () => {
 						slug: newItemTitle.toLowerCase().replace(/ /g, "-"),
 						description: "Draft description",
 					};
-				} else if (value === 4) {
-					// Fan Art
+				} else if (value === 5) {
+					// Gallery / Fan Art
 					endpoint = "/fan-art";
 					payload = {
 						title: newItemTitle,
 						imageUrl: newImageUrl,
 						artistName: newArtistName,
-						description: "Community Art",
+						description: "Gallery Item",
+						type: newItemType,
 					};
 				}
 			} else {
 				if (value === 0) {
-					// Fan Art
+					// Gallery / Fan Art (User)
 					endpoint = "/fan-art";
 					payload = {
 						title: newItemTitle,
 						imageUrl: newImageUrl,
 						artistName: newArtistName,
-						description: "Community Art",
+						description: "Gallery Item",
+						type: newItemType,
 					};
 				}
 			}
@@ -139,6 +148,7 @@ const AdminDashboard = () => {
 				setNewItemTitle("");
 				setNewImageUrl("");
 				setNewArtistName("");
+				setNewItemType("Fan Art");
 				fetchContent();
 			}
 		} catch (error) {
@@ -152,7 +162,7 @@ const AdminDashboard = () => {
 			// Handle delete based on tabs
 			if (isAdmin) {
 				if (value === 2) endpoint = "/quests";
-				if (value === 4) endpoint = "/fan-art";
+				if (value === 5) endpoint = "/fan-art";
 			} else {
 				if (value === 0) endpoint = "/fan-art";
 			}
@@ -174,11 +184,7 @@ const AdminDashboard = () => {
 		return user?.role === "ADMIN" || item.authorId === user?.id;
 	};
 
-	// Define Tabs
-	// Admin: Metrics (0), Users (1), Quests (2), Songs (3), Fan Art (4), Forum (5)
-	// User: Fan Art (0)
-
-	const showFanArtForm = isAdmin ? value === 5 : value === 1;
+	const showFanArtForm = isAdmin ? value === 5 : value === 0;
 
 	return (
 		<Container maxWidth="lg" sx={{ py: 8 }}>
@@ -219,16 +225,16 @@ const AdminDashboard = () => {
 					{isAdmin && <Tab label="Metrics" />} {/* 0 */}
 					{isAdmin && <Tab label="Users" />} {/* 1 */}
 					{isAdmin && <Tab label="Quests" />} {/* 2 */}
-					{isAdmin && <Tab label="Songs" />} {/* 3 */}
-					<Tab label="My Posts" /> {/* 4 (Admin) / 0 (User) */}
-					<Tab label="Fan Art" /> {/* 5 (Admin) / 1 (User) */}
-					<Tab label="Profile" /> {/* 6 (Admin) / 2 (User) */}
-					{isAdmin && <Tab label="All Forum Posts" />} {/* 7 */}
+					{isAdmin && <Tab label="Dialogues" />} {/* 3 */}
+					{isAdmin && <Tab label="All Forum Posts" />} {/* 4 */}
+					<Tab label="Gallery" /> {/* 5 (Admin) / 0 (User) */}
+					{isAdmin && <Tab label="Songs" />} {/* 6 */}
+					<Tab label="My Posts" /> {/* 7 (Admin) / 1 (User) */}
+					<Tab label="Profile" /> {/* 8 (Admin) / 2 (User) */}
 				</Tabs>
 			</Box>
 
-			{/* Simple Create Form - Only for Fan Art in this refactored view, 
-			    Complex types like Quests/Songs/Forum/Users have their own components */}
+			{/* Simple Create Form - Only for Gallery */}
 			{showFanArtForm && (
 				<Paper
 					sx={{
@@ -239,31 +245,52 @@ const AdminDashboard = () => {
 						gap: 2,
 					}}
 				>
-					<Box sx={{ display: "flex", gap: 2 }}>
+					<Box
+						sx={{
+							display: "flex",
+							gap: 2,
+							flexWrap: "wrap",
+							alignItems: "center",
+						}}
+					>
 						<TextField
 							label="New Title"
 							variant="outlined"
 							size="small"
-							fullWidth
 							value={newItemTitle}
 							onChange={(e) => setNewItemTitle(e.target.value)}
+							sx={{ flex: 1, minWidth: 150 }}
 						/>
 						<TextField
 							label="Image URL"
 							variant="outlined"
 							size="small"
-							fullWidth
 							value={newImageUrl}
 							onChange={(e) => setNewImageUrl(e.target.value)}
+							sx={{ flex: 1, minWidth: 150 }}
 						/>
 						<TextField
 							label="Artist Name"
 							variant="outlined"
 							size="small"
-							fullWidth
 							value={newArtistName}
 							onChange={(e) => setNewArtistName(e.target.value)}
+							sx={{ flex: 1, minWidth: 150 }}
 						/>
+						<FormControl size="small" sx={{ minWidth: 120 }}>
+							<InputLabel>Type</InputLabel>
+							<Select
+								value={newItemType}
+								label="Type"
+								onChange={(e) => setNewItemType(e.target.value)}
+							>
+								<MenuItem value="Fan Art">Fan Art</MenuItem>
+								<MenuItem value="Screenshot">
+									Screenshot
+								</MenuItem>
+							</Select>
+						</FormControl>
+
 						<Button
 							variant="contained"
 							onClick={handleCreate}
@@ -288,13 +315,16 @@ const AdminDashboard = () => {
 						<AdminQuestsPage />
 					</CustomTabPanel>
 					<CustomTabPanel value={value} index={3}>
-						<AdminSongs />
+						<AdminDialoguesManager />
+					</CustomTabPanel>
+					<CustomTabPanel value={value} index={4}>
+						<AdminForum />
 					</CustomTabPanel>
 				</>
 			)}
 
-			{/* Fan Art Panel - Index 5 for Admin, 1 for User */}
-			<CustomTabPanel value={value} index={isAdmin ? 5 : 1}>
+			{/* Fan Art Panel - Index 5 for Admin, 0 for User */}
+			<CustomTabPanel value={value} index={isAdmin ? 5 : 0}>
 				<List>
 					{fanArts.length === 0 && (
 						<Typography sx={{ p: 2, opacity: 0.5 }}>
@@ -325,20 +355,20 @@ const AdminDashboard = () => {
 				</List>
 			</CustomTabPanel>
 
-			{/* Forum Panel - Admin only sees all */}
+			{/* Songs */}
 			{isAdmin && (
-				<CustomTabPanel value={value} index={7}>
-					<AdminForum />
+				<CustomTabPanel value={value} index={6}>
+					<AdminSongs />
 				</CustomTabPanel>
 			)}
 
 			{/* My Posts Panel - User's own posts */}
-			<CustomTabPanel value={value} index={isAdmin ? 4 : 0}>
+			<CustomTabPanel value={value} index={isAdmin ? 7 : 1}>
 				<AdminForum showOnlyMine />
 			</CustomTabPanel>
 
 			{/* Profile Panel */}
-			<CustomTabPanel value={value} index={isAdmin ? 6 : 2}>
+			<CustomTabPanel value={value} index={isAdmin ? 8 : 2}>
 				<AdminProfile />
 			</CustomTabPanel>
 		</Container>

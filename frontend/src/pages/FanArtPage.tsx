@@ -10,6 +10,9 @@ import {
 	CircularProgress,
 	Alert,
 	Tooltip,
+	Tabs,
+	Tab,
+	Chip,
 } from "@mui/material";
 import api from "../api/api";
 
@@ -19,12 +22,14 @@ interface FanArt {
 	imageUrl: string;
 	artistName: string;
 	description?: string;
+	type?: string;
 }
 
 const FanArtPage: React.FC = () => {
 	const [fanArts, setFanArts] = useState<FanArt[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [selectedTab, setSelectedTab] = useState("All");
 
 	useEffect(() => {
 		const fetchFanArt = async () => {
@@ -33,14 +38,30 @@ const FanArtPage: React.FC = () => {
 				setFanArts(response.data);
 				setLoading(false);
 			} catch (err) {
-				console.error("Error fetching fan art:", err);
-				setError("Failed to load the art gallery.");
+				console.error("Error fetching gallery:", err);
+				setError("Failed to load the gallery.");
 				setLoading(false);
 			}
 		};
 
 		fetchFanArt();
 	}, []);
+
+	const handleTabChange = (
+		_event: React.SyntheticEvent,
+		newValue: string,
+	) => {
+		setSelectedTab(newValue);
+	};
+
+	const filteredArts =
+		selectedTab === "All"
+			? fanArts
+			: fanArts.filter(
+					(art) =>
+						(art.type || "Fan Art") === selectedTab ||
+						(selectedTab === "Fan Art" && !art.type), // Handle legacy items as Fan Art
+				);
 
 	if (loading) {
 		return (
@@ -57,7 +78,7 @@ const FanArtPage: React.FC = () => {
 
 	return (
 		<Container maxWidth="lg" sx={{ py: 8 }}>
-			<Box textAlign="center" mb={8}>
+			<Box textAlign="center" mb={6}>
 				<Typography
 					variant="h2"
 					component="h1"
@@ -69,7 +90,7 @@ const FanArtPage: React.FC = () => {
 						textAlign: "center",
 					}}
 				>
-					Fan Art
+					Gallery
 				</Typography>
 				<Typography
 					variant="h5"
@@ -88,24 +109,39 @@ const FanArtPage: React.FC = () => {
 				</Typography>
 			</Box>
 
+			<Box sx={{ borderBottom: 1, borderColor: "divider", mb: 4 }}>
+				<Tabs
+					value={selectedTab}
+					onChange={handleTabChange}
+					variant="scrollable"
+					scrollButtons="auto"
+					centered={true}
+					textColor="primary"
+					indicatorColor="primary"
+				>
+					<Tab label="All" value="All" />
+					<Tab label="Fan Art" value="Fan Art" />
+					<Tab label="Screenshots" value="Screenshot" />
+				</Tabs>
+			</Box>
+
 			{error && (
 				<Alert severity="error" sx={{ mb: 4 }}>
 					{error}
 				</Alert>
 			)}
 
-			{fanArts.length === 0 && !error ? (
+			{filteredArts.length === 0 && !error ? (
 				<Typography
 					variant="body1"
 					textAlign="center"
 					color="text.secondary"
 				>
-					No art pieces in the gallery yet. Be the first to
-					contribute!
+					No items found in this category.
 				</Typography>
 			) : (
 				<Grid container spacing={4}>
-					{fanArts.map((art) => (
+					{filteredArts.map((art) => (
 						<Grid key={art.id} size={{ xs: 12, sm: 6, md: 4 }}>
 							<Card
 								sx={{
@@ -123,8 +159,21 @@ const FanArtPage: React.FC = () => {
 											"0 10px 30px rgba(0,0,0,0.5)",
 										border: "1px solid rgba(139, 115, 85, 0.5)",
 									},
+									position: "relative",
 								}}
 							>
+								<Chip
+									label={art.type || "Fan Art"}
+									size="small"
+									color="primary"
+									sx={{
+										position: "absolute",
+										top: 10,
+										right: 10,
+										zIndex: 1,
+										opacity: 0.9,
+									}}
+								/>
 								<Tooltip
 									title={art.description || art.title}
 									arrow
