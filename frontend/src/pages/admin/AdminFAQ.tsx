@@ -368,7 +368,7 @@ const AdminFAQ: React.FC = () => {
 							onChange={(e) =>
 								setCurrentFaq({
 									...currentFaq,
-									status: e.target.value as any,
+									status: e.target.value as FAQ["status"],
 								})
 							}
 							variant="outlined"
