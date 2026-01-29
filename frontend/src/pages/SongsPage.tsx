@@ -70,7 +70,7 @@ const SongsPage: React.FC = () => {
 						mb: 1,
 					}}
 				>
-					Bjorn's Repertoire
+					Bjorn's Songs
 				</Typography>
 				<Typography
 					variant="h5"

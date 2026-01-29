@@ -20,8 +20,8 @@ import {
 	MessageSquare,
 	Image as ImageIcon,
 	ArrowRight,
-	Palette,
 	Music,
+	Bot,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -60,17 +60,11 @@ const hubItems = [
 		category: "Community",
 	},
 	{
-		title: "Fan Art",
-		description: "See the amazing art created by the community.",
-		icon: <Palette size={40} color="#4fc3f7" />,
-		path: "/fan-art",
-		category: "Visuals",
-	},
-	{
 		title: "Gallery",
-		description: "Official screenshots and media from Bjorn's journey.",
+		description:
+			"Official screenshots and amazing art created by the community.",
 		icon: <ImageIcon size={40} color="#4fc3f7" />,
-		path: "/media",
+		path: "/gallery",
 		category: "Visuals",
 	},
 	{
@@ -80,6 +74,14 @@ const hubItems = [
 		icon: <Music size={40} color="#4fc3f7" />,
 		path: "/songs",
 		category: "Lore",
+	},
+	{
+		title: "Chatbot",
+		description:
+			"Talk directly to Bjorn powered by AI. Share a drink and a story.",
+		icon: <Bot size={40} color="#4fc3f7" />,
+		path: "/chat",
+		category: "Interactive",
 	},
 ];
 

@@ -172,13 +172,20 @@ const ForumListPage: React.FC = () => {
 
 			{/* Action Bar */}
 			<Stack
-				direction="row"
+				direction={{ xs: "column", md: "row" }}
 				spacing={2}
 				sx={{ mb: 4 }}
 				justifyContent="space-between"
-				alignItems="center"
+				alignItems={{ xs: "stretch", md: "center" }}
 			>
-				<Box>
+				<Box
+					sx={{
+						display: "flex",
+						flexDirection: { xs: "column", sm: "row" },
+						gap: { xs: 2, sm: 0 },
+						width: { xs: "100%", md: "auto" },
+					}}
+				>
 					<Button
 						startIcon={<Filter size={18} />}
 						onClick={(e) => setFilterAnchorEl(e.currentTarget)}
@@ -236,7 +243,7 @@ const ForumListPage: React.FC = () => {
 						sx={{
 							color: "text.secondary",
 							borderColor: "rgba(255,255,255,0.2)",
-							ml: 1,
+							ml: { xs: 0, sm: 1 },
 						}}
 						variant="outlined"
 					>

@@ -18,6 +18,7 @@ import SongsPage from "./pages/SongsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ChatPage from "./pages/ChatPage";
 import BjornQuestsPage from "./pages/BjornQuestsPage";
+import CookieBanner from "./components/common/CookieBanner";
 
 // Forum Pages
 import ForumListPage from "./pages/forum/ForumListPage";
@@ -73,6 +74,7 @@ function App() {
 					{/* Standalone Route for Chat (No MainLayout) */}
 					<Route path="/chat" element={<ChatPage />} />
 				</Routes>
+				<CookieBanner />
 			</BrowserRouter>
 		</ThemeProvider>
 	);
