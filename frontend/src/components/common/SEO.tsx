@@ -1,5 +1,4 @@
 import React from "react";
-import { Helmet } from "react-helmet-async";
 
 interface SEOProps {
 	title?: string;
@@ -25,8 +24,8 @@ const SEO: React.FC<SEOProps> = ({
 	const siteUrl = "https://bjorn.wiki";
 
 	return (
-		<Helmet>
-			{/* Standard metadata tags */}
+		<>
+			{/* Standard metadata tags (Hoisted by React 19) */}
 			<title>{siteTitle}</title>
 			<meta name="description" content={siteDescription} />
 			{canonical && <link rel="canonical" href={canonical} />}
@@ -44,7 +43,7 @@ const SEO: React.FC<SEOProps> = ({
 			<meta name="twitter:title" content={siteTitle} />
 			<meta name="twitter:description" content={siteDescription} />
 			<meta name="twitter:image" content={`${siteUrl}${image}`} />
-		</Helmet>
+		</>
 	);
 };
 
