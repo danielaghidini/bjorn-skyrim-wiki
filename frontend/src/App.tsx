@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider, CssBaseline, Box, Typography } from "@mui/material";
+import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 import { useEffect } from "react";
 import { useAuthStore } from "./store/authStore";
 import skyrimTheme from "./styles/Theme";
