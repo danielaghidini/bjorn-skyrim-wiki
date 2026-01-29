@@ -497,8 +497,8 @@ const MainLayout: React.FC = () => {
 							variant="caption"
 							sx={{ color: "text.secondary", opacity: 0.5 }}
 						>
-							&copy; {new Date().getFullYear()} Bjorn Mod Team.
-							Not affiliated with Bethesda Game Studios.
+							&copy; {new Date().getFullYear()} DanGhidini. Not
+							affiliated with Bethesda Game Studios.
 						</Typography>
 					</Stack>
 				</Container>
