@@ -1,5 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, ArrowLeft, Terminal, User } from "lucide-react";
+import {
+	Send,
+	ArrowLeft,
+	Terminal,
+	User,
+	Trash2,
+	RefreshCw,
+} from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -11,7 +19,9 @@ import {
 	IconButton,
 	Stack,
 	InputBase,
+	Button,
 } from "@mui/material";
+import { useAuthStore } from "../store/authStore";
 
 // Import local image
 import bjornPortrait from "../assets/bjorn_portrait.png";
@@ -23,16 +33,53 @@ interface Message {
 
 const ChatPage: React.FC = () => {
 	// Initialize with the Greeting
-	const [messages, setMessages] = useState<Message[]>([
-		{
-			role: "assistant",
-			content:
-				"*The air inside Whitewatch Tower is thick with smoke and the stench of blood. You cut down one of the last bandits just as a tall Nord buries his sword into another’s chest. The final scream dies out, leaving only the crackle of burning wood and the labored breath of the surviving guards.*\n\n*The Nord wipes his blade clean, gives you a quick once-over, then smiles — a crooked, mead-warmed grin that doesn’t match the carnage around you.*",
-		},
-	]);
+	/* eslint-disable react-hooks/exhaustive-deps */
+	const INITIAL_MESSAGE: Message = {
+		role: "assistant",
+		content:
+			"*The air inside Whitewatch Tower is thick with smoke and the stench of blood. You cut down one of the last bandits just as a tall Nord buries his sword into another’s chest. The final scream dies out, leaving only the crackle of burning wood and the labored breath of the surviving guards.*\n\n*The Nord wipes his blade clean, gives you a quick once-over, then smiles — a crooked, mead-warmed grin that doesn’t match the carnage around you.*",
+	};
+
+	// User
+	const { user } = useAuthStore();
+	const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const [isHistoryLoaded, setIsHistoryLoaded] = useState(false);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
+
+	// Load history on mount/user change
+	useEffect(() => {
+		setIsHistoryLoaded(false); // Reset on user change
+		if (user?.id) {
+			const saved = localStorage.getItem(`bjorn_chat_${user.id}`);
+			if (saved) {
+				try {
+					const parsed = JSON.parse(saved);
+					if (Array.isArray(parsed) && parsed.length > 0) {
+						setMessages(parsed);
+					}
+				} catch (e) {
+					console.error("Failed to load chat history", e);
+				}
+			}
+			// Mark as loaded whether we found save or not (if not, we keep initial/current)
+			setIsHistoryLoaded(true);
+		} else {
+			// No user, reset to initial
+			setMessages([INITIAL_MESSAGE]);
+		}
+	}, [user?.id]);
+
+	// Save history on change
+	useEffect(() => {
+		if (isHistoryLoaded && user?.id && messages.length > 0) {
+			localStorage.setItem(
+				`bjorn_chat_${user.id}`,
+				JSON.stringify(messages),
+			);
+		}
+	}, [messages, user?.id, isHistoryLoaded]);
 
 	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,25 +89,33 @@ const ChatPage: React.FC = () => {
 		scrollToBottom();
 	}, [messages, isLoading]);
 
-	const handleSendMessage = async () => {
-		if (!input.trim() || isLoading) return;
+	const handleReset = () => {
+		if (window.confirm("Restart the conversation?")) {
+			setMessages([INITIAL_MESSAGE]);
+			if (user?.id) {
+				localStorage.removeItem(`bjorn_chat_${user.id}`);
+			}
+		}
+	};
 
-		const userMessage: Message = { role: "user", content: input };
-		setMessages((prev) => [...prev, userMessage]);
-		setInput("");
+	const fetchBjornResponse = async (currentHistory: Message[]) => {
 		setIsLoading(true);
-
 		try {
-			// Determine API URL: Use env var in prod, or relative path in dev (to use proxy)
 			const baseUrl = import.meta.env.VITE_API_ORIGIN || "";
 			const apiUrl = `${baseUrl}/api/chat`;
+
+			// History for backend: exclude the very last user message if we are sending it separately?
+			// Actually backend takes "message" (latest) and "history" (context).
+			// So we need to split.
+			const lastMsg = currentHistory[currentHistory.length - 1];
+			const context = currentHistory.slice(0, -1);
 
 			const response = await fetch(apiUrl, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					message: userMessage.content,
-					history: messages.map((m) => ({
+					message: lastMsg.content,
+					history: context.map((m) => ({
 						role: m.role,
 						content: m.content,
 					})),
@@ -103,6 +158,30 @@ const ChatPage: React.FC = () => {
 		} finally {
 			setIsLoading(false);
 		}
+	};
+
+	const handleSendMessage = async () => {
+		if (!input.trim() || isLoading) return;
+
+		const userMessage: Message = { role: "user", content: input };
+		const newHistory = [...messages, userMessage];
+		setMessages(newHistory);
+		setInput("");
+
+		await fetchBjornResponse(newHistory);
+	};
+
+	const handleRegenerate = async () => {
+		if (isLoading || messages.length === 0) return;
+		const lastMsg = messages[messages.length - 1];
+		if (lastMsg.role !== "assistant") return;
+
+		// Backtrack to remove the AI response
+		const historyWithoutAi = messages.slice(0, -1);
+		setMessages(historyWithoutAi);
+
+		// Trigger fetch with the remaining history (which ends in user message)
+		await fetchBjornResponse(historyWithoutAi);
 	};
 
 	const AVATAR_URL = bjornPortrait;
@@ -208,7 +287,9 @@ const ChatPage: React.FC = () => {
 						}}
 					>
 						This chatbot responds based on content created by the
-						author, but may not be fully accurate.
+						author. <br />
+						Conversations are auto-saved to your device. We do not
+						have access to your chat history.
 					</Typography>
 					<Stack direction="row" alignItems="center" spacing={1}>
 						<Box
@@ -233,7 +314,18 @@ const ChatPage: React.FC = () => {
 					</Stack>
 				</Stack>
 
-				<Box sx={{ width: 40, display: { xs: "none", md: "block" } }} />
+				<Box sx={{ width: 40, display: { xs: "none", md: "block" } }}>
+					<IconButton
+						onClick={handleReset}
+						sx={{
+							color: "rgba(255,255,255,0.4)",
+							"&:hover": { color: "#ef4444" },
+						}}
+						title="Reset Chat"
+					>
+						<Trash2 size={20} />
+					</IconButton>
+				</Box>
 			</Box>
 
 			{/* Chat Area Container */}
@@ -368,7 +460,7 @@ const ChatPage: React.FC = () => {
 															: "primary.main",
 													color:
 														msg.role === "assistant"
-															? "grey.200"
+															? "#22d3ee"
 															: "black",
 													border:
 														msg.role === "assistant"
@@ -377,30 +469,47 @@ const ChatPage: React.FC = () => {
 													lineHeight: 1.6,
 												}}
 											>
-												<Typography
-													variant="body1"
-													sx={{
-														fontFamily: "Alan Sans",
-														fontSize: "1.05rem",
-														whiteSpace: "pre-wrap",
-													}}
-												>
-													{msg.role ===
-													"assistant" ? (
-														<span
-															style={{
-																fontStyle:
-																	"italic",
-																opacity: 0.9,
-															}}
-														>
-															{msg.content}
-														</span>
-													) : (
-														msg.content
-													)}
-												</Typography>
+												<MessageContent
+													role={msg.role}
+													content={msg.content}
+													isLatest={
+														idx ===
+														messages.length - 1
+													}
+												/>
 											</Paper>
+											{/* Regenerate Button for latest AI message */}
+											{msg.role === "assistant" &&
+												idx === messages.length - 1 &&
+												idx > 0 &&
+												!isLoading && (
+													<Button
+														onClick={
+															handleRegenerate
+														}
+														startIcon={
+															<RefreshCw
+																size={16}
+															/>
+														}
+														sx={{
+															mt: 1,
+															color: "rgba(255,255,255,0.6)",
+															textTransform:
+																"none",
+															fontSize: "0.85rem",
+															alignSelf:
+																"flex-start",
+															"&:hover": {
+																color: "#22d3ee",
+																bgcolor:
+																	"rgba(34, 211, 238, 0.1)",
+															},
+														}}
+													>
+														Try again
+													</Button>
+												)}
 										</Box>
 									</Stack>
 								</motion.div>
@@ -536,6 +645,89 @@ const ChatPage: React.FC = () => {
 					</Box>
 				</Paper>
 			</Container>
+		</Box>
+	);
+};
+
+// Helper component for message content
+const MessageContent = ({
+	role,
+	content,
+	isLatest,
+}: {
+	role: "user" | "assistant";
+	content: string;
+	isLatest: boolean;
+}) => {
+	const [displayedText, setDisplayedText] = useState("");
+	const [mood, setMood] = useState<string | null>(null);
+
+	useEffect(() => {
+		// Clean content (extract mood)
+		let cleanContent = content;
+		const moodMatch = content.match(/^\[(.*?)\]\s*/);
+		if (moodMatch) {
+			setMood(moodMatch[1]);
+			cleanContent = content.replace(/^\[(.*?)\]\s*/, "");
+		} else {
+			setMood(null);
+		}
+
+		if (role === "assistant" && isLatest) {
+			// Typewriter effect
+			setDisplayedText("");
+			let i = 0;
+			const speed = 20; // ms per char
+			const interval = setInterval(() => {
+				setDisplayedText(cleanContent.slice(0, i + 1));
+				i++;
+				if (i >= cleanContent.length) clearInterval(interval);
+			}, speed);
+			return () => clearInterval(interval);
+		} else {
+			setDisplayedText(cleanContent);
+		}
+	}, [content, role, isLatest]);
+
+	return (
+		<Box>
+			{mood && (
+				<Typography
+					variant="caption"
+					sx={{
+						display: "inline-block",
+						bgcolor: "rgba(255,255,255,0.1)",
+						color: "#22d3ee",
+						px: 1,
+						py: 0.5,
+						borderRadius: 1,
+						mb: 1,
+						fontSize: "0.7rem",
+						textTransform: "uppercase",
+						letterSpacing: 1,
+						fontWeight: "bold",
+					}}
+				>
+					{mood}
+				</Typography>
+			)}
+			<Typography
+				component="div"
+				variant="body1"
+				sx={{
+					fontFamily: "Alan Sans",
+					fontSize: "1.05rem",
+					"& em": {
+						color: role === "assistant" ? "#e2e8f0" : "inherit",
+					},
+					"& strong": {
+						color: role === "assistant" ? "#e2e8f0" : "inherit",
+					},
+					"& p": { m: 0, mb: 1, "&:last-child": { mb: 0 } },
+				}}
+			>
+				<ReactMarkdown>{displayedText}</ReactMarkdown>
+			</Typography>
 		</Box>
 	);
 };
