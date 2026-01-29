@@ -119,6 +119,9 @@ app.post("/api/categories", async (req, res) => {
 // app.get("/api/quests", ...); // Handled by questRoutes
 
 app.get("/api/fan-art", getAllFanArt);
+app.post("/api/fan-art", authenticateToken, createFanArt);
+app.put("/api/fan-art/:id", authenticateToken, updateFanArt);
+app.delete("/api/fan-art/:id", authenticateToken, deleteFanArt);
 app.get("/api/dialogues", getDialogues);
 app.post(
 	"/api/dialogues",

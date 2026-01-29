@@ -13,7 +13,18 @@ import {
 	Tabs,
 	Tab,
 	Chip,
+	Paper,
+	TextField,
+	Button,
+	Select,
+	MenuItem,
+	FormControl,
+	InputLabel,
+	IconButton,
+	Dialog,
 } from "@mui/material";
+import { useAuthStore } from "../store/authStore";
+import { X, PlusCircle } from "lucide-react";
 import api from "../api/api";
 
 interface FanArt {
@@ -30,6 +41,40 @@ const FanArtPage: React.FC = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [selectedTab, setSelectedTab] = useState("All");
+	const [showCreateForm, setShowCreateForm] = useState(false);
+	const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+	const { user } = useAuthStore();
+	// Form states
+	const [newItemTitle, setNewItemTitle] = useState("");
+	const [newImageUrl, setNewImageUrl] = useState("");
+	const [newDescription, setNewDescription] = useState("");
+	const [newItemType, setNewItemType] = useState("Fan Art");
+
+	const handleCreate = async () => {
+		if (!newItemTitle || !newImageUrl) return;
+		try {
+			await api.post("/api/fan-art", {
+				title: newItemTitle,
+				imageUrl: newImageUrl,
+				artistName: user?.name || "Anonymous",
+				description: newDescription,
+				type: newItemType,
+			});
+			setNewItemTitle("");
+			setNewImageUrl("");
+			setNewDescription("");
+			setNewItemType("Fan Art");
+			setShowCreateForm(false);
+
+			// Refresh list
+			const response = await api.get(`/api/fan-art`);
+			setFanArts(response.data);
+		} catch (error) {
+			console.error("Error creating item:", error);
+			setError("Failed to create item.");
+		}
+	};
 
 	useEffect(() => {
 		const fetchFanArt = async () => {
@@ -123,6 +168,163 @@ const FanArtPage: React.FC = () => {
 				</Tabs>
 			</Box>
 
+			{user ? (
+				<Box sx={{ mb: 4 }}>
+					<Box display="flex" justifyContent="flex-end" mb={2}>
+						{!showCreateForm && (
+							<Button
+								variant="contained"
+								color="primary"
+								startIcon={<PlusCircle size={20} />}
+								onClick={() => setShowCreateForm(true)}
+								sx={{ fontWeight: "bold" }}
+							>
+								Upload Art
+							</Button>
+						)}
+					</Box>
+
+					{showCreateForm && (
+						<Paper
+							sx={{
+								p: 3,
+								mb: 4,
+								bgcolor: "rgba(21, 25, 33, 0.9)",
+								border: "1px solid",
+								borderColor: "primary.main",
+								borderRadius: 2,
+								animation: "fadeIn 0.3s ease-in-out",
+								"@keyframes fadeIn": {
+									"0%": {
+										opacity: 0,
+										transform: "translateY(-10px)",
+									},
+									"100%": {
+										opacity: 1,
+										transform: "translateY(0)",
+									},
+								},
+							}}
+						>
+							<Box
+								sx={{
+									display: "flex",
+									justifyContent: "space-between",
+									alignItems: "center",
+									mb: 2,
+								}}
+							>
+								<Typography
+									variant="h6"
+									sx={{ color: "#ffffff" }}
+								>
+									Upload New Art
+								</Typography>
+								<IconButton
+									onClick={() => setShowCreateForm(false)}
+								>
+									<X size={20} color="#ffffff" />
+								</IconButton>
+							</Box>
+
+							<Box
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									gap: 2,
+								}}
+							>
+								<Box sx={{ display: "flex", gap: 2 }}>
+									<TextField
+										label="Title"
+										variant="outlined"
+										size="small"
+										fullWidth
+										value={newItemTitle}
+										onChange={(e) =>
+											setNewItemTitle(e.target.value)
+										}
+										sx={{ bgcolor: "rgba(0,0,0,0.2)" }}
+									/>
+									<FormControl
+										size="small"
+										sx={{ minWidth: 150 }}
+									>
+										<InputLabel>Type</InputLabel>
+										<Select
+											value={newItemType}
+											label="Type"
+											onChange={(e) =>
+												setNewItemType(e.target.value)
+											}
+											sx={{ bgcolor: "rgba(0,0,0,0.2)" }}
+										>
+											<MenuItem value="Fan Art">
+												Fan Art
+											</MenuItem>
+											<MenuItem value="Screenshot">
+												Screenshot
+											</MenuItem>
+										</Select>
+									</FormControl>
+								</Box>
+
+								<TextField
+									label="Image URL"
+									variant="outlined"
+									size="small"
+									fullWidth
+									value={newImageUrl}
+									onChange={(e) =>
+										setNewImageUrl(e.target.value)
+									}
+									sx={{ bgcolor: "rgba(0,0,0,0.2)" }}
+								/>
+
+								<TextField
+									label="Description (Optional)"
+									variant="outlined"
+									size="small"
+									fullWidth
+									multiline
+									rows={3}
+									value={newDescription}
+									onChange={(e) =>
+										setNewDescription(e.target.value)
+									}
+									sx={{ bgcolor: "rgba(0,0,0,0.2)" }}
+								/>
+
+								<Box
+									display="flex"
+									justifyContent="flex-end"
+									gap={2}
+									mt={1}
+								>
+									<Button
+										onClick={() => setShowCreateForm(false)}
+										sx={{ color: "text.secondary" }}
+									>
+										Cancel
+									</Button>
+									<Button
+										variant="contained"
+										onClick={handleCreate}
+										disabled={!newItemTitle || !newImageUrl}
+									>
+										Post
+									</Button>
+								</Box>
+							</Box>
+						</Paper>
+					)}
+				</Box>
+			) : (
+				<Alert severity="info" sx={{ mb: 4 }}>
+					Please log in to submit your own art or screenshots.
+				</Alert>
+			)}
+
 			{error && (
 				<Alert severity="error" sx={{ mb: 4 }}>
 					{error}
@@ -146,16 +348,16 @@ const FanArtPage: React.FC = () => {
 									height: "100%",
 									display: "flex",
 									flexDirection: "column",
-									background: "rgba(30, 30, 30, 0.6)",
+									background: "rgba(13, 25, 41, 0.7)",
 									backdropFilter: "blur(10px)",
-									border: "1px solid rgba(139, 115, 85, 0.2)",
+									border: "1px solid rgba(79, 195, 247, 0.2)",
 									transition:
-										"transform 0.3s ease, box-shadow 0.3s ease",
+										"transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
 									"&:hover": {
 										transform: "translateY(-10px)",
 										boxShadow:
-											"0 10px 30px rgba(0,0,0,0.5)",
-										border: "1px solid rgba(139, 115, 85, 0.5)",
+											"0 0 20px rgba(79, 195, 247, 0.2)",
+										border: "1px solid #4fc3f7",
 									},
 									position: "relative",
 								}}
@@ -181,11 +383,15 @@ const FanArtPage: React.FC = () => {
 										component="img"
 										image={art.imageUrl}
 										alt={art.title}
+										onClick={() =>
+											setSelectedImage(art.imageUrl)
+										}
 										sx={{
 											height: 350,
 											objectFit: "cover",
+											cursor: "pointer",
 											borderBottom:
-												"1px solid rgba(139, 115, 85, 0.2)",
+												"1px solid rgba(79, 195, 247, 0.2)",
 										}}
 									/>
 								</Tooltip>
@@ -195,8 +401,8 @@ const FanArtPage: React.FC = () => {
 										component="h2"
 										gutterBottom
 										sx={{
-											fontFamily: "'Cinzel', serif",
-											color: "#e0d8c3",
+											fontFamily: "Bungee",
+											color: "#ffffff",
 										}}
 									>
 										{art.title}
@@ -223,6 +429,50 @@ const FanArtPage: React.FC = () => {
 					))}
 				</Grid>
 			)}
+
+			<Dialog
+				open={!!selectedImage}
+				onClose={() => setSelectedImage(null)}
+				maxWidth="lg"
+				PaperProps={{
+					sx: {
+						bgcolor: "transparent",
+						boxShadow: "none",
+						backgroundImage: "none",
+					},
+				}}
+			>
+				<Box sx={{ position: "relative", outline: "none" }}>
+					<IconButton
+						onClick={() => setSelectedImage(null)}
+						sx={{
+							position: "absolute",
+							top: 10,
+							right: 10,
+							color: "#ffffff",
+							bgcolor: "rgba(0,0,0,0.5)",
+							"&:hover": {
+								bgcolor: "rgba(0,0,0,0.7)",
+							},
+						}}
+					>
+						<X size={24} />
+					</IconButton>
+					<Box
+						component="img"
+						src={selectedImage || undefined}
+						alt="Full size"
+						sx={{
+							maxWidth: "100%",
+							maxHeight: "90vh",
+							display: "block",
+							borderRadius: 2,
+							border: "1px solid rgba(79, 195, 247, 0.5)",
+							boxShadow: "0 0 50px rgba(0,0,0,0.5)",
+						}}
+					/>
+				</Box>
+			</Dialog>
 		</Container>
 	);
 };

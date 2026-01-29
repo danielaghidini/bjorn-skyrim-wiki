@@ -5,17 +5,10 @@ import {
 	Typography,
 	Tab,
 	Tabs,
-	Button,
 	List,
 	ListItem,
 	ListItemText,
 	IconButton,
-	TextField,
-	Paper,
-	Select,
-	MenuItem,
-	FormControl,
-	InputLabel,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useLocation } from "react-router-dom";
@@ -81,11 +74,7 @@ const AdminDashboard = () => {
 
 	const [fanArts, setFanArts] = useState<FanArtItem[]>([]);
 
-	// Form states
-	const [newItemTitle, setNewItemTitle] = useState("");
-	const [newImageUrl, setNewImageUrl] = useState("");
-	const [newArtistName, setNewArtistName] = useState("");
-	const [newItemType, setNewItemType] = useState("Fan Art");
+	// Form states removed (moved to FanArtPage)
 
 	// Handle navigation state changes
 	useEffect(() => {
@@ -111,71 +100,15 @@ const AdminDashboard = () => {
 		fetchContent();
 	}, [fetchContent]);
 
-	const handleCreate = async () => {
-		if (!newItemTitle) return;
-		try {
-			let endpoint = "";
-			let payload = {};
-
-			// Admin: 0:Metrics, 1:Users, 2:Quests, 3:Dialogues, 4:All Forum Posts, 5:Gallery, 6:Songs, 7:My Posts, 8:Profile
-			// User: 0:Gallery, 1:My Posts, 2:Profile
-
-			if (isAdmin) {
-				if (value === 2) {
-					// Quests
-					endpoint = "/quests";
-					payload = {
-						title: newItemTitle,
-						slug: newItemTitle.toLowerCase().replace(/ /g, "-"),
-						description: "Draft description",
-					};
-				} else if (value === 5) {
-					// Gallery / Fan Art
-					endpoint = "/fan-art";
-					payload = {
-						title: newItemTitle,
-						imageUrl: newImageUrl,
-						artistName: newArtistName,
-						description: "Gallery Item",
-						type: newItemType,
-					};
-				}
-			} else {
-				if (value === 0) {
-					// Gallery / Fan Art (User)
-					endpoint = "/fan-art";
-					payload = {
-						title: newItemTitle,
-						imageUrl: newImageUrl,
-						artistName: newArtistName,
-						description: "Gallery Item",
-						type: newItemType,
-					};
-				}
-			}
-
-			if (endpoint) {
-				await api.post(`${endpoint}`, payload);
-				setNewItemTitle("");
-				setNewImageUrl("");
-				setNewArtistName("");
-				setNewItemType("Fan Art");
-				fetchContent();
-			}
-		} catch {
-			alert("Error creating item");
-		}
-	};
-
 	const handleDelete = async (id: string) => {
 		try {
 			let endpoint = "";
 			// Handle delete based on tabs
 			if (isAdmin) {
-				if (value === 2) endpoint = "/quests";
-				if (value === 5) endpoint = "/fan-art";
+				if (value === 2) endpoint = "/api/quests";
+				if (value === 5) endpoint = "/api/fan-art";
 			} else {
-				if (value === 0) endpoint = "/fan-art";
+				if (value === 0) endpoint = "/api/fan-art";
 			}
 
 			if (endpoint) {
@@ -194,8 +127,6 @@ const AdminDashboard = () => {
 	const canManage = (item: FanArtItem) => {
 		return user?.role === "ADMIN" || item.authorId === user?.id;
 	};
-
-	const showFanArtForm = isAdmin ? value === 5 : value === 0;
 
 	return (
 		<Container maxWidth="lg" sx={{ py: 8 }}>
@@ -244,74 +175,6 @@ const AdminDashboard = () => {
 					<Tab label="Profile" /> {/* 8 (Admin) / 2 (User) */}
 				</Tabs>
 			</Box>
-
-			{/* Simple Create Form - Only for Gallery */}
-			{showFanArtForm && (
-				<Paper
-					sx={{
-						p: 2,
-						mt: 2,
-						display: "flex",
-						flexDirection: "column",
-						gap: 2,
-					}}
-				>
-					<Box
-						sx={{
-							display: "flex",
-							gap: 2,
-							flexWrap: "wrap",
-							alignItems: "center",
-						}}
-					>
-						<TextField
-							label="New Title"
-							variant="outlined"
-							size="small"
-							value={newItemTitle}
-							onChange={(e) => setNewItemTitle(e.target.value)}
-							sx={{ flex: 1, minWidth: 150 }}
-						/>
-						<TextField
-							label="Image URL"
-							variant="outlined"
-							size="small"
-							value={newImageUrl}
-							onChange={(e) => setNewImageUrl(e.target.value)}
-							sx={{ flex: 1, minWidth: 150 }}
-						/>
-						<TextField
-							label="Artist Name"
-							variant="outlined"
-							size="small"
-							value={newArtistName}
-							onChange={(e) => setNewArtistName(e.target.value)}
-							sx={{ flex: 1, minWidth: 150 }}
-						/>
-						<FormControl size="small" sx={{ minWidth: 120 }}>
-							<InputLabel>Type</InputLabel>
-							<Select
-								value={newItemType}
-								label="Type"
-								onChange={(e) => setNewItemType(e.target.value)}
-							>
-								<MenuItem value="Fan Art">Fan Art</MenuItem>
-								<MenuItem value="Screenshot">
-									Screenshot
-								</MenuItem>
-							</Select>
-						</FormControl>
-
-						<Button
-							variant="contained"
-							onClick={handleCreate}
-							sx={{ minWidth: 100 }}
-						>
-							Create
-						</Button>
-					</Box>
-				</Paper>
-			)}
 
 			{/* Admin Panels */}
 			{isAdmin && (
