@@ -62,7 +62,7 @@ const hubItems = [
 	{
 		title: "Fan Art",
 		description: "See the amazing art created by the community.",
-		icon: <Palette size={40} color="#ffffff" />,
+		icon: <Palette size={40} color="#4fc3f7" />,
 		path: "/fan-art",
 		category: "Visuals",
 	},
@@ -77,7 +77,7 @@ const hubItems = [
 		title: "Bjorn's Songs",
 		description:
 			"Listen to the melodies and verses Bjorn learned as a bard.",
-		icon: <Music size={40} color="#ffffff" />,
+		icon: <Music size={40} color="#4fc3f7" />,
 		path: "/songs",
 		category: "Lore",
 	},
