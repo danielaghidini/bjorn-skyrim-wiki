@@ -18,6 +18,7 @@ import SongsPage from "./pages/SongsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ChatPage from "./pages/ChatPage";
 import BjornQuestsPage from "./pages/BjornQuestsPage";
+import FAQPage from "./pages/FAQPage";
 import CookieBanner from "./components/common/CookieBanner";
 
 // Forum Pages
@@ -65,6 +66,7 @@ function App() {
 
 						<Route path="dialogues" element={<DialoguesPage />} />
 						<Route path="songs" element={<SongsPage />} />
+						<Route path="faq" element={<FAQPage />} />
 
 						<Route
 							path="*"

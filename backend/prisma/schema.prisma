@@ -71,6 +71,7 @@ model User {
   forumPosts    ForumPost[]
   forumComments ForumComment[]
   likes         PostLike[]
+  faqs          FAQ[]     @relation("UserFAQs")
 }
 
 model FanArt {
@@ -155,4 +156,17 @@ model PostLike {
   createdAt DateTime  @default(now())
 
   @@unique([userId, postId])
+}
+
+model FAQ {
+  id        String   @id @default(uuid())
+  question  String
+  answer    String?
+  category  String?  @default("General")
+  status    String   @default("PUBLISHED") // PUBLISHED, PENDING
+  order     Int      @default(0)
+  authorId  String?
+  author    User?    @relation("UserFAQs", fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

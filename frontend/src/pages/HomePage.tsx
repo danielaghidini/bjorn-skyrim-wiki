@@ -22,6 +22,7 @@ import {
 	ArrowRight,
 	Music,
 	Bot,
+	HelpCircle,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -82,6 +83,14 @@ const hubItems = [
 		icon: <Bot size={40} color="#4fc3f7" />,
 		path: "/chat",
 		category: "Interactive",
+	},
+	{
+		title: "FAQ",
+		description:
+			"Answers to the most common questions about the Bjorn mod.",
+		icon: <HelpCircle size={40} color="#4fc3f7" />,
+		path: "/faq",
+		category: "Support",
 	},
 ];
 

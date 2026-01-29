@@ -47,6 +47,14 @@ import {
 	updateSong,
 	deleteSong,
 } from "./controllers/songController.js";
+import {
+	getAllFAQs,
+	getAllFAQsAdmin,
+	createFAQ,
+	submitFAQ,
+	updateFAQ,
+	deleteFAQ,
+} from "./controllers/faqController.js";
 import { authorizeRole } from "./middleware/auth.js";
 
 console.log("Starting server...");
@@ -205,6 +213,35 @@ app.delete(
 	authenticateToken,
 	authorizeRole(["ADMIN"]),
 	deleteSong,
+);
+
+// FAQ Routes
+app.get("/api/faq", getAllFAQs);
+app.post("/api/faq/submit", authenticateToken, submitFAQ);
+
+app.get(
+	"/api/admin/faq",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	getAllFAQsAdmin,
+);
+app.post(
+	"/api/admin/faq",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	createFAQ,
+);
+app.put(
+	"/api/admin/faq/:id",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	updateFAQ,
+);
+app.delete(
+	"/api/admin/faq/:id",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	deleteFAQ,
 );
 
 app.listen(port, () => {

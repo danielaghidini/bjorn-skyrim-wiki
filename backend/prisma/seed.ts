@@ -208,6 +208,48 @@ In the aftermath, Adielle survives but remembers little of what happened inside 
 		}
 	}
 
+	console.log("Seeding FAQs...");
+	const faqs = [
+		{
+			question: "How do I start Bjorn's quest line?",
+			answer: "You can find Bjorn at the Whitewatch Tower. The quest can be started by visiting the tower directly or by hearing rumors in Riverwood or Whiterun.",
+			category: "Quests",
+			order: 1,
+		},
+		{
+			question: "Can I romance Bjorn?",
+			answer: "Bjorn has a full romance arc that develops as you complete his personal quests and increase your affinity with him.",
+			category: "Romance",
+			order: 2,
+		},
+		{
+			question: "Is Bjorn compatible with other follower mods?",
+			answer: "Yes, Bjorn uses his own follower system and should be compatible with AFT, NFF, and other follower managers. However, it is recommended to NOT manage him through these mods to avoid breaking his custom AI.",
+			category: "Compatibility",
+			order: 3,
+		},
+	];
+
+	for (const faq of faqs) {
+		const existing = await prisma.fAQ.findFirst({
+			where: { question: faq.question },
+		});
+		if (!existing) {
+			await prisma.fAQ.create({ data: faq });
+			console.log(`Created FAQ: ${faq.question}`);
+		} else {
+			await prisma.fAQ.update({
+				where: { id: existing.id },
+				data: {
+					answer: faq.answer,
+					category: faq.category,
+					order: faq.order,
+				},
+			});
+			console.log(`Updated FAQ: ${faq.question}`);
+		}
+	}
+
 	console.log("Seeding finished.");
 }
 

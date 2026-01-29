@@ -32,6 +32,7 @@ import {
 	LogOut,
 	LayoutDashboard,
 	ChevronDown,
+	HelpCircle,
 } from "lucide-react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
@@ -68,6 +69,11 @@ const menuItems = [
 		text: "Chatbot",
 		icon: <Bot size={18} />,
 		path: "/chat",
+	},
+	{
+		text: "FAQ",
+		icon: <HelpCircle size={18} />,
+		path: "/faq",
 	},
 ];
 

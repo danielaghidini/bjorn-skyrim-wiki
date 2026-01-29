@@ -22,6 +22,7 @@ import AdminSongs from "./AdminSongs";
 import AdminForum from "./AdminForum";
 import AdminProfile from "./AdminProfile";
 import AdminDialoguesManager from "./AdminDialoguesManager";
+import AdminFAQ from "./AdminFAQ";
 
 interface FanArtItem {
 	id: string;
@@ -60,9 +61,9 @@ const AdminDashboard = () => {
 	const isAdmin = user?.role === "ADMIN";
 
 	// Calculate profile tab index based on role
-	// Admin: 0:Metrics, 1:Users, 2:Quests, 3:Dialogues, 4:All Forum Posts, 5:Gallery, 6:Songs, 7:My Posts, 8:Profile
+	// Admin: 0:Metrics, 1:Users, 2:Quests, 3:Dialogues, 4:All Forum Posts, 5:Gallery, 6:Songs, 7:FAQ, 8:My Posts, 9:Profile
 	// User: 0:Gallery, 1:My Posts, 2:Profile
-	const getProfileTabIndex = () => (isAdmin ? 8 : 2);
+	const getProfileTabIndex = () => (isAdmin ? 9 : 2);
 
 	// Initialize tab based on navigation state
 	const [value, setValue] = useState(() => {
@@ -171,8 +172,9 @@ const AdminDashboard = () => {
 					{isAdmin && <Tab label="All Forum Posts" />} {/* 4 */}
 					<Tab label="Gallery" /> {/* 5 (Admin) / 0 (User) */}
 					{isAdmin && <Tab label="Songs" />} {/* 6 */}
-					<Tab label="My Posts" /> {/* 7 (Admin) / 1 (User) */}
-					<Tab label="Profile" /> {/* 8 (Admin) / 2 (User) */}
+					{isAdmin && <Tab label="FAQ" />} {/* 7 */}
+					<Tab label="My Posts" /> {/* 8 (Admin) / 1 (User) */}
+					<Tab label="Profile" /> {/* 9 (Admin) / 2 (User) */}
 				</Tabs>
 			</Box>
 
@@ -236,13 +238,20 @@ const AdminDashboard = () => {
 				</CustomTabPanel>
 			)}
 
+			{/* FAQ */}
+			{isAdmin && (
+				<CustomTabPanel value={value} index={7}>
+					<AdminFAQ />
+				</CustomTabPanel>
+			)}
+
 			{/* My Posts Panel - User's own posts */}
-			<CustomTabPanel value={value} index={isAdmin ? 7 : 1}>
+			<CustomTabPanel value={value} index={isAdmin ? 8 : 1}>
 				<AdminForum showOnlyMine />
 			</CustomTabPanel>
 
 			{/* Profile Panel */}
-			<CustomTabPanel value={value} index={isAdmin ? 8 : 2}>
+			<CustomTabPanel value={value} index={isAdmin ? 9 : 2}>
 				<AdminProfile />
 			</CustomTabPanel>
 		</Container>
