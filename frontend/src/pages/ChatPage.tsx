@@ -89,13 +89,15 @@ const ChatPage: React.FC = () => {
 					},
 				]);
 			}
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error("Chat error:", error);
+			const errorMessage =
+				error instanceof Error ? error.message : "Unknown error";
 			setMessages((prev) => [
 				...prev,
 				{
 					role: "assistant",
-					content: `(Connection error: ${error.message || "Unknown error"}. Ensure backend is running.)`,
+					content: `(Connection error: ${errorMessage}. Ensure backend is running.)`,
 				},
 			]);
 		} finally {

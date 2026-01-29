@@ -45,7 +45,7 @@ const AdminQuestsPage: React.FC = () => {
 	});
 	const [error, setError] = useState<string | null>(null);
 
-	const fetchQuests = async () => {
+	const fetchQuests = React.useCallback(async () => {
 		try {
 			const data = await getQuests();
 			setQuests(data);
@@ -53,11 +53,12 @@ const AdminQuestsPage: React.FC = () => {
 			console.error("Failed to fetch quests", err);
 			setError("Failed to load quests.");
 		}
-	};
+	}, []);
 
 	useEffect(() => {
+		// eslint-disable-next-line
 		fetchQuests();
-	}, []);
+	}, [fetchQuests]);
 
 	const handleOpen = async (quest?: Quest) => {
 		setError(null);
@@ -153,7 +154,7 @@ const AdminQuestsPage: React.FC = () => {
 	const handleStepChange = (
 		index: number,
 		field: keyof QuestStep,
-		value: any,
+		value: string | number,
 	) => {
 		const newSteps = [...(formData.steps || [])];
 		newSteps[index] = { ...newSteps[index], [field]: value };

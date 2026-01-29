@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
 	Box,
 	Container,
@@ -21,7 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useLocation } from "react-router-dom";
 import api from "../../api/api";
 import { useAuthStore } from "../../store/authStore";
-import { API_URL } from "../../config/apiConfig";
+
 import AdminQuestsPage from "./AdminQuestsPage";
 import AdminMetrics from "./AdminMetrics";
 import AdminUsers from "./AdminUsers";
@@ -29,6 +29,15 @@ import AdminSongs from "./AdminSongs";
 import AdminForum from "./AdminForum";
 import AdminProfile from "./AdminProfile";
 import AdminDialoguesManager from "./AdminDialoguesManager";
+
+interface FanArtItem {
+	id: string;
+	title: string;
+	imageUrl: string;
+	artistName: string;
+	description?: string;
+	authorId?: string;
+}
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -70,7 +79,7 @@ const AdminDashboard = () => {
 		return 0;
 	});
 
-	const [fanArts, setFanArts] = useState<any[]>([]);
+	const [fanArts, setFanArts] = useState<FanArtItem[]>([]);
 
 	// Form states
 	const [newItemTitle, setNewItemTitle] = useState("");
@@ -81,24 +90,26 @@ const AdminDashboard = () => {
 	// Handle navigation state changes
 	useEffect(() => {
 		if (location.state?.tab === "profile") {
+			// eslint-disable-next-line
 			setValue(getProfileTabIndex());
 			// Clear the state to prevent re-triggering
 			window.history.replaceState({}, document.title);
 		}
 	}, [location.state]);
 
-	const fetchContent = async () => {
+	const fetchContent = useCallback(async () => {
 		try {
 			const resFanArt = await api.get(`/api/fan-art`);
 			setFanArts(resFanArt.data);
 		} catch (error) {
 			console.error("Fetch error:", error);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
+		// eslint-disable-next-line
 		fetchContent();
-	}, [API_URL]);
+	}, [fetchContent]);
 
 	const handleCreate = async () => {
 		if (!newItemTitle) return;
@@ -151,7 +162,7 @@ const AdminDashboard = () => {
 				setNewItemType("Fan Art");
 				fetchContent();
 			}
-		} catch (error) {
+		} catch {
 			alert("Error creating item");
 		}
 	};
@@ -171,7 +182,7 @@ const AdminDashboard = () => {
 				await api.delete(`${endpoint}/${id}`);
 				fetchContent();
 			}
-		} catch (error) {
+		} catch {
 			alert("Error deleting item");
 		}
 	};
@@ -180,7 +191,7 @@ const AdminDashboard = () => {
 		setValue(newValue);
 	};
 
-	const canManage = (item: any) => {
+	const canManage = (item: FanArtItem) => {
 		return user?.role === "ADMIN" || item.authorId === user?.id;
 	};
 
@@ -331,7 +342,7 @@ const AdminDashboard = () => {
 							No Fan Art found.
 						</Typography>
 					)}
-					{fanArts.map((art: any) => (
+					{fanArts.map((art: FanArtItem) => (
 						<ListItem
 							key={art.id}
 							secondaryAction={

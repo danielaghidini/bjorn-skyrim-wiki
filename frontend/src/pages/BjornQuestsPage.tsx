@@ -178,7 +178,7 @@ const BjornQuestsPage: React.FC = () => {
 						>
 							<ReactMarkdown
 								components={{
-									a: ({ node, ...props }) => (
+									a: ({ ...props }) => (
 										<a
 											{...props}
 											target="_blank"
@@ -259,7 +259,6 @@ const BjornQuestsPage: React.FC = () => {
 													<ReactMarkdown
 														components={{
 															a: ({
-																node,
 																...props
 															}) => (
 																<a

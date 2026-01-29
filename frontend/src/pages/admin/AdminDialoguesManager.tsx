@@ -65,10 +65,11 @@ const AdminDialoguesManager: React.FC = () => {
 			setTopic("");
 			setResponse("");
 			setAudioFileName("");
-		} catch (err: any) {
+		} catch (err: unknown) {
 			console.error(err);
+			const e = err as { response?: { data?: { error?: string } } };
 			setAddError(
-				"Failed to add dialogue. " + (err.response?.data?.error || ""),
+				"Failed to add dialogue. " + (e.response?.data?.error || ""),
 			);
 		} finally {
 			setAddLoading(false);
@@ -84,7 +85,7 @@ const AdminDialoguesManager: React.FC = () => {
 				params: { search: searchQuery, limit: 20 },
 			});
 			setResults(res.data.data);
-		} catch (err: any) {
+		} catch (err: unknown) {
 			console.error(err);
 			setSearchError("Failed to search dialogues.");
 		} finally {
@@ -99,7 +100,7 @@ const AdminDialoguesManager: React.FC = () => {
 		try {
 			await api.delete(`/api/dialogues/${id}`);
 			setResults((prev) => prev.filter((d) => d.id !== id));
-		} catch (err: any) {
+		} catch (err: unknown) {
 			console.error(err);
 			alert("Failed to delete dialogue.");
 		} finally {

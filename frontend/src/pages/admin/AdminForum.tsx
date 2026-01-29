@@ -12,6 +12,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { forumService } from "../../data/forumService";
 import { useAuthStore } from "../../store/authStore";
+import { type Post } from "../../types/forum";
 import { useNavigate } from "react-router-dom";
 
 interface AdminForumProps {
@@ -19,7 +20,7 @@ interface AdminForumProps {
 }
 
 const AdminForum = ({ showOnlyMine = false }: AdminForumProps) => {
-	const [posts, setPosts] = useState<any[]>([]);
+	const [posts, setPosts] = useState<Post[]>([]);
 	const { user } = useAuthStore();
 	const isAdmin = user?.role === "ADMIN";
 	const navigate = useNavigate();
@@ -38,6 +39,7 @@ const AdminForum = ({ showOnlyMine = false }: AdminForumProps) => {
 	};
 
 	useEffect(() => {
+		// eslint-disable-next-line
 		fetchPosts();
 	}, [showOnlyMine]);
 
@@ -47,14 +49,14 @@ const AdminForum = ({ showOnlyMine = false }: AdminForumProps) => {
 			try {
 				await forumService.deletePost(postId);
 				setPosts(posts.filter((p) => p.id !== postId));
-			} catch (error) {
+			} catch {
 				alert("Failed to delete post.");
 			}
 		}
 	};
 
 	// Determine if user can manage a post (admin can manage all, user can manage their own)
-	const canManage = (post: any) => {
+	const canManage = (post: Post) => {
 		return isAdmin || post.isAuthor;
 	};
 

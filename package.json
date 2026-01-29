@@ -1,0 +1,26 @@
+{
+  "name": "bjorn-skyrim-wiki",
+  "version": "1.0.0",
+  "description": "An interactive React-based wiki for the Bjorn Skyrim mod, designed to organize dialogues, videos, quests, and mod details. This project aims to provide a seamless experience for players and modders to explore the content of the Bjorn Follower mod.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielaghidini/bjorn-skyrim-wiki.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/danielaghidini/bjorn-skyrim-wiki/issues"
+  },
+  "homepage": "https://github.com/danielaghidini/bjorn-skyrim-wiki#readme",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
+  }
+}

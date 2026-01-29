@@ -60,9 +60,10 @@ const ForumPostPage: React.FC = () => {
 				setPost(updatedPost);
 			}
 			setNewComment("");
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error("Failed to add comment:", error);
-			if (error.response && error.response.status === 401) {
+			const err = error as { response?: { status?: number } };
+			if (err.response && err.response.status === 401) {
 				navigate("/login", {
 					state: {
 						message: "You must be logged in to add a comment.",
@@ -81,9 +82,10 @@ const ForumPostPage: React.FC = () => {
 			// Verify: fetch updated post or optimistically increment
 			const updatedPost = await forumService.getPostById(id);
 			if (updatedPost) setPost(updatedPost);
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error("Failed to like post", error);
-			if (error.response && error.response.status === 401) {
+			const err = error as { response?: { status?: number } };
+			if (err.response && err.response.status === 401) {
 				navigate("/login", {
 					state: {
 						message: "You must be logged in to like a post.",

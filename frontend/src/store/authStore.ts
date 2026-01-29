@@ -59,7 +59,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 				localStorage.removeItem("user");
 				set({ user: null, token: null });
 			}
-		} catch (error) {
+		} catch {
 			localStorage.removeItem("token");
 			localStorage.removeItem("user");
 			set({ user: null, token: null });

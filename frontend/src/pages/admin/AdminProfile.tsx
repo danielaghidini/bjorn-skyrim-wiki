@@ -64,8 +64,9 @@ const AdminProfile = () => {
 			const response = await api.put("/auth/profile", { name, avatar });
 			setUser(response.data.user);
 			setSuccess("Profile updated successfully!");
-		} catch (err: any) {
-			setError(err.response?.data?.error || "Failed to update profile");
+		} catch (err: unknown) {
+			const e = err as { response?: { data?: { error?: string } } };
+			setError(e.response?.data?.error || "Failed to update profile");
 		} finally {
 			setLoading(false);
 		}
@@ -97,8 +98,9 @@ const AdminProfile = () => {
 			setCurrentPassword("");
 			setNewPassword("");
 			setConfirmPassword("");
-		} catch (err: any) {
-			setError(err.response?.data?.error || "Failed to change password");
+		} catch (err: unknown) {
+			const e = err as { response?: { data?: { error?: string } } };
+			setError(e.response?.data?.error || "Failed to change password");
 		} finally {
 			setLoading(false);
 		}

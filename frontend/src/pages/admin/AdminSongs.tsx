@@ -85,7 +85,8 @@ const AdminSongs = () => {
 			}
 			fetchSongs();
 			handleCancel();
-		} catch (err) {
+		} catch (error) {
+			console.error(error);
 			setError(editingId ? "Error updating song" : "Error creating song");
 		}
 	};
@@ -96,7 +97,8 @@ const AdminSongs = () => {
 		try {
 			await api.delete(`/api/admin/songs/${id}`);
 			fetchSongs();
-		} catch (err) {
+		} catch (error) {
+			console.error(error);
 			setError("Error deleting song");
 		}
 	};

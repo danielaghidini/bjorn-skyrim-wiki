@@ -32,8 +32,9 @@ const RegisterPage = () => {
 
 			setAuth(response.data.user, response.data.token);
 			navigate("/"); // Redirect to home after register
-		} catch (err: any) {
-			setError(err.response?.data?.error || "Failed to register");
+		} catch (err: unknown) {
+			const error = err as { response?: { data?: { error?: string } } };
+			setError(error.response?.data?.error || "Failed to register");
 		}
 	};
 

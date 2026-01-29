@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+echo "🔍 Running pre-commit checks..."
+
+# Check frontend
+echo "📦 Checking frontend..."
+cd frontend
+npm run lint || exit 1
+npx tsc --noEmit || exit 1
+
+# Check backend  
+echo "📦 Checking backend..."
+cd ../backend
+npx tsc --noEmit || exit 1
+
+echo "✅ All checks passed!"

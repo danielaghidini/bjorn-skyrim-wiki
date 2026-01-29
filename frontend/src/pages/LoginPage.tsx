@@ -21,8 +21,7 @@ const LoginPage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const setAuth = useAuthStore((state) => state.setAuth);
-	// @ts-ignore
-	const message = location.state?.message;
+	const message = (location.state as { message?: string })?.message;
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -34,8 +33,9 @@ const LoginPage = () => {
 
 			setAuth(response.data.user, response.data.token);
 			navigate("/admin");
-		} catch (err: any) {
-			setError(err.response?.data?.error || "Failed to login");
+		} catch (err: unknown) {
+			const error = err as { response?: { data?: { error?: string } } };
+			setError(error.response?.data?.error || "Failed to login");
 		}
 	};
 

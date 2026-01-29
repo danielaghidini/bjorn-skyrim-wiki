@@ -80,9 +80,10 @@ const ForumListPage: React.FC = () => {
 			setNewPostContent("");
 			setNewPostCategory("General Discussion");
 			setShowNewPost(false);
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error("Failed to create post:", error);
-			if (error.response && error.response.status === 401) {
+			const err = error as { response?: { status?: number } };
+			if (err.response && err.response.status === 401) {
 				navigate("/login", {
 					state: {
 						message: "You must be logged in to create a post.",
@@ -523,11 +524,16 @@ const ForumListPage: React.FC = () => {
 													const updatedPosts =
 														await forumService.getAllPosts();
 													setPosts(updatedPosts);
-												} catch (error: any) {
+												} catch (error: unknown) {
+													const err = error as {
+														response?: {
+															status?: number;
+														};
+													};
 													if (
-														error.response &&
-														error.response
-															.status === 401
+														err.response &&
+														err.response.status ===
+															401
 													) {
 														navigate("/login", {
 															state: {
