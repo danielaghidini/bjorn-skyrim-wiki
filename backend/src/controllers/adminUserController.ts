@@ -40,3 +40,17 @@ export const updateUserRole = async (req: Request, res: Response) => {
 		res.status(500).json({ error: "Failed to update user role" });
 	}
 };
+
+export const deleteUser = async (req: Request, res: Response) => {
+	const { userId } = req.params;
+
+	try {
+		await prisma.user.delete({
+			where: { id: String(userId) },
+		});
+		res.json({ message: "User deleted successfully" });
+	} catch (error) {
+		console.error("Delete user error:", error);
+		res.status(500).json({ error: "Failed to delete user" });
+	}
+};

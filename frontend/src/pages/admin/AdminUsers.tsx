@@ -15,8 +15,10 @@ import {
 	Select,
 	MenuItem,
 	FormControl,
+	IconButton,
+	Tooltip,
 } from "@mui/material";
-import { Shield, Mail, Calendar, ShieldAlert } from "lucide-react";
+import { Shield, Mail, Calendar, ShieldAlert, Trash2 } from "lucide-react";
 import api from "../../api/api";
 
 interface User {
@@ -49,6 +51,23 @@ const AdminUsers = () => {
 		} catch (error) {
 			console.error("Error updating role:", error);
 			alert("Failed to update user role");
+		}
+	};
+
+	const handleDeleteUser = async (userId: string) => {
+		if (
+			!window.confirm(
+				"Are you sure you want to delete this user? This action cannot be undone.",
+			)
+		)
+			return;
+
+		try {
+			await api.delete(`/api/admin/users/${userId}`);
+			fetchUsers();
+		} catch (error) {
+			console.error("Error deleting user:", error);
+			alert("Failed to delete user");
 		}
 	};
 
@@ -219,42 +238,82 @@ const AdminUsers = () => {
 										sx={{ fontWeight: "bold" }}
 									/>
 								</TableCell>
-								<TableCell align="right">
-									<FormControl
-										size="small"
-										sx={{ minWidth: 120 }}
+								<TableCell>
+									<Box
+										sx={{
+											display: "flex",
+											alignItems: "center",
+											justifyContent: "flex-end",
+											gap: 1,
+										}}
 									>
-										<Select
-											value={user.role}
-											onChange={(e) =>
-												handleRoleChange(
-													user.id,
-													e.target.value,
-												)
-											}
+										<FormControl
+											size="small"
+											sx={{ width: 110 }}
+										>
+											<Select
+												value={user.role}
+												onChange={(e) =>
+													handleRoleChange(
+														user.id,
+														e.target.value,
+													)
+												}
+												sx={{
+													color: "#fff",
+													fontSize: "0.8rem",
+													".MuiSelect-select": {
+														py: "6px",
+														pl: "12px",
+													},
+													".MuiOutlinedInput-notchedOutline":
+														{
+															borderColor:
+																"rgba(255,255,255,0.2)",
+														},
+													"&:hover .MuiOutlinedInput-notchedOutline":
+														{
+															borderColor:
+																"primary.main",
+														},
+												}}
+											>
+												<MenuItem value="USER">
+													User
+												</MenuItem>
+												<MenuItem value="ADMIN">
+													Admin
+												</MenuItem>
+											</Select>
+										</FormControl>
+										<Box
 											sx={{
-												color: "#fff",
-												fontSize: "0.8rem",
-												".MuiOutlinedInput-notchedOutline":
-													{
-														borderColor:
-															"rgba(255,255,255,0.2)",
-													},
-												"&:hover .MuiOutlinedInput-notchedOutline":
-													{
-														borderColor:
-															"primary.main",
-													},
+												width: 40,
+												display: "flex",
+												justifyContent: "center",
 											}}
 										>
-											<MenuItem value="USER">
-												User
-											</MenuItem>
-											<MenuItem value="ADMIN">
-												Admin
-											</MenuItem>
-										</Select>
-									</FormControl>
+											<Tooltip title="Delete User">
+												<IconButton
+													onClick={() =>
+														handleDeleteUser(
+															user.id,
+														)
+													}
+													sx={{
+														color: "rgba(255,255,255,0.3)",
+														"&:hover": {
+															color: "error.main",
+															bgcolor:
+																"rgba(211, 47, 47, 0.1)",
+														},
+													}}
+												>
+													<Trash2 size={18} />
+												</IconButton>
+											</Tooltip>
+										</Box>
+									</Box>
 								</TableCell>
 							</TableRow>
 						))}

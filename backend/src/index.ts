@@ -39,6 +39,7 @@ import { getMetrics } from "./controllers/metricsController.js";
 import {
 	getAllUsers,
 	updateUserRole,
+	deleteUser,
 } from "./controllers/adminUserController.js";
 import {
 	getAllSongs,
@@ -154,6 +155,12 @@ app.put(
 	authenticateToken,
 	authorizeRole(["ADMIN"]),
 	updateUserRole,
+);
+app.delete(
+	"/api/admin/users/:userId",
+	authenticateToken,
+	authorizeRole(["ADMIN"]),
+	deleteUser,
 );
 
 // Auth Routes
