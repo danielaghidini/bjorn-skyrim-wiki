@@ -13,6 +13,7 @@ import { ChevronRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import type { Quest } from "../types/Quest";
 import { getQuests, getQuestBySlug } from "../services/questService";
+import SEO from "../components/common/SEO";
 
 // Convert various YouTube URL formats to embed URL
 const getYouTubeEmbedUrl = (url: string): string => {
@@ -50,6 +51,15 @@ const BjornQuestsPage: React.FC = () => {
 			maxWidth="lg"
 			sx={{ py: { xs: 4, sm: 6, md: 8 }, px: { xs: 1, sm: 2, md: 3 } }}
 		>
+			<SEO
+				title={selectedQuest ? selectedQuest.title : "Quests"}
+				description={
+					selectedQuest
+						? selectedQuest.summary ||
+							selectedQuest.description.substring(0, 160)
+						: "Complete guide for all Bjorn's quests, including his personal arc and redemption story."
+				}
+			/>
 			<Box sx={{ mb: 6, textAlign: "center" }}>
 				<Typography
 					variant="h2"

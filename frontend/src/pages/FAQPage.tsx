@@ -15,6 +15,7 @@ import {
 import { ChevronDown, Search, HelpCircle, Send } from "lucide-react";
 import api from "../api/api";
 import { useAuthStore } from "../store/authStore";
+import SEO from "../components/common/SEO";
 
 interface FAQ {
 	id: string;
@@ -97,6 +98,10 @@ const FAQPage: React.FC = () => {
 
 	return (
 		<Container maxWidth="md" sx={{ py: 8 }}>
+			<SEO
+				title="FAQ"
+				description="Common questions about Bjorn mod, installation, features and troubleshooting."
+			/>
 			<Box sx={{ textAlign: "center", mb: 8 }}>
 				<HelpCircle
 					size={48}
@@ -105,6 +110,7 @@ const FAQPage: React.FC = () => {
 				/>
 				<Typography
 					variant="h2"
+					component="h1"
 					sx={{ fontFamily: "Bungee", color: "#fff", mb: 2 }}
 				>
 					FAQ

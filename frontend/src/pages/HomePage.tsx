@@ -24,6 +24,7 @@ import {
 	Bot,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import SEO from "../components/common/SEO";
 
 // Swiper imports - use bundle CSS for compatibility
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -88,6 +89,10 @@ const hubItems = [
 const HomePage: React.FC = () => {
 	return (
 		<Box sx={{ pb: 8 }}>
+			<SEO
+				title="Home"
+				description="Welcome to the Official Bjorn Wiki. Discover the story of the legendary Nord follower, explore quests, and chat with him using AI."
+			/>
 			{/* Hero Carousel Section */}
 			<Box
 				sx={{
